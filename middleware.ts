@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Réplica de netlify/edge-functions/inject-meta.js: reescribe lang/title/og:*
-// según el hostname para los dominios alias (soctara.com en català,
-// iamtara.io en anglès). soytara.com (por defecto) no cambia.
-//
-// A diferencia de Netlify Edge Functions (donde context.next() deja leer y
-// modificar la respuesta ya generada), el middleware de Next.js/Vercel NO
-// permite leer el cuerpo de NextResponse.next() — la página aún no existe
-// en ese punto. Por eso aquí, para los hosts que sí necesitan reescritura,
-// se hace fetch directo del HTML estático y se devuelve ya modificado,
-// sin pasar por next().
+// Réplica de netlify/edge-functions/inject-meta.js, solo para /escoles
+// (página estática sin tocar). La nueva landing en "/" ya no pasa por aquí:
+// al ser una página React real, resuelve su lang/title/og:* de forma nativa
+// leyendo el host en app/page.tsx (ver getBrandForHost en lib/i18n.ts).
 const META_BY_HOST: Record<string, { lang: string; title: string; ogTitle: string; ogDesc: string; ogUrl: string }> = {
   soctara: {
     lang: "ca",
@@ -28,7 +22,6 @@ const META_BY_HOST: Record<string, { lang: string; title: string; ogTitle: strin
 };
 
 const HTML_SOURCE_BY_PATH: Record<string, string> = {
-  "/": "/index.html",
   "/escoles": "/escoles/index.html",
   "/escoles/": "/escoles/index.html"
 };
@@ -61,5 +54,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/escoles", "/escoles/"]
+  matcher: ["/escoles", "/escoles/"]
 };

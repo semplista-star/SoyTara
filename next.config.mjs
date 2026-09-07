@@ -2,7 +2,9 @@
 const nextConfig = {
   async rewrites() {
     return [
-      { source: "/", destination: "/index.html" },
+      // "/" ahora la sirve la landing en React (app/page.tsx).
+      // La app de chat existente (index.html, sin tocar) vive en /chat.
+      { source: "/chat", destination: "/index.html" },
       { source: "/escoles", destination: "/escoles/index.html" },
       { source: "/escoles/", destination: "/escoles/index.html" },
       { source: "/soytara_mestres", destination: "/soytara_mestres.html" },
