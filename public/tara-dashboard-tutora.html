@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resum de grup · Tara</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F8F7F4;
+  --white: #FFFFFF;
+  --ink: #1A1A1A;
+  --ink2: #3D3D3D;
+  --muted: #8A8A8A;
+  --border: #E5E2DC;
+  --teal: #0D9488;
+  --teal-lt: #CCFBF1;
+  --gold: #D97706;
+  --gold-lt: #FEF3C7;
+  --rose: #E11D48;
+  --rose-lt: #FFE4E6;
+  --blue: #2563EB;
+  --blue-lt: #DBEAFE;
+}
+
+body { background: var(--bg); color: var(--ink); font-family: 'Georgia', serif; min-height: 100vh; padding: 0; }
+
+.topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 1rem 2.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+.logo { font-size: 1.4rem; font-weight: bold; color: var(--ink); letter-spacing: -0.3px; }
+.logo span { color: var(--teal); }
+.topbar-right { display: flex; align-items: center; gap: 1.5rem; }
+.centre-badge { font-size: 0.8rem; font-family: 'Helvetica Neue', sans-serif; color: var(--muted); background: var(--bg); padding: 0.35rem 0.9rem; border-radius: 20px; border: 1px solid var(--border); }
+.rol-badge { font-size: 0.8rem; font-family: 'Helvetica Neue', sans-serif; color: var(--teal); background: var(--teal-lt); padding: 0.35rem 0.9rem; border-radius: 20px; font-weight: bold; }
+
+.page { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+.section-title { font-size: 0.72rem; font-family: 'Helvetica Neue', sans-serif; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+
+.moments { display: flex; gap: 0.5rem; margin-bottom: 2.5rem; }
+.moment-tab { padding: 0.5rem 1.2rem; border-radius: 6px; font-size: 0.85rem; font-family: 'Helvetica Neue', sans-serif; cursor: pointer; border: 1px solid var(--border); background: var(--white); color: var(--muted); transition: all 0.15s; }
+.moment-tab.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+.kpi-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.3rem 1.5rem; }
+.kpi-label { font-size: 0.75rem; font-family: 'Helvetica Neue', sans-serif; color: var(--muted); margin-bottom: 0.4rem; letter-spacing: 0.3px; }
+.kpi-val { font-size: 2rem; font-weight: bold; color: var(--ink); line-height: 1; margin-bottom: 0.2rem; }
+.kpi-sub { font-size: 0.75rem; font-family: 'Helvetica Neue', sans-serif; color: var(--muted); }
+.kpi-delta { font-size: 0.78rem; font-family: 'Helvetica Neue', sans-serif; font-weight: bold; margin-top: 0.4rem; }
+.delta-up { color: var(--teal); }
+.delta-down { color: var(--rose); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+.card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+.card-title { font-size: 0.95rem; font-weight: bold; color: var(--ink); margin-bottom: 1.2rem; font-family: 'Helvetica Neue', sans-serif; }
+
+.dim-list { display: flex; flex-direction: column; gap: 1.1rem; }
+.dim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+.dim-nom { font-size: 0.82rem; font-family: 'Helvetica Neue', sans-serif; color: var(--ink2); }
+.dim-nums { font-size: 0.82rem; font-family: 'Helvetica Neue', sans-serif; color: var(--muted); display: flex; gap: 0.5rem; align-items: center; }
+.dim-num-now { font-weight: bold; color: var(--ink); }
+.dim-track { height: 8px; background: var(--bg); border-radius: 4px; overflow: visible; position: relative; }
+.dim-fill-pre { position: absolute; top: 0; left: 0; height: 100%; border-radius: 4px; background: var(--border); transition: width 0.8s ease; }
+.dim-fill-post { position: absolute; top: 0; left: 0; height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+.alumnes-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem; }
+.alumnes-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.alumnes-title { font-size: 0.95rem; font-weight: bold; color: var(--ink); font-family: 'Helvetica Neue', sans-serif; }
+.alumnes-count { font-size: 0.8rem; color: var(--muted); font-family: 'Helvetica Neue', sans-serif; }
+
+table { width: 100%; border-collapse: collapse; }
+thead th { padding: 0.7rem 1.5rem; text-align: left; font-size: 0.72rem; font-family: 'Helvetica Neue', sans-serif; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid var(--border); background: var(--bg); }
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #FAFAF8; }
+tbody td { padding: 0.85rem 1.5rem; font-size: 0.88rem; font-family: 'Helvetica Neue', sans-serif; color: var(--ink2); }
+.codi-cell { font-family: 'Courier New', monospace; font-size: 0.82rem; color: var(--muted); }
+
+.nivell-pill { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.7rem; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+.n0 { background: #F1F5F9; color: #64748B; }
+.n1 { background: var(--teal-lt); color: #0F766E; }
+.n2 { background: var(--blue-lt); color: var(--blue); }
+.n3 { background: var(--gold-lt); color: var(--gold); }
+
+.delta-cell { font-weight: bold; font-size: 0.82rem; }
+.alerta-tag { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 10px; font-size: 0.72rem; font-weight: bold; }
+.alerta-alt { background: var(--rose-lt); color: var(--rose); }
+.alerta-ok { background: var(--teal-lt); color: #0F766E; }
+.alerta-mid { background: var(--gold-lt); color: var(--gold); }
+
+.atencio-card { border: 1px solid var(--rose); border-radius: 12px; padding: 1.5rem; background: #FFF5F6; margin-bottom: 2.5rem; }
+.atencio-title { font-size: 0.9rem; font-weight: bold; color: var(--rose); font-family: 'Helvetica Neue', sans-serif; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.atencio-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.atencio-item { display: flex; align-items: center; gap: 1rem; font-size: 0.85rem; font-family: 'Helvetica Neue', sans-serif; color: var(--ink2); background: var(--white); padding: 0.7rem 1rem; border-radius: 8px; border: 1px solid #FFD6DA; }
+.atencio-codi { font-family: 'Courier New', monospace; color: var(--muted); font-size: 0.8rem; min-width: 80px; }
+.atencio-motiu { flex: 1; color: var(--rose); font-weight: bold; }
+
+.footer { text-align: center; padding: 2rem; font-size: 0.75rem; color: var(--muted); font-family: 'Helvetica Neue', sans-serif; border-top: 1px solid var(--border); margin-top: 1rem; }
+
+.setup-box { max-width: 480px; margin: 5rem auto; padding: 2.5rem; background: var(--white); border-radius: 16px; border: 1px solid var(--border); }
+.setup-box h2 { font-size: 1.1rem; margin-bottom: 0.5rem; font-family: 'Helvetica Neue', sans-serif; }
+.setup-box p { font-size: 0.85rem; color: var(--muted); font-family: 'Helvetica Neue', sans-serif; margin-bottom: 1.2rem; line-height: 1.5; }
+.setup-box input { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; font-family: 'Helvetica Neue', sans-serif; background: var(--bg); }
+.setup-box input:focus { outline: 2px solid var(--teal); border-color: var(--teal); }
+.setup-box button { width: 100%; padding: 0.75rem; background: var(--ink); color: white; border: none; border-radius: 8px; font-size: 0.95rem; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; }
+
+#primary-tabs-row { display: flex; gap: 0.3rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+.primary-tab { padding: 0.55rem 1.3rem; border-radius: 8px 8px 0 0; font-size: 0.87rem; font-family: 'Helvetica Neue', sans-serif; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--muted); transition: all 0.15s; margin-bottom: -1px; }
+.primary-tab.active { background: var(--white); color: var(--ink); border-color: var(--border); border-bottom-color: var(--white); font-weight: 600; }
+.primary-tab:hover:not(.active) { color: var(--ink2); }
+
+.riasec-badge { display: inline-flex; gap: 3px; align-items: center; }
+.riasec-letter { display: inline-block; width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; font-weight: bold; text-align: center; line-height: 20px; font-family: 'Helvetica Neue', sans-serif; }
+.rl-R { background: #FEF3C7; color: #D97706; }
+.rl-I { background: #DBEAFE; color: #2563EB; }
+.rl-A { background: #FCE7F3; color: #BE185D; }
+.rl-S { background: #DCFCE7; color: #15803D; }
+.rl-E { background: #FFE4E6; color: #E11D48; }
+.rl-C { background: var(--teal-lt); color: #0F766E; }
+.hd-tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.75rem; background: #F3F4F6; color: #374151; font-family: 'Helvetica Neue', sans-serif; }
+.orienta-empty { text-align: center; padding: 3rem; font-family: 'Helvetica Neue', sans-serif; color: var(--muted); font-size: 0.9rem; }
+
+@media (max-width: 768px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .grid2 { grid-template-columns: 1fr; }
+  .page { padding: 1.5rem 1rem; }
+  .topbar { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">T<span>ara</span></div>
+  <div class="topbar-right">
+    <div class="centre-badge" id="centre-badge">Dashboard</div>
+    <div class="rol-badge">Educador/a</div>
+  </div>
+</div>
+
+<!-- PANTALLA INICIAL: entrada de codi de grup -->
+<div id="setup-screen" style="display:none;">
+  <div class="setup-box">
+    <h2>Entra el codi de grup</h2>
+    <p>Els alumnes han d'usar codis amb el prefix del grup seguit d'un guió i el seu codi personal.<br><br>Exemple: si el grup és <strong>2NB</strong>, els codis dels alumnes serien <strong>2NB-marc</strong>, <strong>2NB-lluna</strong>, etc.</p>
+    <input id="grup-input" type="text" placeholder="2NB" autocomplete="off" />
+    <button onclick="entrarGrup()">Veure el grup →</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading-screen" style="display:none; text-align:center; padding:5rem 2rem; color:var(--muted); font-family:'Helvetica Neue',sans-serif; font-size:0.9rem;">
+  Carregant dades del grup...
+</div>
+
+<!-- ERROR -->
+<div id="error-screen" style="display:none; text-align:center; padding:5rem 2rem;">
+  <p style="font-family:'Helvetica Neue',sans-serif; color:var(--muted); margin-bottom:0.5rem;">No s'han trobat dades per a aquest grup.</p>
+  <p style="font-family:'Helvetica Neue',sans-serif; font-size:0.82rem; color:var(--muted); margin-bottom:2rem;">Comprova que el codi és correcte i que els alumnes han completat el test inicial.</p>
+  <button onclick="tornar()" style="padding:0.6rem 1.5rem; background:var(--ink); color:white; border:none; border-radius:8px; cursor:pointer; font-family:'Helvetica Neue',sans-serif;">← Tornar</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-content" style="display:none;">
+  <div class="page">
+    <div id="primary-tabs-row">
+      <button class="primary-tab active" id="tab-benestar" onclick="togglePrimaryTab('benestar')">Benestar emocional</button>
+      <button class="primary-tab" id="tab-orienta" onclick="togglePrimaryTab('orienta')">Tara Orienta</button>
+    </div>
+    <div id="benestar-section">
+    <div class="moments" id="moment-tabs"></div>
+
+    <div class="section-title">Resum del grup</div>
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Alumnes participants</div>
+        <div class="kpi-val" id="kpi-participants">—</div>
+        <div class="kpi-sub" id="kpi-participants-sub"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Puntuació EEET mitjana</div>
+        <div class="kpi-val" id="kpi-eeet">—</div>
+        <div class="kpi-sub">sobre 36 punts</div>
+        <div class="kpi-delta" id="kpi-eeet-delta"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Benestar GHQ-12 mitjà</div>
+        <div class="kpi-val" id="kpi-ghq">—</div>
+        <div class="kpi-sub">sobre 12 · menys és millor</div>
+        <div class="kpi-delta" id="kpi-ghq-delta"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Sessions completades</div>
+        <div class="kpi-val" id="kpi-sessions">—</div>
+        <div class="kpi-sub" id="kpi-sessions-sub"></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title" id="dim-title">Evolució per dimensió</div>
+        <div class="dim-list" id="dim-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title" id="nivells-title">Distribució de nivells</div>
+        <div id="nivells-content"></div>
+      </div>
+    </div>
+
+    <div class="atencio-card" id="atencio-card" style="display:none;">
+      <div class="atencio-title">⚠ Alumnes que necessiten atenció</div>
+      <div class="atencio-list" id="atencio-list"></div>
+    </div>
+
+    <div class="section-title">Tots els alumnes</div>
+    <div class="alumnes-card">
+      <div class="alumnes-header">
+        <div class="alumnes-title" id="taula-title">Resultats individuals</div>
+        <div class="alumnes-count" id="taula-count"></div>
+      </div>
+      <table>
+        <thead>
+          <tr id="taula-head">
+            <th>Codi</th>
+            <th>EEET Inici</th>
+            <th id="th-mid">EEET Mig</th>
+            <th>EEET Ara</th>
+            <th>GHQ-12</th>
+            <th>Nivell</th>
+            <th>Evolució</th>
+            <th>Estat</th>
+          </tr>
+        </thead>
+        <tbody id="taula-body"></tbody>
+      </table>
+      <div style="padding:1.2rem 1.5rem; font-size:0.75rem; color:var(--muted); font-family:'Helvetica Neue',sans-serif; border-top:1px solid var(--border); line-height:1.8;">
+        Els codis són anònims — cap alumne és identificable per nom
+        <span style="display:block; margin-top:0.7rem; color:var(--ink); font-size:0.78rem;">
+          <strong>Com llegir l'estat:</strong><br>
+          <span style="color:#c0392b; font-weight:600;">● Revisar</span> — L'alumne ha indicat un nivell alt de malestar emocional. Es recomana un check-in informal i discret. No és un diagnòstic.<br>
+          <span style="color:#e67e22; font-weight:600;">● Observar</span> — Puntuació moderada. Convé estar atent a l'evolució en les properes setmanes.<br>
+          <span style="color:#27ae60; font-weight:600;">● Bé</span> — Sense senyals d'alerta en aquest moment.
+        </span>
+      </div>
+    </div>
+    </div><!-- /benestar-section -->
+
+    <div id="orienta-section" style="display:none; padding-top:1.5rem;">
+      <div class="alumnes-card">
+        <div class="alumnes-header">
+          <div class="alumnes-title">Perfils Tara Orienta</div>
+          <div class="alumnes-count" id="orienta-count"></div>
+        </div>
+        <div id="orienta-loading" style="text-align:center;padding:2rem;font-family:'Helvetica Neue',sans-serif;color:var(--muted);font-size:0.87rem;">Carregant perfils...</div>
+        <table id="orienta-table" style="display:none;">
+          <thead>
+            <tr>
+              <th>Alumne</th>
+              <th>RIASEC</th>
+              <th>Tipus energètic</th>
+              <th>Feines suggerides</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="orienta-body"></tbody>
+        </table>
+        <div id="orienta-empty" class="orienta-empty" style="display:none;">Cap alumne ha completat el test Tara Orienta encara.</div>
+        <div style="padding:1rem 1.5rem;font-size:0.75rem;color:var(--muted);font-family:'Helvetica Neue',sans-serif;border-top:1px solid var(--border);">
+          Els codis són anònims · cada alumne ha completat voluntàriament el test Tara Orienta
+        </div>
+      </div>
+    </div><!-- /orienta-section -->
+
+  </div>
+</div>
+
+<div class="footer">
+  Tara Systems · soytara.com · Dades anònimes · GDPR compliant
+</div>
+
+<script>
+const PROXY_URL = 'https://markisboix--d4e9d964465b11f199bc42b51c65c3df.web.val.run';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxRO2IqBvdIZrONeXbVUQ9CbH_HdAiV4LdsvG0HnpR1joRO7etoyo6iUHatDNHyssKc/exec';
+
+const NIVELL_NOMS = ['Explorant', 'Descobrint', 'Connectant', 'Integrant'];
+const NIVELL_CLASSES = ['n0', 'n1', 'n2', 'n3'];
+const NIVELL_COLORS = ['#CBD5E1', '#0D9488', '#2563EB', '#D97706'];
+const NIVELL_TEXT = ['#64748B', '#0F766E', '#2563EB', '#D97706'];
+const DIM_NOMS = ['Vocabulari emocional', 'Connexió emoció-necessitat', 'Comunicació'];
+const DIM_FIELDS = ['b1', 'b2', 'b3'];
+const DIM_COLORS = ['#0D9488', '#2563EB', '#D97706'];
+
+let _alumnes = [];
+let _grup = '';
+
+window.onload = () => {
+  const grup = new URLSearchParams(location.search).get('grup');
+  if (grup) {
+    _grup = grup.toUpperCase();
+    document.getElementById('centre-badge').textContent = 'Grup ' + _grup;
+    carregarDades(_grup);
+  } else {
+    document.getElementById('setup-screen').style.display = 'block';
+  }
+};
+
+function entrarGrup() {
+  const val = document.getElementById('grup-input').value.trim().toUpperCase();
+  if (val) window.location.search = '?grup=' + val;
+}
+
+function tornar() { window.location.search = ''; }
+
+async function carregarDades(grup) {
+  document.getElementById('loading-screen').style.display = 'block';
+  try {
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sheets_url: SHEETS_URL,
+        sheets_data: { action: 'getDashboard', grup: grup.toLowerCase() }
+      })
+    });
+    const data = await res.json();
+    document.getElementById('loading-screen').style.display = 'none';
+    if (!data.ok) {
+      document.getElementById('error-screen').style.display = 'block';
+      return;
+    }
+    _alumnes = data.alumnes || [];
+    if (_alumnes.length > 0) renderDashboard();
+    else {
+      // Sense dades de benestar — mostra dashboard buit però pestanya Orienta accessible
+      document.getElementById('benestar-section').innerHTML =
+        '<div style="text-align:center;padding:3rem;font-family:\'Helvetica Neue\',sans-serif;color:var(--muted);font-size:0.9rem;">Cap alumne ha completat el test de Benestar emocional encara.</div>';
+    }
+    document.getElementById('dashboard-content').style.display = 'block';
+  } catch(e) {
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('error-screen').style.display = 'block';
+  }
+}
+
+function getCurrent(a) { return a.post || a.mid || a.pre || null; }
+
+function renderDashboard() {
+  const withData = _alumnes.map(a => {
+    const current = getCurrent(a);
+    const pre = a.pre;
+    const delta = (current && pre && current !== pre) ? current.total - pre.total : null;
+    return { ...a, current, delta };
+  });
+
+  // KPIs
+  const amb = withData.filter(a => a.current);
+  const ambPRE = withData.filter(a => a.pre);
+
+  const avgEEET = avg(amb, a => a.current.total);
+  const avgEEETPre = avg(ambPRE, a => a.pre.total);
+  const ambGHQ = amb.filter(a => a.current.ghq12 !== null && a.current.ghq12 !== '');
+  const ambGHQPre = ambPRE.filter(a => a.pre && a.pre.ghq12 !== null && a.pre.ghq12 !== '');
+  const avgGHQ = avg(ambGHQ, a => Number(a.current.ghq12));
+  const avgGHQPre = avg(ambGHQPre, a => Number(a.pre.ghq12));
+  const totalSessions = _alumnes.reduce((s, a) => s + (a.sessions || 0), 0);
+
+  set('kpi-participants', _alumnes.length);
+  set('kpi-participants-sub', amb.length + ' amb dades de test');
+  set('kpi-eeet', avgEEET !== null ? avgEEET.toFixed(1) : '—');
+  set('kpi-ghq', avgGHQ !== null ? avgGHQ.toFixed(1) : '—');
+  set('kpi-sessions', totalSessions);
+  set('kpi-sessions-sub', 'mitjana ' + (_alumnes.length ? (totalSessions / _alumnes.length).toFixed(1) : 0) + ' per alumne');
+
+  if (avgEEET !== null && avgEEETPre !== null) {
+    const d = (avgEEET - avgEEETPre).toFixed(1);
+    setDelta('kpi-eeet-delta', d, d > 0 ? '↑ +' + d : '↓ ' + d, d > 0);
+  }
+  if (avgGHQ !== null && avgGHQPre !== null) {
+    const d = (avgGHQ - avgGHQPre).toFixed(1);
+    setDelta('kpi-ghq-delta', d, d < 0 ? '↓ ' + d : '↑ +' + d, d < 0);
+  }
+
+  // Tabs
+  const hasMID = withData.some(a => a.mid);
+  const hasPost = withData.some(a => a.post);
+  const tabs = [{ t: 'Moment actual', v: 'actual' }];
+  if (hasMID) tabs.push({ t: 'Mig curs', v: 'mid' });
+  if (ambPRE.length) tabs.push({ t: 'Inici de curs', v: 'pre' });
+  document.getElementById('moment-tabs').innerHTML = tabs.map((t, i) =>
+    `<button class="moment-tab ${i === 0 ? 'active' : ''}">${t.t}</button>`
+  ).join('');
+
+  // Dimensions
+  const hasEvol = ambPRE.length > 0 && amb.some(a => a.current !== a.pre);
+  set('dim-title', hasEvol ? 'Evolució per dimensió · Inici → Ara' : 'Puntuació per dimensió');
+  document.getElementById('dim-list').innerHTML = DIM_FIELDS.map((f, i) => {
+    const vNow = avg(amb, a => a.current[f]);
+    const vPre = avg(ambPRE, a => a.pre[f]);
+    const diff = vNow !== null && vPre !== null ? (vNow - vPre).toFixed(1) : null;
+    const pctNow = vNow !== null ? (vNow / 12 * 100).toFixed(0) + '%' : '0%';
+    const pctPre = vPre !== null ? (vPre / 12 * 100).toFixed(0) + '%' : '0%';
+    const diffHtml = diff !== null ? `<span class="${Number(diff) > 0 ? 'delta-up' : 'delta-down'}" style="font-size:0.75rem;font-weight:bold">${Number(diff) > 0 ? '+' : ''}${diff}</span>` : '';
+    return `<div class="dim-item">
+      <div class="dim-header">
+        <div class="dim-nom">${DIM_NOMS[i]}</div>
+        <div class="dim-nums">
+          ${vPre !== null && hasEvol ? `<span>Inici ${vPre.toFixed(1)}</span><span>→</span>` : ''}
+          <span class="dim-num-now">${vNow !== null ? vNow.toFixed(1) : '—'} / 12</span>
+          ${diffHtml}
+        </div>
+      </div>
+      <div class="dim-track">
+        ${hasEvol && vPre !== null ? `<div class="dim-fill-pre" style="width:${pctPre}"></div>` : ''}
+        <div class="dim-fill-post" style="width:${pctNow}; background:${DIM_COLORS[i]}; opacity:0.85"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Nivells
+  const nivells = [0, 0, 0, 0];
+  amb.forEach(a => { if (a.current && a.current.nivell !== undefined) nivells[a.current.nivell]++; });
+  const nivellsPre = [0, 0, 0, 0];
+  ambPRE.forEach(a => { if (a.pre && a.pre.nivell !== undefined) nivellsPre[a.pre.nivell]++; });
+
+  set('nivells-title', hasEvol ? 'Distribució de nivells · Ara' : 'Distribució de nivells');
+  document.getElementById('nivells-content').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:0.9rem;margin-top:0.5rem;">
+      ${[0,1,2,3].map(i => `
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.35rem;">
+            <span style="font-size:0.82rem;font-family:'Helvetica Neue',sans-serif;color:${NIVELL_TEXT[i]};">Nivell ${i} — ${NIVELL_NOMS[i]}</span>
+            <span style="font-size:0.82rem;font-family:'Helvetica Neue',sans-serif;font-weight:bold;">${nivells[i]} alumne${nivells[i] !== 1 ? 's' : ''}</span>
+          </div>
+          <div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden;">
+            <div style="width:${amb.length ? (nivells[i]/amb.length*100).toFixed(0) : 0}%;height:100%;background:${NIVELL_COLORS[i]};border-radius:4px;"></div>
+          </div>
+        </div>
+      `).join('')}
+      ${hasEvol ? `<div style="padding-top:0.8rem;border-top:1px solid var(--border);font-size:0.78rem;font-family:'Helvetica Neue',sans-serif;color:var(--muted);line-height:1.5;">
+        A l'inici, ${nivellsPre[0]+nivellsPre[1]} alumnes eren al Nivell 0 o 1. Ara, ${nivells[0]+nivells[1]}.
+      </div>` : ''}
+    </div>`;
+
+  // Alertes
+  const alertes = withData.filter(a => {
+    const ghqAlt = a.current && Number(a.current.ghq12) >= 6;
+    const estancat = a.delta !== null && a.delta <= 0 && a.pre && (a.mid || a.post);
+    return ghqAlt || estancat;
+  });
+  if (alertes.length > 0) {
+    document.getElementById('atencio-card').style.display = 'block';
+    document.getElementById('atencio-list').innerHTML = alertes.map(a => {
+      const ghqAlt = a.current && Number(a.current.ghq12) >= 6;
+      const motiu = ghqAlt
+        ? `GHQ-12 alt (${a.current.ghq12}/12) — possible malestar emocional significatiu`
+        : `EEET sense millora (${a.delta === 0 ? 'igual' : a.delta + ' punts'} des de l'inici)`;
+      return `<div class="atencio-item">
+        <div class="atencio-codi">${a.codi}</div>
+        <div class="atencio-motiu">${motiu}</div>
+        <div><span class="alerta-tag ${ghqAlt ? 'alerta-alt' : 'alerta-mid'}">${ghqAlt ? 'Revisar' : 'Observar'}</span></div>
+      </div>`;
+    }).join('');
+  }
+
+  // Taula
+  if (!hasMID) document.getElementById('th-mid').style.display = 'none';
+  const sorted = [...withData].sort((a, b) => (b.delta ?? -999) - (a.delta ?? -999));
+  set('taula-count', `${_alumnes.length} alumnes · ordenats per evolució`);
+  document.getElementById('taula-body').innerHTML = sorted.map(a => {
+    const pre = a.pre ? a.pre.total : '—';
+    const mid = a.mid ? a.mid.total : '—';
+    const cur = a.current ? a.current.total : '—';
+    const ghq = (a.current && a.current.ghq12 !== null && a.current.ghq12 !== '') ? a.current.ghq12 : '—';
+    const n = a.current ? a.current.nivell : null;
+    const d = a.delta;
+    const ghqAlt = ghq !== '—' && Number(ghq) >= 6;
+    const estancat = d !== null && d <= 0 && a.pre && (a.mid || a.post);
+    const estat = ghqAlt
+      ? '<span class="alerta-tag alerta-alt">Revisar</span>'
+      : estancat
+        ? '<span class="alerta-tag alerta-mid">Observar</span>'
+        : '<span class="alerta-tag alerta-ok">Bé</span>';
+    const deltaHtml = d !== null
+      ? `<span class="delta-cell ${d > 0 ? 'delta-up' : d < 0 ? 'delta-down' : ''}">${d > 0 ? '+' : ''}${d}</span>`
+      : '<span style="color:var(--muted)">—</span>';
+    const midCell = hasMID ? `<td>${mid}</td>` : '';
+    return `<tr>
+      <td class="codi-cell">${a.codi}</td>
+      <td>${pre}</td>
+      ${midCell}
+      <td>${cur}</td>
+      <td>${ghq}</td>
+      <td>${n !== null ? `<span class="nivell-pill ${NIVELL_CLASSES[n]}">${NIVELL_NOMS[n]}</span>` : '—'}</td>
+      <td>${deltaHtml}</td>
+      <td>${estat}</td>
+    </tr>`;
+  }).join('');
+}
+
+function avg(arr, fn) {
+  if (!arr.length) return null;
+  return arr.reduce((s, a) => s + fn(a), 0) / arr.length;
+}
+function set(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+function setDelta(id, d, txt, isGood) {
+  const el = document.getElementById(id);
+  if (el) { el.textContent = txt + ' des de l\'inici'; el.className = 'kpi-delta ' + (isGood ? 'delta-up' : 'delta-down'); }
+}
+
+// ── Tara Orienta tab ──────────────────────────────────────────────
+let _orienta = [];
+let _orientaLoaded = false;
+
+function togglePrimaryTab(tab) {
+  const isBenestar = tab === 'benestar';
+  document.getElementById('tab-benestar').classList.toggle('active', isBenestar);
+  document.getElementById('tab-orienta').classList.toggle('active', !isBenestar);
+  document.getElementById('benestar-section').style.display = isBenestar ? '' : 'none';
+  document.getElementById('orienta-section').style.display = isBenestar ? 'none' : 'block';
+  if (!isBenestar && !_orientaLoaded) carregarOrienta(_grup);
+}
+
+async function carregarOrienta(grup) {
+  document.getElementById('orienta-loading').style.display = 'block';
+  document.getElementById('orienta-table').style.display = 'none';
+  document.getElementById('orienta-empty').style.display = 'none';
+  try {
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sheets_url: SHEETS_URL, sheets_data: { action: 'getDashboardOrienta', grup: grup.toLowerCase() } })
+    });
+    const data = await res.json();
+    _orientaLoaded = true;
+    document.getElementById('orienta-loading').style.display = 'none';
+    if (data.ok && data.alumnes && data.alumnes.length > 0) {
+      _orienta = data.alumnes;
+      renderOrienta();
+    } else {
+      document.getElementById('orienta-count').textContent = '0 alumnes';
+      document.getElementById('orienta-empty').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('orienta-loading').style.display = 'none';
+    document.getElementById('orienta-empty').textContent = 'Error carregant les dades.';
+    document.getElementById('orienta-empty').style.display = 'block';
+  }
+}
+
+function riasecBadge(riasec) {
+  return '<span class="riasec-badge">' +
+    (riasec || '').split('').map(l => `<span class="riasec-letter rl-${l}">${l}</span>`).join('') +
+    '</span>';
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleDateString('ca', { day: '2-digit', month: '2-digit', year: '2-digit' }); }
+  catch(e) { return String(iso).slice(0, 10); }
+}
+
+function renderOrienta() {
+  const sorted = [..._orienta].sort((a, b) => a.codi.localeCompare(b.codi));
+  document.getElementById('orienta-count').textContent = sorted.length + ' alumne' + (sorted.length !== 1 ? 's' : '');
+  document.getElementById('orienta-body').innerHTML = sorted.map(a => `<tr>
+    <td class="codi-cell">${a.codi}</td>
+    <td>${riasecBadge(a.riasec)}</td>
+    <td>${a.hd_tipus ? `<span class="hd-tag">${a.hd_tipus}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+    <td style="font-size:0.82rem;color:var(--ink2);max-width:280px;">${a.feines || '—'}</td>
+    <td style="color:var(--muted);font-size:0.82rem;">${fmtDate(a.data)}</td>
+  </tr>`).join('');
+  document.getElementById('orienta-table').style.display = '';
+}
+</script>
+</body>
+</html>
