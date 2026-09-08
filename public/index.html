@@ -202,7 +202,6 @@
     .voice-main-btn.is-active { background: transparent; color: #b3453f; border: 1px solid rgba(179,69,63,0.4); }
     .voice-mute-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid #ddd3bc; background: var(--surface); color: #52584f; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
     .voice-mute-btn.is-muted { border-color: rgba(193,101,46,0.4); color: var(--gold); background: rgba(193,101,46,0.08); }
-    #voice-consent-modal { position:fixed; inset:0; background:rgba(28,38,33,0.5); z-index:400; display:flex; align-items:center; justify-content:center; padding:1rem; }
   </style>
 </head>
 <body>
@@ -307,16 +306,6 @@
       </svg>
     </button>
     <button class="voice-main-btn" id="voice-main-btn" aria-label="Parlar amb Tara">Parla amb Tara</button>
-  </div>
-</div>
-
-<!-- VOICE CONSENT MODAL -->
-<div id="voice-consent-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="voice-consent-title">
-  <div class="gdpr-box">
-    <h2 id="voice-consent-title">Abans de parlar per veu</h2>
-    <p id="voice-consent-p1">El teu àudio es processa en temps real per un servei extern (ElevenLabs) per convertir-lo en text i en la veu de Tara. No es grava ni es guarda l'àudio.</p>
-    <p id="voice-consent-p2">La resta de promeses segueixen igual: ningú llegeix el contingut de la conversa.</p>
-    <button id="voice-consent-btn" aria-label="Entesos, vull parlar">Entesos, vull parlar</button>
   </div>
 </div>
 
@@ -2108,13 +2097,20 @@ function setVoiceState(state) {
   }
 }
 
+function voiceErrorDetail(e) {
+  if (!e) return '';
+  if (typeof e === 'string') return e;
+  return e.name ? `${e.name}: ${e.message || ''}` : (e.message || String(e));
+}
+
 async function startVoiceSession() {
   if (currentMode !== 'normal') {
     alert(voiceText('modeUnavailable'));
     return;
   }
   if (!window.__elevenlabsConversation) {
-    alert(voiceText('micError'));
+    console.error('Voice: SDK not loaded (window.__elevenlabsConversation missing)');
+    alert(voiceText('micError') + ' (SDK no cargado)');
     return;
   }
   setVoiceState('connecting');
@@ -2125,13 +2121,18 @@ async function startVoiceSession() {
       onConnect: () => setVoiceState('listening'),
       onDisconnect: () => { voiceConversation = null; setVoiceState('idle'); },
       onModeChange: (m) => setVoiceState(m && m.mode === 'speaking' ? 'speaking' : 'listening'),
-      onError: () => { voiceConversation = null; setVoiceState('idle'); alert(voiceText('micError')); }
+      onError: (message, err) => {
+        console.error('Voice onError', message, err);
+        voiceConversation = null;
+        setVoiceState('idle');
+        alert(voiceText('micError') + '\n(' + (message || voiceErrorDetail(err)) + ')');
+      }
     });
   } catch (e) {
     console.error('Voice session error', e);
     voiceConversation = null;
     setVoiceState('idle');
-    alert(voiceText('micError'));
+    alert(voiceText('micError') + '\n(' + voiceErrorDetail(e) + ')');
   }
 }
 
@@ -2152,9 +2153,6 @@ function openVoiceScreen() {
   if (note) note.textContent = voiceText('note');
   setVoiceState('idle');
   document.getElementById('voice-screen').style.display = 'flex';
-  if (localStorage.getItem('tara_voice_consent') !== '1') {
-    document.getElementById('voice-consent-modal').style.display = 'flex';
-  }
 }
 
 function closeVoiceScreen() {
@@ -2180,12 +2178,6 @@ if (voiceMuteBtn) voiceMuteBtn.addEventListener('click', () => {
   const nowMuted = !voiceMuteBtn.classList.contains('is-muted');
   voiceConversation.setMicMuted(nowMuted);
   voiceMuteBtn.classList.toggle('is-muted', nowMuted);
-});
-
-const voiceConsentBtn = document.getElementById('voice-consent-btn');
-if (voiceConsentBtn) voiceConsentBtn.addEventListener('click', () => {
-  localStorage.setItem('tara_voice_consent', '1');
-  document.getElementById('voice-consent-modal').style.display = 'none';
 });
 
 document.getElementById('modal-confirm').addEventListener('click', async () => {
