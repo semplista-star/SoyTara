@@ -3074,9 +3074,13 @@ async function finalitzarTest() {
   }, esLliure ? 3500 : 2000);
 }
 </script>
-<script type="module">
-  import { Conversation } from 'https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.25.0/dist/index.js';
-  window.__elevenlabsConversation = Conversation;
+<script src="https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.25.0/dist/lib.iife.js"></script>
+<script>
+  // The ESM build imports "livekit-client" as a bare specifier, which a
+  // plain browser <script type="module"> can't resolve without a bundler —
+  // that silently broke voice with no page error. The IIFE build below
+  // bundles it, so a normal script tag works.
+  window.__elevenlabsConversation = window.ElevenLabsClient && window.ElevenLabsClient.Conversation;
 </script>
 </body>
 </html>
