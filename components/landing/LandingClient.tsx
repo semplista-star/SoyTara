@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import type { Locale } from "@/lib/i18n";
 import type { LandingContent } from "@/lib/content";
+import BridgeMotif from "./BridgeMotif";
 import "./landing.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,8 +14,11 @@ gsap.registerPlugin(ScrollTrigger);
 export default function LandingClient({ locale, content: c }: { locale: Locale; content: LandingContent }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
-  const contextPinRef = useRef<HTMLDivElement>(null);
-  const phraseRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const confessionRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const railFillRef = useRef<HTMLDivElement>(null);
+  const [activeStep, setActiveStep] = useState(-1);
+  const stepCount = c.product.steps.length;
 
   useLayoutEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -33,7 +37,6 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
           ["[data-reveal]", ".step", ".never-item", ".cred-item", ".hero-title .line span"],
           { opacity: 1, y: 0, x: 0 }
         );
-        phraseRefs.current.forEach((el) => el && gsap.set(el, { opacity: 1, position: "static" }));
         return;
       }
 
@@ -45,34 +48,6 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         .from(".hero-sub", { opacity: 0, y: 16, duration: 0.7 }, "-=0.4")
         .from(".hero-actions", { opacity: 0, y: 16, duration: 0.7 }, "-=0.5")
         .from(".hero-scroll", { opacity: 0, duration: 0.6 }, "-=0.3");
-
-      // --- Context: pinned phrase cycler ---
-      const phrases = phraseRefs.current.filter(Boolean) as HTMLParagraphElement[];
-      if (contextPinRef.current && phrases.length) {
-        gsap.set(phrases, { opacity: 0, y: 16 });
-        gsap.set(phrases[0], { opacity: 1, y: 0 });
-
-        const segment = 1;
-        const total = phrases.length * segment;
-        const phraseTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: contextPinRef.current,
-            start: "top top",
-            end: `+=${total * 100}%`,
-            scrub: 0.6,
-            pin: true,
-            anticipatePin: 1
-          }
-        });
-
-        phrases.forEach((el, i) => {
-          if (i > 0) {
-            phraseTl.to(phrases[i - 1], { opacity: 0, y: -16, duration: 0.22, ease: "power1.in" }, i - 0.3);
-            phraseTl.to(el, { opacity: 1, y: 0, duration: 0.22, ease: "power1.out" }, i - 0.06);
-          }
-          phraseTl.to({}, { duration: 0.55 });
-        });
-      }
 
       // --- Generic reveal-on-scroll for grouped elements ---
       const revealGroups = [".step", ".never-item", ".cred-item"];
@@ -102,6 +77,88 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
     }, rootRef);
 
     return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    if (reduceMotion || !fine) return;
+
+    const buttons = gsap.utils.toArray<HTMLElement>(".btn-gold");
+    const cleanups = buttons.map((btn) => {
+      const strength = 0.35;
+      const onMove = (e: MouseEvent) => {
+        const rect = btn.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) * strength;
+        const y = (e.clientY - rect.top - rect.height / 2) * strength;
+        gsap.to(btn, { x, y, duration: 0.4, ease: "power2.out" });
+      };
+      const onLeave = () => {
+        gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.4)" });
+      };
+      btn.addEventListener("mousemove", onMove);
+      btn.addEventListener("mouseleave", onLeave);
+      return () => {
+        btn.removeEventListener("mousemove", onMove);
+        btn.removeEventListener("mouseleave", onLeave);
+      };
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
+
+  useEffect(() => {
+    const steps = stepRefs.current.filter(Boolean) as HTMLDivElement[];
+    if (!steps.length) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setActiveStep(stepCount - 1);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Number((entry.target as HTMLElement).dataset.stepIndex);
+            setActiveStep(idx);
+          }
+        });
+      },
+      { threshold: 0, rootMargin: "-45% 0px -50% 0px" }
+    );
+    steps.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [stepCount]);
+
+  useEffect(() => {
+    if (railFillRef.current) {
+      railFillRef.current.style.height = `${((activeStep + 1) / stepCount) * 100}%`;
+    }
+  }, [activeStep, stepCount]);
+
+  useEffect(() => {
+    const lines = confessionRefs.current.filter(Boolean) as HTMLParagraphElement[];
+    if (!lines.length) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      lines.forEach((el) => el.classList.add("visible"));
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4, rootMargin: "0px 0px -10% 0px" }
+    );
+    lines.forEach((el) => io.observe(el));
+    return () => io.disconnect();
   }, []);
 
   useEffect(() => {
@@ -166,28 +223,27 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
             </a>
           </div>
         </div>
+        <BridgeMotif className="hero-motif" variant="open" />
         <div className="hero-scroll">
           <span>{c.hero.scroll}</span>
           <span className="hero-scroll-line" aria-hidden="true" />
         </div>
       </section>
 
-      <section className="context">
-        <div className="context-pin" ref={contextPinRef}>
-          <span className="context-kicker">{c.context.kicker}</span>
-          <div className="context-phrase-stage">
-            {c.context.phrases.map((phrase, i) => (
-              <p
-                key={phrase}
-                className="context-phrase"
-                ref={(el) => {
-                  phraseRefs.current[i] = el;
-                }}
-              >
-                {phrase}
-              </p>
-            ))}
-          </div>
+      <section className="context wrap">
+        <span className="context-kicker">{c.context.kicker}</span>
+        <div className="confessions">
+          {c.context.phrases.map((phrase, i) => (
+            <p
+              key={phrase}
+              className="confession-line"
+              ref={(el) => {
+                confessionRefs.current[i] = el;
+              }}
+            >
+              {phrase}
+            </p>
+          ))}
         </div>
         <div className="context-closing">
           <p data-reveal>{c.context.closing}</p>
@@ -202,8 +258,17 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
           {c.product.title}
         </h2>
         <div className="steps">
-          {c.product.steps.map((step) => (
-            <div className="step" key={step.n}>
+          <div className="steps-rail" aria-hidden="true" />
+          <div className="steps-rail-fill" ref={railFillRef} aria-hidden="true" />
+          {c.product.steps.map((step, i) => (
+            <div
+              className={`step${i <= activeStep ? " active" : ""}`}
+              key={step.n}
+              data-step-index={i}
+              ref={(el) => {
+                stepRefs.current[i] = el;
+              }}
+            >
               <span className="step-num">{step.n}</span>
               <div className="step-body">
                 <span className="step-word">{step.word}</span>
@@ -255,6 +320,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
       </section>
 
       <section className="cta">
+        <BridgeMotif className="cta-motif" variant="resolved" />
         <h2 className="cta-title">
           {c.cta.line1}
           <br />
