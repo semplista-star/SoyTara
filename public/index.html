@@ -295,7 +295,7 @@
   <div class="voice-stage">
     <div class="voice-orb" id="voice-orb"><div class="voice-orb-core"></div></div>
     <p class="voice-status" id="voice-status">Toca per parlar</p>
-    <p class="voice-note" id="voice-note">Ara mateix, la veu de Tara només és en castellà.</p>
+    <p class="voice-note" id="voice-note">Tara te habla en español.</p>
   </div>
   <div class="voice-controls">
     <button class="voice-mute-btn" id="voice-mute-btn" style="display:none;" aria-label="Silenciar micròfon">
@@ -2048,7 +2048,12 @@ if (newSessionBtn) {
 }
 
 // ---------- VEU (ElevenLabs Conversational AI, mode normal únicament) ----------
-const VOICE_AGENT_ID = 'agent_2301m20j5c1xe45s37k8drwrhzek';
+// Un agent per idioma — la veu segueix l'idioma seleccionat a la capçalera (lang).
+const VOICE_AGENT_IDS = {
+  es: 'agent_2301m20j5c1xe45s37k8drwrhzek',
+  ca: 'agent_5301m231a21nert8r5bd2e20nadv',
+  en: 'agent_3801m231a3xqe5rtdn1t6yavszsf'
+};
 let voiceConversation = null;
 let voiceState = 'idle'; // idle | connecting | listening | speaking
 
@@ -2060,7 +2065,7 @@ function voiceText(key) {
     speaking: { ca: 'Tara està parlant…', es: 'Tara está hablando…', en: 'Tara is speaking…' },
     start: { ca: 'Parla amb Tara', es: 'Habla con Tara', en: 'Talk to Tara' },
     end: { ca: 'Acabar', es: 'Terminar', en: 'End' },
-    note: { ca: 'Ara mateix, la veu de Tara només és en castellà.', es: 'Ahora mismo, la voz de Tara solo está en español.', en: "Right now, Tara's voice is only in Spanish." },
+    note: { ca: 'La Tara et parla en català.', es: 'Tara te habla en español.', en: 'Tara speaks in English.' },
     modeUnavailable: { ca: 'La veu encara no està disponible en aquest mode.', es: 'La voz aún no está disponible en este modo.', en: "Voice isn't available in this mode yet." },
     micError: { ca: "No s'ha pogut accedir al micròfon.", es: 'No se pudo acceder al micrófono.', en: 'Could not access the microphone.' }
   };
@@ -2116,7 +2121,7 @@ async function startVoiceSession() {
   setVoiceState('connecting');
   try {
     voiceConversation = await window.__elevenlabsConversation.startSession({
-      agentId: VOICE_AGENT_ID,
+      agentId: VOICE_AGENT_IDS[lang] || VOICE_AGENT_IDS.es,
       connectionType: 'webrtc',
       onConnect: () => setVoiceState('listening'),
       onDisconnect: () => { voiceConversation = null; setVoiceState('idle'); },
