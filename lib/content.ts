@@ -30,6 +30,13 @@ export interface LandingContent {
     kicker: string;
     items: { n: string; title: string; body: string }[];
   };
+  privacy: {
+    kicker: string;
+    title: string;
+    intro: string;
+    points: { title: string; body: string }[];
+    note: { title: string; body: string };
+  };
   cta: {
     line1: string;
     line2: string;
@@ -94,6 +101,23 @@ export const CONTENT: Record<Locale, LandingContent> = {
         { n: "IES", title: "ya en centros educativos", body: "Con un panel propio para tutorías, administración y referentes de bienestar — construido para que el acompañamiento no se quede solo en la pantalla." }
       ]
     },
+    privacy: {
+      kicker: "Privacidad y protección",
+      title: "Nadie más lee lo que escribes.",
+      intro: "Tara está construida para adolescentes, así que el diseño parte de una pregunta muy simple: ¿qué necesitaría saber para atreverme a contarlo?",
+      points: [
+        { title: "No guardamos lo que escribes", body: "El texto literal de la conversación nunca se envía ni se almacena. Solo se registran datos anónimos de uso (idioma, franja horaria) para mejorar el servicio." },
+        { title: "No hace falta decir quién eres", body: "No hay registro ni cuenta. Hablas con Tara de forma anónima, sin nombre ni email." },
+        { title: "La conversación viaja cifrada", body: "Nadie de fuera puede leerla. No se comparte, no se vende y no hay publicidad ni rastreo comercial." },
+        { title: "Cuando hace falta ayuda real, decide una persona", body: "El protocolo de seguridad lo revisa siempre un humano responsable — la IA nunca decide sola ni actúa por su cuenta." },
+        { title: "Los datos caducan solos", body: "La información de uso se elimina de forma automática pasado un tiempo. Nada se queda guardado \"por si acaso\"." },
+        { title: "Cumplimos el RGPD", body: "Tara sigue el reglamento europeo de protección de datos y la normativa española específica para menores de edad." }
+      ],
+      note: {
+        title: "En los centros educativos, un nivel más de garantías.",
+        body: "Cuando Tara se usa dentro de un centro, el acceso del personal está protegido con verificación en dos pasos, las peticiones al sistema están limitadas para evitar abusos, y cualquier alerta de seguridad llega en tiempo real y por escrito a las personas responsables — nunca se pierde ni se queda sin revisar."
+      }
+    },
     cta: {
       line1: "Sea lo que sea,",
       line2: "empieza por donde estés.",
@@ -156,6 +180,23 @@ export const CONTENT: Record<Locale, LandingContent> = {
         { n: "IES", title: "ja en centres educatius", body: "Amb un panell propi per a tutories, administració i referents de benestar — construït perquè l'acompanyament no es quedi només a la pantalla." }
       ]
     },
+    privacy: {
+      kicker: "Privacitat i protecció",
+      title: "Ningú més llegeix el que escrius.",
+      intro: "Tara està construïda per a adolescents, així que el disseny parteix d'una pregunta molt senzilla: què necessitaria saber per atrevir-me a explicar-ho?",
+      points: [
+        { title: "No guardem el que escrius", body: "El text literal de la conversa mai s'envia ni s'emmagatzema. Només es registren dades anònimes d'ús (idioma, franja horària) per millorar el servei." },
+        { title: "No cal dir qui ets", body: "No hi ha registre ni compte. Parles amb Tara de forma anònima, sense nom ni correu." },
+        { title: "La conversa viatja xifrada", body: "Ningú de fora la pot llegir. No es comparteix, no es ven i no hi ha publicitat ni seguiment comercial." },
+        { title: "Quan cal ajuda de veritat, decideix una persona", body: "El protocol de seguretat sempre el revisa una persona responsable — la IA mai decideix sola ni actua pel seu compte." },
+        { title: "Les dades caduquen soles", body: "La informació d'ús s'elimina de forma automàtica passat un temps. Res es queda guardat \"per si de cas\"." },
+        { title: "Complim el RGPD", body: "Tara segueix el reglament europeu de protecció de dades i la normativa espanyola específica per a persones menors d'edat." }
+      ],
+      note: {
+        title: "Als centres educatius, un nivell més de garanties.",
+        body: "Quan Tara s'utilitza dins d'un centre, l'accés del personal està protegit amb verificació en dos passos, les peticions al sistema estan limitades per evitar abusos, i qualsevol alerta de seguretat arriba en temps real i per escrit a les persones responsables — mai es perd ni es queda sense revisar."
+      }
+    },
     cta: {
       line1: "Sigui el que sigui,",
       line2: "comença per on siguis.",
@@ -217,6 +258,23 @@ export const CONTENT: Record<Locale, LandingContent> = {
         { n: "24h", title: "real safety protocol", body: "Backed by real helplines, not a generic AI response." },
         { n: "K-12", title: "already in schools", body: "With its own panel for tutors, administrators and wellbeing staff — built so the support doesn't stay stuck on a screen." }
       ]
+    },
+    privacy: {
+      kicker: "Privacy & protection",
+      title: "No one else reads what you write.",
+      intro: "Tara is built for teenagers, so the design starts from one simple question: what would I need to know to actually dare to say it?",
+      points: [
+        { title: "We don't save what you write", body: "The literal text of the conversation is never sent or stored. Only anonymous usage data (language, time of day) is logged to improve the service." },
+        { title: "You don't have to say who you are", body: "No sign-up, no account. You talk to Tara anonymously, with no name and no email." },
+        { title: "The conversation is encrypted", body: "No one outside can read it. It's never shared or sold, and there's no advertising or commercial tracking." },
+        { title: "When real help is needed, a person decides", body: "The safety protocol is always reviewed by a responsible human — the AI never decides alone or acts on its own." },
+        { title: "Your data expires on its own", body: "Usage data is automatically deleted after a set period. Nothing sits around stored \"just in case.\"" },
+        { title: "We comply with GDPR", body: "Tara follows the EU data protection regulation and Spain's specific rules for minors." }
+      ],
+      note: {
+        title: "In schools, an extra layer of safeguards.",
+        body: "When Tara is used inside a school, staff access is protected with two-factor verification, requests to the system are rate-limited to prevent abuse, and any safety alert reaches the responsible people in real time and in writing — it's never lost and never left unreviewed."
+      }
     },
     cta: {
       line1: "Whatever it is,",

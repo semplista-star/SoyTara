@@ -319,6 +319,30 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         </div>
       </section>
 
+      <section className="privacy wrap" id="privacy">
+        <span className="section-kicker" data-reveal>
+          {c.privacy.kicker}
+        </span>
+        <h2 className="section-title" data-reveal>
+          {c.privacy.title}
+        </h2>
+        <p className="privacy-intro" data-reveal>
+          {c.privacy.intro}
+        </p>
+        <div className="never-grid privacy-grid">
+          {c.privacy.points.map((item) => (
+            <div className="never-item" key={item.title}>
+              <h3 className="never-title privacy-point-title">{item.title}</h3>
+              <p className="never-body">{item.body}</p>
+            </div>
+          ))}
+        </div>
+        <div className="bridge" data-reveal>
+          <h3 className="bridge-title">{c.privacy.note.title}</h3>
+          <p className="bridge-body">{c.privacy.note.body}</p>
+        </div>
+      </section>
+
       <section className="cta">
         <BridgeMotif className="cta-motif" variant="resolved" />
         <h2 className="cta-title">
@@ -340,6 +364,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
           <span className="footer-tagline">{c.footer.rights}</span>
           <div className="footer-links">
             <a href="/escoles">{c.footer.schools}</a>
+            <a href="#privacy">{c.footer.privacy}</a>
           </div>
         </div>
       </footer>
