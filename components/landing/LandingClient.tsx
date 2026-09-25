@@ -3,7 +3,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import type { Locale } from "@/lib/i18n";
 import type { LandingContent } from "@/lib/content";
 import BridgeMotif from "./BridgeMotif";
@@ -168,27 +167,6 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
     return () => io.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    // duration tuned down from 1.1s: at 1.1 the page felt sluggish to catch
-    // up with input, especially once more sections were added. syncTouch
-    // stays off (default) so mobile keeps native momentum scrolling — Lenis
-    // only takes over desktop wheel input.
-    const lenis = new Lenis({ duration: 0.85, wheelMultiplier: 1, smoothWheel: true });
-    lenis.on("scroll", ScrollTrigger.update);
-
-    function raf(time: number) {
-      lenis.raf(time);
-    }
-    gsap.ticker.add(raf);
-    gsap.ticker.lagSmoothing(0);
-
-    return () => {
-      gsap.ticker.remove(raf);
-      lenis.destroy();
-    };
-  }, []);
 
   return (
     <div className="landing" ref={rootRef}>
