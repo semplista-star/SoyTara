@@ -37,13 +37,19 @@ export interface LandingContent {
     points: { title: string; body: string }[];
     note: { title: string; body: string };
   };
+  team: {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    members: { initials: string; name: string; role: string; bio: string[]; photo?: string }[];
+  };
   cta: {
     line1: string;
     line2: string;
     button: string;
     note: string;
   };
-  footer: { rights: string; schools: string; privacy: string };
+  footer: { rights: string; schools: string; privacy: string; team: string };
 }
 
 export const CONTENT: Record<Locale, LandingContent> = {
@@ -118,13 +124,70 @@ export const CONTENT: Record<Locale, LandingContent> = {
         body: "Cuando Tara se usa dentro de un centro, el acceso del personal está protegido con verificación en dos pasos, las peticiones al sistema están limitadas para evitar abusos, y cualquier alerta de seguridad llega en tiempo real y por escrito a las personas responsables — nunca se pierde ni se queda sin revisar."
       }
     },
+    team: {
+      kicker: "Quién hay detrás",
+      title: "Equipo",
+      subtitle: "Visión, dirección, tecnología, pedagogía y salud mental",
+      members: [
+        {
+          initials: "MB",
+          name: "Marc Boix Sanglas",
+          role: "Arquitectura · Visión",
+          bio: [
+            "Creador de Tara (soytara.com) y Mirall Íntim (mirallintim.com) — validado por profesionales de salud mental.",
+            "Cofundador de EMLIFE y creador del primer probiótico líquido del mercado español.",
+            "Experiencia en educación emocional, CNV aplicada y arquitectura de IA conversacional."
+          ]
+        },
+        {
+          initials: "MR",
+          name: "Marc Ribó Tarré",
+          role: "Estrategia · Crecimiento",
+          bio: [
+            "Fundador de la agencia de marketing Aurora Global Group y cofundador de OPEN, software de gestión de escuelas de yoga.",
+            "MBA y amplia experiencia en liderazgo emprendedor, visión comercial y estrategia de mercado.",
+            "Trayectoria demostrada en construcción de nuevas categorías y desarrollo de negocio."
+          ]
+        },
+        {
+          initials: "FA",
+          name: "Flor Alonso Arjona",
+          role: "Educación emocional · Convivencia",
+          bio: [
+            "Maestra con 12 años de aula. Mediadora familiar y escolar, formadora en CNV y coach familiar.",
+            "Máster Universitario en Educación Emocional y del Carácter. Autora del libro «Aquí convive una familia».",
+            "Fundadora de Educando en la Paz: 4 años formando a alumnado, profesorado y familias en centros educativos."
+          ]
+        },
+        {
+          initials: "MF",
+          name: "Mireia Font Rodríguez",
+          role: "Supervisión clínica · Derivación",
+          bio: [
+            "Graduada en Psicología por la UAB y Máster en Psicología General Sanitaria por la UVic-UCC.",
+            "Experiencia en salud mental infantojuvenil y neuropsicología clínica.",
+            "Vinculada al CSMIJ del Consorci Hospitalari de Vic en el marco de formación sanitaria especializada."
+          ]
+        },
+        {
+          initials: "MS",
+          name: "Mustapha Sousan",
+          role: "Infraestructura · Seguridad",
+          bio: [
+            "Director General de T-Connect y VSL — programación, desarrollo web e infraestructura digital.",
+            "Autor de Bonito Caos (Amazon, 2017), escrito a los 16 años — récord de ventas.",
+            "Responsable de la arquitectura técnica escalable, seguridad GDPR, desarrollo de modelo de IA propio e integración API."
+          ]
+        }
+      ]
+    },
     cta: {
       line1: "Sea lo que sea,",
       line2: "empieza por donde estés.",
       button: "Habla con Tara",
       note: "Gratis. Sin registro. Nadie más lo lee."
     },
-    footer: { rights: "De la pantalla a la vida.", schools: "Centros educativos", privacy: "Privacidad" }
+    footer: { rights: "De la pantalla a la vida.", schools: "Centros educativos", privacy: "Privacidad", team: "Equipo" }
   },
   ca: {
     nav: { chat: "Parla amb Tara", schools: "Centres educatius" },
@@ -197,13 +260,70 @@ export const CONTENT: Record<Locale, LandingContent> = {
         body: "Quan Tara s'utilitza dins d'un centre, l'accés del personal està protegit amb verificació en dos passos, les peticions al sistema estan limitades per evitar abusos, i qualsevol alerta de seguretat arriba en temps real i per escrit a les persones responsables — mai es perd ni es queda sense revisar."
       }
     },
+    team: {
+      kicker: "Qui hi ha darrere",
+      title: "Equip",
+      subtitle: "Visió, direcció, tecnologia, pedagogia i salut mental",
+      members: [
+        {
+          initials: "MB",
+          name: "Marc Boix Sanglas",
+          role: "Arquitectura · Visió",
+          bio: [
+            "Creador de Tara (soytara.com) i Mirall Íntim (mirallintim.com) — validat per professionals de salut mental.",
+            "Cofundador d'EMLIFE i creador del primer probiòtic líquid del mercat espanyol.",
+            "Experiència en educació emocional, CNV aplicada i arquitectura d'IA conversacional."
+          ]
+        },
+        {
+          initials: "MR",
+          name: "Marc Ribó Tarré",
+          role: "Estratègia · Creixement",
+          bio: [
+            "Fundador de l'agència de màrqueting Aurora Global Group i cofundador d'OPEN, software de gestió d'escoles de ioga.",
+            "MBA i àmplia experiència en lideratge emprenedor, visió comercial i estratègia de mercat.",
+            "Trajectòria demostrada en construcció de noves categories i desenvolupament de negoci."
+          ]
+        },
+        {
+          initials: "FA",
+          name: "Flor Alonso Arjona",
+          role: "Educació emocional · Convivència",
+          bio: [
+            "Mestra amb 12 anys d'aula. Mediadora familiar i escolar, formadora en CNV i coach familiar.",
+            "Màster Universitari en Educació Emocional i del Caràcter. Autora del llibre «Aquí convive una familia».",
+            "Fundadora d'Educando en la Paz: 4 anys formant alumnat, professorat i famílies en centres educatius."
+          ]
+        },
+        {
+          initials: "MF",
+          name: "Mireia Font Rodríguez",
+          role: "Supervisió clínica · Derivació",
+          bio: [
+            "Graduada en Psicologia per la UAB i Màster en Psicologia General Sanitària per la UVic-UCC.",
+            "Experiència en salut mental infantojuvenil i neuropsicologia clínica.",
+            "Vinculada al CSMIJ del Consorci Hospitalari de Vic en el marc de formació sanitària especialitzada."
+          ]
+        },
+        {
+          initials: "MS",
+          name: "Mustapha Sousan",
+          role: "Infraestructura · Seguretat",
+          bio: [
+            "Director General de T-Connect i VSL — programació, desenvolupament web i infraestructura digital.",
+            "Autor de Bonito Caos (Amazon, 2017), escrit als 16 anys — rècord de vendes.",
+            "Responsable de l'arquitectura tècnica escalable, seguretat GDPR, desenvolupament de model d'IA propi i integració API."
+          ]
+        }
+      ]
+    },
     cta: {
       line1: "Sigui el que sigui,",
       line2: "comença per on siguis.",
       button: "Parla amb Tara",
       note: "Gratis. Sense registre. Ningú més ho llegeix."
     },
-    footer: { rights: "De la pantalla a la vida.", schools: "Centres educatius", privacy: "Privacitat" }
+    footer: { rights: "De la pantalla a la vida.", schools: "Centres educatius", privacy: "Privacitat", team: "Equip" }
   },
   en: {
     nav: { chat: "Talk to Tara", schools: "Schools" },
@@ -276,12 +396,69 @@ export const CONTENT: Record<Locale, LandingContent> = {
         body: "When Tara is used inside a school, staff access is protected with two-factor verification, requests to the system are rate-limited to prevent abuse, and any safety alert reaches the responsible people in real time and in writing — it's never lost and never left unreviewed."
       }
     },
+    team: {
+      kicker: "Who's behind it",
+      title: "Team",
+      subtitle: "Vision, leadership, technology, pedagogy and mental health",
+      members: [
+        {
+          initials: "MB",
+          name: "Marc Boix Sanglas",
+          role: "Architecture · Vision",
+          bio: [
+            "Creator of Tara (soytara.com) and Mirall Íntim (mirallintim.com) — validated by mental health professionals.",
+            "Co-founder of EMLIFE and creator of the first liquid probiotic on the Spanish market.",
+            "Experience in emotional education, applied NVC and conversational AI architecture."
+          ]
+        },
+        {
+          initials: "MR",
+          name: "Marc Ribó Tarré",
+          role: "Strategy · Growth",
+          bio: [
+            "Founder of marketing agency Aurora Global Group and co-founder of OPEN, yoga-studio management software.",
+            "MBA with extensive experience in entrepreneurial leadership, commercial vision and market strategy.",
+            "Track record building new categories and growing businesses."
+          ]
+        },
+        {
+          initials: "FA",
+          name: "Flor Alonso Arjona",
+          role: "Emotional education · School climate",
+          bio: [
+            "Teacher with 12 years in the classroom. Family and school mediator, NVC trainer and family coach.",
+            "Master's degree in Emotional and Character Education. Author of the book «Aquí convive una familia».",
+            "Founder of Educando en la Paz: 4 years training students, teachers and families in schools."
+          ]
+        },
+        {
+          initials: "MF",
+          name: "Mireia Font Rodríguez",
+          role: "Clinical oversight · Escalation",
+          bio: [
+            "Degree in Psychology from UAB and Master's in General Health Psychology from UVic-UCC.",
+            "Experience in child and adolescent mental health and clinical neuropsychology.",
+            "Affiliated with the CSMIJ at Consorci Hospitalari de Vic as part of specialized healthcare training."
+          ]
+        },
+        {
+          initials: "MS",
+          name: "Mustapha Sousan",
+          role: "Infrastructure · Security",
+          bio: [
+            "Managing Director of T-Connect and VSL — programming, web development and digital infrastructure.",
+            "Author of Bonito Caos (Amazon, 2017), written at age 16 — a bestseller.",
+            "Responsible for scalable technical architecture, GDPR security, in-house AI model development and API integration."
+          ]
+        }
+      ]
+    },
     cta: {
       line1: "Whatever it is,",
       line2: "start from where you are.",
       button: "Talk to Tara",
       note: "Free. No sign-up. No one else reads it."
     },
-    footer: { rights: "From the screen to real life.", schools: "Schools", privacy: "Privacy" }
+    footer: { rights: "From the screen to real life.", schools: "Schools", privacy: "Privacy", team: "Team" }
   }
 };

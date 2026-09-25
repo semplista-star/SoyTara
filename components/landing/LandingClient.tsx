@@ -34,7 +34,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
 
       if (reduceMotion) {
         gsap.set(
-          ["[data-reveal]", ".step", ".never-item", ".cred-item", ".hero-title .line span"],
+          ["[data-reveal]", ".step", ".never-item", ".cred-item", ".team-card", ".hero-title .line span"],
           { opacity: 1, y: 0, x: 0 }
         );
         return;
@@ -50,7 +50,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         .from(".hero-scroll", { opacity: 0, duration: 0.6 }, "-=0.3");
 
       // --- Generic reveal-on-scroll for grouped elements ---
-      const revealGroups = [".step", ".never-item", ".cred-item"];
+      const revealGroups = [".step", ".never-item", ".cred-item", ".team-card"];
       revealGroups.forEach((sel) => {
         const items = gsap.utils.toArray<HTMLElement>(sel);
         items.forEach((el, i) => {
@@ -75,6 +75,13 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         });
       });
     }, rootRef);
+
+    // Trigger start positions are computed from layout at mount time. Even
+    // with next/font avoiding most font-swap shift, refresh once more after
+    // fonts finish loading so reveal animations never fire against stale
+    // (pre-layout) scroll offsets — that mismatch is what reads as "jumpy"
+    // scrolling rather than smooth.
+    document.fonts?.ready?.then(() => ScrollTrigger.refresh());
 
     return () => ctx.revert();
   }, []);
@@ -164,7 +171,11 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+    // duration tuned down from 1.1s: at 1.1 the page felt sluggish to catch
+    // up with input, especially once more sections were added. syncTouch
+    // stays off (default) so mobile keeps native momentum scrolling — Lenis
+    // only takes over desktop wheel input.
+    const lenis = new Lenis({ duration: 0.85, wheelMultiplier: 1, smoothWheel: true });
     lenis.on("scroll", ScrollTrigger.update);
 
     function raf(time: number) {
@@ -343,6 +354,38 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         </div>
       </section>
 
+      <section className="team wrap" id="team">
+        <span className="section-kicker" data-reveal>
+          {c.team.kicker}
+        </span>
+        <h2 className="section-title" data-reveal>
+          {c.team.title}
+        </h2>
+        <p className="team-subtitle" data-reveal>
+          {c.team.subtitle}
+        </p>
+        <div className="team-grid">
+          {c.team.members.map((member) => (
+            <div className="team-card" key={member.name}>
+              {member.photo ? (
+                <img className="team-photo" src={member.photo} alt={member.name} />
+              ) : (
+                <span className="team-avatar" aria-hidden="true">
+                  {member.initials}
+                </span>
+              )}
+              <h3 className="team-name">{member.name}</h3>
+              <span className="team-role">{member.role}</span>
+              {member.bio.map((p, i) => (
+                <p className="team-bio" key={i}>
+                  {p}
+                </p>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="cta">
         <BridgeMotif className="cta-motif" variant="resolved" />
         <h2 className="cta-title">
@@ -364,6 +407,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
           <span className="footer-tagline">{c.footer.rights}</span>
           <div className="footer-links">
             <a href="/escoles">{c.footer.schools}</a>
+            <a href="#team">{c.footer.team}</a>
             <a href="#privacy">{c.footer.privacy}</a>
           </div>
         </div>

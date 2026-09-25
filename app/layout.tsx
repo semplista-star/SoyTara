@@ -1,7 +1,27 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { Fraunces, DM_Sans, DM_Mono } from "next/font/google";
 import { localeForHost, BRAND_BY_LOCALE } from "@/lib/i18n";
 import "./globals.css";
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-fraunces",
+  display: "swap"
+});
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-dm-sans",
+  display: "swap"
+});
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-dm-mono",
+  display: "swap"
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const h = await headers();
@@ -35,7 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = localeForHost(h.get("host") ?? "");
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${fraunces.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body>{children}</body>
     </html>
   );
