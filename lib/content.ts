@@ -1,7 +1,13 @@
 import type { Locale } from "./i18n";
 
 export interface LandingContent {
-  nav: { chat: string; schools: string };
+  nav: {
+    chat: string;
+    chatShort: string;
+    menu: { how: string; privacy: string; community: string; team: string };
+    language: string;
+    urgency: string;
+  };
   hero: {
     eyebrow: string;
     line1: string;
@@ -26,15 +32,19 @@ export interface LandingContent {
     never: { title: string; body: string }[];
     bridge: { title: string; body: string; helplines: string };
   };
-  credibility: {
+  community: {
     kicker: string;
-    items: { n: string; title: string; body: string }[];
+    title: string;
+    intro: string;
+    cards: { title: string; subtitle: string; body: string; linkLabel?: string; href?: string }[];
+    extra: string;
   };
   privacy: {
     kicker: string;
     title: string;
     intro: string;
     points: { title: string; body: string }[];
+    policyLink: string;
     note: { title: string; body: string };
   };
   team: {
@@ -49,12 +59,25 @@ export interface LandingContent {
     button: string;
     note: string;
   };
-  footer: { rights: string; schools: string; privacy: string; team: string };
+  footer: {
+    rights: string;
+    columns: {
+      product: { heading: string; how: string; schools: string; team: string };
+      legal: { heading: string; notice: string; privacy: string; rights: string };
+      language: { heading: string };
+    };
+  };
 }
 
 export const CONTENT: Record<Locale, LandingContent> = {
   es: {
-    nav: { chat: "Hablar con Tara", schools: "Centros educativos" },
+    nav: {
+      chat: "Hablar con Tara",
+      chatShort: "Hablar",
+      menu: { how: "Cómo funciona", privacy: "Privacidad", community: "Centros y familias", team: "Equipo" },
+      language: "Idioma",
+      urgency: "¿Urgencia? Llama al 024"
+    },
     hero: {
       eyebrow: "Acompañamiento emocional · Comunicación No Violenta",
       line1: "Hola.",
@@ -99,26 +122,44 @@ export const CONTENT: Record<Locale, LandingContent> = {
         helplines: "024 · Teléfono de la Esperanza 717 00 37 17 — 24 horas, gratuito"
       }
     },
-    credibility: {
-      kicker: "Por si te lo preguntas",
-      items: [
-        { n: "3", title: "idiomas propios", body: "Castellano, català i English. No son traducciones automáticas: cada idioma tiene sus propias reglas de tono y expresión." },
-        { n: "24h", title: "protocolo de seguridad real", body: "Respaldado por líneas de ayuda de verdad, no por una respuesta genérica de IA." },
-        { n: "IES", title: "ya en centros educativos", body: "Con un panel propio para tutorías, administración y referentes de bienestar — construido para que el acompañamiento no se quede solo en la pantalla." }
-      ]
+    community: {
+      kicker: "Para toda la comunidad",
+      title: "Un ecosistema de acompañamiento, no una app suelta.",
+      intro: "Tara no sustituye al tutor, al orientador ni a la familia. Les abre la puerta para que su acompañamiento llegue antes.",
+      cards: [
+        {
+          title: "Centros educativos",
+          subtitle: "Un programa que se integra con lo que ya tenéis",
+          body: "Panel para tutoría, orientación y bienestar. Formación del claustro y escuela de familias.",
+          linkLabel: "Ver el programa para centros →",
+          href: "/escoles"
+        },
+        {
+          title: "Profesorado · Tara Docente",
+          subtitle: "Preparar tutorías y conversaciones difíciles",
+          body: "Gestionar conflictos en el aula con más herramientas."
+        },
+        {
+          title: "Familias · Tara Família",
+          subtitle: "Entender mejor lo que vive tu hijo o tu hija",
+          body: "Preparar en casa las conversaciones que cuestan."
+        }
+      ],
+      extra: "También: Tara Orienta, para descubrir tu perfil profesional (próximamente)."
     },
     privacy: {
       kicker: "Privacidad y protección",
-      title: "Nadie más lee lo que escribes.",
-      intro: "Tara está construida para adolescentes, así que el diseño parte de una pregunta muy simple: ¿qué necesitaría saber para atreverme a contarlo?",
+      title: "Lo que guardamos y lo que no.",
+      intro: "Tara está hecha para adolescentes. Cada frase de esta sección tiene que describir exactamente lo que hace el chat.",
       points: [
-        { title: "No guardamos lo que escribes", body: "El texto literal de la conversación nunca se envía ni se almacena. Solo se registran datos anónimos de uso (idioma, franja horaria) para mejorar el servicio." },
         { title: "No hace falta decir quién eres", body: "No hay registro ni cuenta. Hablas con Tara de forma anónima, sin nombre ni email." },
+        { title: "Qué se guarda de la conversación", body: "[Por decidir con el equipo: exactamente qué se guarda, durante cuánto tiempo y si se usa para mejorar el modelo.]" },
         { title: "La conversación viaja cifrada", body: "Nadie de fuera puede leerla. No se comparte, no se vende y no hay publicidad ni rastreo comercial." },
-        { title: "Cuando hace falta ayuda real, decide una persona", body: "El protocolo de seguridad lo revisa siempre un humano responsable — la IA nunca decide sola ni actúa por su cuenta." },
-        { title: "Los datos caducan solos", body: "La información de uso se elimina de forma automática pasado un tiempo. Nada se queda guardado \"por si acaso\"." },
-        { title: "Cumplimos el RGPD", body: "Tara sigue el reglamento europeo de protección de datos y la normativa española específica para menores de edad." }
+        { title: "Decide una persona", body: "En una alerta de seguridad, la IA nunca actúa sola: la revisa un humano responsable." },
+        { title: "RGPD y normativa de menores", body: "Reglamento europeo y normativa española para menores de edad." },
+        { title: "Edad de uso", body: "[Por fijar: a partir de 12 o 14 años.]" }
       ],
+      policyLink: "Política de privacidad completa →",
       note: {
         title: "En los centros educativos, un nivel más de garantías.",
         body: "Cuando Tara se usa dentro de un centro, el acceso del personal está protegido con verificación en dos pasos, las peticiones al sistema están limitadas para evitar abusos, y cualquier alerta de seguridad llega en tiempo real y por escrito a las personas responsables — nunca se pierde ni se queda sin revisar."
@@ -187,10 +228,23 @@ export const CONTENT: Record<Locale, LandingContent> = {
       button: "Habla con Tara",
       note: "Gratis. Sin registro. Nadie más lo lee."
     },
-    footer: { rights: "De la pantalla a la vida.", schools: "Centros educativos", privacy: "Privacidad", team: "Equipo" }
+    footer: {
+      rights: "De la pantalla a la vida.",
+      columns: {
+        product: { heading: "Tara", how: "Cómo funciona", schools: "Centros educativos", team: "Equipo" },
+        legal: { heading: "Legal", notice: "Aviso legal", privacy: "Política de privacidad", rights: "Cómo ejercer tus derechos" },
+        language: { heading: "Idioma" }
+      }
+    }
   },
   ca: {
-    nav: { chat: "Parla amb Tara", schools: "Centres educatius" },
+    nav: {
+      chat: "Parla amb Tara",
+      chatShort: "Parla",
+      menu: { how: "Com funciona", privacy: "Privacitat", community: "Centres i famílies", team: "Equip" },
+      language: "Idioma",
+      urgency: "Urgència? Truca al 024"
+    },
     hero: {
       eyebrow: "Acompanyament emocional · Comunicació No Violenta",
       line1: "Hola.",
@@ -235,26 +289,44 @@ export const CONTENT: Record<Locale, LandingContent> = {
         helplines: "024 · Telèfon de l'Esperança 717 00 37 17 — 24 hores, gratuït"
       }
     },
-    credibility: {
-      kicker: "Per si t'ho preguntes",
-      items: [
-        { n: "3", title: "idiomes propis", body: "Català, castellà i anglès. No són traduccions automàtiques: cada idioma té les seves pròpies regles de to i expressió." },
-        { n: "24h", title: "protocol de seguretat real", body: "Recolzat per línies d'ajuda de veritat, no per una resposta genèrica d'IA." },
-        { n: "IES", title: "ja en centres educatius", body: "Amb un panell propi per a tutories, administració i referents de benestar — construït perquè l'acompanyament no es quedi només a la pantalla." }
-      ]
+    community: {
+      kicker: "Per a tota la comunitat",
+      title: "Un ecosistema d'acompanyament, no una app solta.",
+      intro: "Tara no substitueix el tutor, l'orientador ni la família. Els obre la porta perquè el seu acompanyament arribi abans.",
+      cards: [
+        {
+          title: "Centres educatius",
+          subtitle: "Un programa que s'integra amb el que ja teniu",
+          body: "Panell per a tutoria, orientació i benestar. Formació del claustre i escola de famílies.",
+          linkLabel: "Veure el programa per a centres →",
+          href: "/escoles"
+        },
+        {
+          title: "Professorat · Tara Docent",
+          subtitle: "Preparar tutories i converses difícils",
+          body: "Gestionar conflictes a l'aula amb més eines."
+        },
+        {
+          title: "Famílies · Tara Família",
+          subtitle: "Entendre millor el que viu el teu fill o filla",
+          body: "Preparar a casa les converses que costen."
+        }
+      ],
+      extra: "També: Tara Orienta, per descobrir el teu perfil professional (properament)."
     },
     privacy: {
       kicker: "Privacitat i protecció",
-      title: "Ningú més llegeix el que escrius.",
-      intro: "Tara està construïda per a adolescents, així que el disseny parteix d'una pregunta molt senzilla: què necessitaria saber per atrevir-me a explicar-ho?",
+      title: "El que guardem i el que no.",
+      intro: "Tara està feta per a adolescents. Cada frase d'aquest apartat ha de descriure exactament el que fa el xat.",
       points: [
-        { title: "No guardem el que escrius", body: "El text literal de la conversa mai s'envia ni s'emmagatzema. Només es registren dades anònimes d'ús (idioma, franja horària) per millorar el servei." },
         { title: "No cal dir qui ets", body: "No hi ha registre ni compte. Parles amb Tara de forma anònima, sense nom ni correu." },
+        { title: "Què es guarda de la conversa", body: "[Per decidir amb l'equip: exactament què es guarda, durant quant de temps i si s'utilitza per millorar el model.]" },
         { title: "La conversa viatja xifrada", body: "Ningú de fora la pot llegir. No es comparteix, no es ven i no hi ha publicitat ni seguiment comercial." },
-        { title: "Quan cal ajuda de veritat, decideix una persona", body: "El protocol de seguretat sempre el revisa una persona responsable — la IA mai decideix sola ni actua pel seu compte." },
-        { title: "Les dades caduquen soles", body: "La informació d'ús s'elimina de forma automàtica passat un temps. Res es queda guardat \"per si de cas\"." },
-        { title: "Complim el RGPD", body: "Tara segueix el reglament europeu de protecció de dades i la normativa espanyola específica per a persones menors d'edat." }
+        { title: "Decideix una persona", body: "En una alerta de seguretat, la IA mai actua sola: la revisa un humà responsable." },
+        { title: "RGPD i normativa de menors", body: "Reglament europeu i normativa espanyola per a persones menors d'edat." },
+        { title: "Edat d'ús", body: "[Per fixar: a partir de 12 o 14 anys.]" }
       ],
+      policyLink: "Política de privacitat completa →",
       note: {
         title: "Als centres educatius, un nivell més de garanties.",
         body: "Quan Tara s'utilitza dins d'un centre, l'accés del personal està protegit amb verificació en dos passos, les peticions al sistema estan limitades per evitar abusos, i qualsevol alerta de seguretat arriba en temps real i per escrit a les persones responsables — mai es perd ni es queda sense revisar."
@@ -323,10 +395,23 @@ export const CONTENT: Record<Locale, LandingContent> = {
       button: "Parla amb Tara",
       note: "Gratis. Sense registre. Ningú més ho llegeix."
     },
-    footer: { rights: "De la pantalla a la vida.", schools: "Centres educatius", privacy: "Privacitat", team: "Equip" }
+    footer: {
+      rights: "De la pantalla a la vida.",
+      columns: {
+        product: { heading: "Tara", how: "Com funciona", schools: "Centres educatius", team: "Equip" },
+        legal: { heading: "Legal", notice: "Avís legal", privacy: "Política de privacitat", rights: "Com exercir els teus drets" },
+        language: { heading: "Idioma" }
+      }
+    }
   },
   en: {
-    nav: { chat: "Talk to Tara", schools: "Schools" },
+    nav: {
+      chat: "Talk to Tara",
+      chatShort: "Talk",
+      menu: { how: "How it works", privacy: "Privacy", community: "Schools & families", team: "Team" },
+      language: "Language",
+      urgency: "Urgent? Call 024 (Spain)"
+    },
     hero: {
       eyebrow: "Emotional support · Nonviolent Communication",
       line1: "Hi.",
@@ -371,26 +456,44 @@ export const CONTENT: Record<Locale, LandingContent> = {
         helplines: "024 (Spain) · International Association for Suicide Prevention: befrienders.org"
       }
     },
-    credibility: {
-      kicker: "In case you're wondering",
-      items: [
-        { n: "3", title: "native languages", body: "Spanish, Catalan and English. Not machine translations — each language has its own rules of tone and expression." },
-        { n: "24h", title: "real safety protocol", body: "Backed by real helplines, not a generic AI response." },
-        { n: "K-12", title: "already in schools", body: "With its own panel for tutors, administrators and wellbeing staff — built so the support doesn't stay stuck on a screen." }
-      ]
+    community: {
+      kicker: "For the whole community",
+      title: "An ecosystem of support, not a standalone app.",
+      intro: "Tara doesn't replace the tutor, the counselor or the family. It opens the door so their support can arrive sooner.",
+      cards: [
+        {
+          title: "Schools",
+          subtitle: "A program that fits what you already have",
+          body: "A panel for tutoring, counseling and wellbeing. Staff training and a family school.",
+          linkLabel: "See the program for schools →",
+          href: "/escoles"
+        },
+        {
+          title: "Teachers · Tara Docente",
+          subtitle: "Prepare tutoring sessions and hard conversations",
+          body: "Handle classroom conflict with more tools."
+        },
+        {
+          title: "Families · Tara Família",
+          subtitle: "Better understand what your child is going through",
+          body: "Prepare at home the conversations that are hardest."
+        }
+      ],
+      extra: "Also: Tara Orienta, to discover your career path (coming soon)."
     },
     privacy: {
       kicker: "Privacy & protection",
-      title: "No one else reads what you write.",
-      intro: "Tara is built for teenagers, so the design starts from one simple question: what would I need to know to actually dare to say it?",
+      title: "What we keep, and what we don't.",
+      intro: "Tara is built for teenagers. Every line in this section has to describe exactly what the chat does.",
       points: [
-        { title: "We don't save what you write", body: "The literal text of the conversation is never sent or stored. Only anonymous usage data (language, time of day) is logged to improve the service." },
         { title: "You don't have to say who you are", body: "No sign-up, no account. You talk to Tara anonymously, with no name and no email." },
+        { title: "What's kept from the conversation", body: "[To be decided with the team: exactly what is stored, for how long, and whether it's used to improve the model.]" },
         { title: "The conversation is encrypted", body: "No one outside can read it. It's never shared or sold, and there's no advertising or commercial tracking." },
-        { title: "When real help is needed, a person decides", body: "The safety protocol is always reviewed by a responsible human — the AI never decides alone or acts on its own." },
-        { title: "Your data expires on its own", body: "Usage data is automatically deleted after a set period. Nothing sits around stored \"just in case.\"" },
-        { title: "We comply with GDPR", body: "Tara follows the EU data protection regulation and Spain's specific rules for minors." }
+        { title: "A person decides", body: "On a safety alert, the AI never acts alone — a responsible human reviews it." },
+        { title: "GDPR and rules for minors", body: "EU data protection regulation and Spain's specific rules for minors." },
+        { title: "Minimum age", body: "[To be set: from age 12 or 14.]" }
       ],
+      policyLink: "Full privacy policy →",
       note: {
         title: "In schools, an extra layer of safeguards.",
         body: "When Tara is used inside a school, staff access is protected with two-factor verification, requests to the system are rate-limited to prevent abuse, and any safety alert reaches the responsible people in real time and in writing — it's never lost and never left unreviewed."
@@ -459,6 +562,13 @@ export const CONTENT: Record<Locale, LandingContent> = {
       button: "Talk to Tara",
       note: "Free. No sign-up. No one else reads it."
     },
-    footer: { rights: "From the screen to real life.", schools: "Schools", privacy: "Privacy", team: "Team" }
+    footer: {
+      rights: "From the screen to real life.",
+      columns: {
+        product: { heading: "Tara", how: "How it works", schools: "Schools", team: "Team" },
+        legal: { heading: "Legal", notice: "Legal notice", privacy: "Privacy policy", rights: "How to exercise your rights" },
+        language: { heading: "Language" }
+      }
+    }
   }
 };

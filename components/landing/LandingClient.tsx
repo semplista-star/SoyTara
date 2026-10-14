@@ -10,6 +10,12 @@ import "./landing.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const LOCALES: { code: Locale; label: string; url: string }[] = [
+  { code: "es", label: "ES", url: "https://soytara.com" },
+  { code: "ca", label: "CA", url: "https://soctara.com" },
+  { code: "en", label: "EN", url: "https://iamtara.io" }
+];
+
 export default function LandingClient({ locale, content: c }: { locale: Locale; content: LandingContent }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -17,6 +23,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const railFillRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(-1);
+  const [menuOpen, setMenuOpen] = useState(false);
   const stepCount = c.product.steps.length;
 
   useLayoutEffect(() => {
@@ -33,7 +40,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
 
       if (reduceMotion) {
         gsap.set(
-          ["[data-reveal]", ".step", ".never-item", ".cred-item", ".team-card", ".hero-title .line span"],
+          ["[data-reveal]", ".step", ".never-item", ".team-card", ".community-card", ".hero-title .line span"],
           { opacity: 1, y: 0, x: 0 }
         );
         return;
@@ -49,7 +56,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         .from(".hero-scroll", { opacity: 0, duration: 0.6 }, "-=0.3");
 
       // --- Generic reveal-on-scroll for grouped elements ---
-      const revealGroups = [".step", ".never-item", ".cred-item", ".team-card"];
+      const revealGroups = [".step", ".never-item", ".team-card", ".community-card"];
       revealGroups.forEach((sel) => {
         const items = gsap.utils.toArray<HTMLElement>(sel);
         items.forEach((el, i) => {
@@ -167,6 +174,21 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   return (
     <div className="landing" ref={rootRef}>
@@ -174,16 +196,78 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         <a href="/" className="nav-mark">
           soy<span>tara</span>
         </a>
+        <div className="nav-menu">
+          <a href="#como-funciona">{c.nav.menu.how}</a>
+          <a href="#privacy">{c.nav.menu.privacy}</a>
+          <a href="#community">{c.nav.menu.community}</a>
+          <a href="#team">{c.nav.menu.team}</a>
+        </div>
         <div className="nav-right">
-          <span className="nav-locale">{locale.toUpperCase()}</span>
-          <a href="/escoles" className="nav-schools">
-            {c.nav.schools}
-          </a>
-          <a href="/chat" className="nav-cta">
+          <div className="nav-locales">
+            {LOCALES.map((l) => (
+              <a key={l.code} href={l.url} className={`nav-locale${l.code === locale ? " active" : ""}`}>
+                {l.label}
+              </a>
+            ))}
+          </div>
+          <a href="/chat" className="nav-cta nav-cta-full">
             {c.nav.chat}
           </a>
+          <a href="/chat" className="nav-cta nav-cta-short">
+            {c.nav.chatShort}
+          </a>
+          <button
+            className="nav-burger"
+            aria-label={c.nav.menu.how}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
       </nav>
+
+      <div className={`nav-overlay${menuOpen ? " open" : ""}`}>
+        <div className="nav-overlay-top">
+          <a href="/" className="nav-mark" onClick={() => setMenuOpen(false)}>
+            soy<span>tara</span>
+          </a>
+          <button className="nav-close" aria-label="Close" onClick={() => setMenuOpen(false)}>
+            ×
+          </button>
+        </div>
+        <a href="#como-funciona" onClick={() => setMenuOpen(false)}>
+          {c.nav.menu.how}
+        </a>
+        <a href="#privacy" onClick={() => setMenuOpen(false)}>
+          {c.nav.menu.privacy}
+        </a>
+        <a href="#community" onClick={() => setMenuOpen(false)}>
+          {c.nav.menu.community}
+        </a>
+        <a href="#team" onClick={() => setMenuOpen(false)}>
+          {c.nav.menu.team}
+        </a>
+        <div className="nav-overlay-lang">
+          <span className="nav-overlay-lang-label">{c.nav.language}</span>
+          <div className="nav-overlay-lang-pills">
+            {LOCALES.map((l) => (
+              <a key={l.code} href={l.url} className={`lang-pill${l.code === locale ? " active" : ""}`}>
+                {l.label}
+              </a>
+            ))}
+          </div>
+        </div>
+        <a href="/chat" className="btn-gold nav-overlay-cta">
+          {c.nav.chat}
+          <span className="arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+        <p className="nav-overlay-urgency">{c.nav.urgency}</p>
+      </div>
 
       <section className="hero">
         <div className="hero-inner">
@@ -239,7 +323,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         </div>
       </section>
 
-      <section className="product wrap">
+      <section className="product wrap" id="como-funciona">
         <span className="section-kicker" data-reveal>
           {c.product.kicker}
         </span>
@@ -266,26 +350,19 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
             </div>
           ))}
         </div>
+        <div className="never-compact" data-reveal>
+          <h3 className="never-compact-title">{c.differentiation.kicker}</h3>
+          <div className="never-compact-grid">
+            {c.differentiation.never.map((item) => (
+              <p className="never-compact-item" key={item.title}>
+                <b>{item.title}.</b> {item.body}
+              </p>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className="diff wrap">
-        <span className="section-kicker" data-reveal>
-          {c.differentiation.kicker}
-        </span>
-        <h2 className="section-title" data-reveal>
-          {c.differentiation.title}
-        </h2>
-        <div className="never-grid">
-          {c.differentiation.never.map((item) => (
-            <div className="never-item" key={item.title}>
-              <span className="never-x" aria-hidden="true">
-                ✕
-              </span>
-              <h3 className="never-title">{item.title}</h3>
-              <p className="never-body">{item.body}</p>
-            </div>
-          ))}
-        </div>
         <div className="bridge" data-reveal>
           <h3 className="bridge-title">{c.differentiation.bridge.title}</h3>
           <p className="bridge-body">{c.differentiation.bridge.body}</p>
@@ -293,19 +370,31 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         </div>
       </section>
 
-      <section className="credibility wrap">
+      <section className="community wrap" id="community">
         <span className="section-kicker" data-reveal>
-          {c.credibility.kicker}
+          {c.community.kicker}
         </span>
-        <div className="cred-grid">
-          {c.credibility.items.map((item) => (
-            <div className="cred-item" key={item.title}>
-              <span className="cred-num">{item.n}</span>
-              <h3 className="cred-title">{item.title}</h3>
-              <p className="cred-body">{item.body}</p>
+        <h2 className="section-title" data-reveal>
+          {c.community.title}
+        </h2>
+        <p className="community-intro" data-reveal>
+          {c.community.intro}
+        </p>
+        <div className="community-grid">
+          {c.community.cards.map((card) => (
+            <div className="community-card" key={card.title}>
+              <span className="community-card-eyebrow">{card.title}</span>
+              <h3 className="community-card-title">{card.subtitle}</h3>
+              <p className="community-card-body">{card.body}</p>
+              {card.href && card.linkLabel && (
+                <a href={card.href} className="community-card-link">
+                  {card.linkLabel}
+                </a>
+              )}
             </div>
           ))}
         </div>
+        <p className="community-extra">{c.community.extra}</p>
       </section>
 
       <section className="privacy wrap" id="privacy">
@@ -317,14 +406,24 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         </h2>
         <p className="privacy-intro" data-reveal>
           {c.privacy.intro}
+          {" "}
+          <a href="#privacy" className="privacy-policy-link">
+            {c.privacy.policyLink}
+          </a>
         </p>
-        <div className="never-grid privacy-grid">
-          {c.privacy.points.map((item) => (
-            <div className="never-item" key={item.title}>
-              <h3 className="never-title privacy-point-title">{item.title}</h3>
-              <p className="never-body">{item.body}</p>
-            </div>
-          ))}
+        <div className="privacy-layout">
+          <div className="privacy-featured" data-reveal>
+            <h3 className="privacy-featured-title">{c.privacy.points[0].title}</h3>
+            <p className="privacy-featured-body">{c.privacy.points[0].body}</p>
+          </div>
+          <div className="never-grid privacy-grid">
+            {c.privacy.points.slice(1).map((item) => (
+              <div className="never-item" key={item.title}>
+                <h3 className="never-title privacy-point-title">{item.title}</h3>
+                <p className="never-body">{item.body}</p>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="bridge" data-reveal>
           <h3 className="bridge-title">{c.privacy.note.title}</h3>
@@ -382,11 +481,31 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
 
       <footer className="footer">
         <div className="footer-inner">
-          <span className="footer-tagline">{c.footer.rights}</span>
-          <div className="footer-links">
-            <a href="/escoles">{c.footer.schools}</a>
-            <a href="#team">{c.footer.team}</a>
-            <a href="#privacy">{c.footer.privacy}</a>
+          <div className="footer-brand">
+            <a href="/" className="nav-mark">
+              soy<span>tara</span>
+            </a>
+            <span className="footer-tagline">{c.footer.rights}</span>
+          </div>
+          <div className="footer-col">
+            <span className="footer-col-heading">{c.footer.columns.product.heading}</span>
+            <a href="#como-funciona">{c.footer.columns.product.how}</a>
+            <a href="/escoles">{c.footer.columns.product.schools}</a>
+            <a href="#team">{c.footer.columns.product.team}</a>
+          </div>
+          <div className="footer-col">
+            <span className="footer-col-heading">{c.footer.columns.legal.heading}</span>
+            <span className="footer-col-pending">{c.footer.columns.legal.notice}</span>
+            <a href="#privacy">{c.footer.columns.legal.privacy}</a>
+            <span className="footer-col-pending">{c.footer.columns.legal.rights}</span>
+          </div>
+          <div className="footer-col">
+            <span className="footer-col-heading">{c.footer.columns.language.heading}</span>
+            {LOCALES.map((l) => (
+              <a key={l.code} href={l.url} className={l.code === locale ? "active" : ""}>
+                {l.code === "es" ? "Castellano" : l.code === "ca" ? "Català" : "English"}
+              </a>
+            ))}
           </div>
         </div>
       </footer>
