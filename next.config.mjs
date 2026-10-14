@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    const wwwHosts = ["www.soytara.com", "www.soctara.com", "www.iamtara.io"];
+    return wwwHosts.map((host) => ({
+      source: "/:path*",
+      has: [{ type: "host", value: host }],
+      destination: `https://${host.replace("www.", "")}/:path*`,
+      permanent: true
+    }));
+  },
   async rewrites() {
     return [
       // "/" ahora la sirve la landing en React (app/page.tsx).

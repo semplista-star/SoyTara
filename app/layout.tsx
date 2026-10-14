@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { Fraunces, DM_Sans, DM_Mono } from "next/font/google";
 import { localeForHost, BRAND_BY_LOCALE } from "@/lib/i18n";
@@ -31,6 +31,15 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: brand.title,
     description: brand.ogDesc,
+    alternates: {
+      canonical: brand.ogUrl,
+      languages: {
+        es: "https://soytara.com",
+        ca: "https://soctara.com",
+        en: "https://iamtara.io",
+        "x-default": "https://soytara.com"
+      }
+    },
     openGraph: {
       title: brand.ogTitle,
       description: brand.ogDesc,
@@ -41,12 +50,19 @@ export async function generateMetadata(): Promise<Metadata> {
     manifest: "/manifest.json",
     icons: {
       icon: [
-        { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-        { url: "/icon-512.png", sizes: "512x512", type: "image/png" }
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/tara-favicon.svg", type: "image/svg+xml" }
       ],
-      apple: "/icon-192.png"
-    },
-    themeColor: "#0a0a0a"
+      apple: "/apple-touch-icon.png"
+    }
+  };
+}
+
+export function generateViewport(): Viewport {
+  return {
+    width: "device-width",
+    initialScale: 1,
+    themeColor: "#1c2621"
   };
 }
 
