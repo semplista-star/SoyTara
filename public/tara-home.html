@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tara — Acompañamiento emocional para adolescentes · soytara.com</title>
+<meta name="description" content="Tara escucha sin juzgar. Un ecosistema educativo para la convivencia y la cultura de paz: pedagogía, formación, recursos e IA conversacional, con personas de verdad detrás.">
+<meta name="theme-color" content="#F6F3EC">
+<meta property="og:title" content="Hola. Soy Tara.">
+<meta property="og:description" content="No estoy aquí para darte lecciones. Cuéntame qué ha pasado.">
+<meta property="og:url" content="https://soytara.com/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/tara-favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=20261016d">
+<script>document.documentElement.classList.add("js"); window.__TARA_HOST_LANG__ = "es";</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Saltar al contenido</a>
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<!-- ============ HEADER ============ -->
+<header class="header" id="top">
+  <div class="header__in">
+    <a class="logo" href="#top" aria-label="soytara — inicio">soy<span>tara</span></a>
+    <nav class="nav" id="nav" aria-label="Principal">
+      <a href="#como-funciona" data-i18n="nav.how">Cómo funciona</a>
+      <a href="#privacidad" data-i18n="nav.privacy">Privacidad</a>
+      <a href="#comunidad" data-i18n="nav.community">Centros y familias</a>
+      <a href="#equipo" data-i18n="nav.team">Equipo</a>
+    </nav>
+    <div class="header__right">
+      <div class="lang" role="group" aria-label="Idioma">
+        <button type="button" data-lang="es" aria-pressed="true">ES</button>
+        <button type="button" data-lang="ca" aria-pressed="false">CA</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn btn--ghost btn--sm header__cta" href="#hablar" data-action="chat" data-i18n="cta.talk">Hablar con Tara</a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menú"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="inicio">
+  <div class="hero__ripples" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow eyebrow--pill reveal"><span class="dot"></span><span data-i18n="hero.eyebrow">Acompañamiento emocional · Comunicación no violenta</span></p>
+      <h1 class="hero__title">
+        <span class="line"><span class="word" data-i18n="hero.t1">Hola.</span></span>
+        <span class="line"><span class="word hero__brand">soy<span>tara</span>.</span></span>
+      </h1>
+      <p class="hero__lead reveal" data-i18n="hero.lead">No estoy aquí para darte lecciones. Cuéntame qué ha pasado.</p>
+      <div class="hero__actions reveal">
+        <a class="btn btn--primary magnetic" href="#hablar" data-action="chat"><span data-i18n="cta.talk2">Habla con Tara</span> <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn--link" href="#te-suena" data-i18n="hero.secondary">¿Algo de esto te suena?</a>
+      </div>
+      <ul class="hero__badges reveal">
+        <li data-i18n="badge.free">Gratis</li>
+        <li data-i18n="badge.anon">Anónimo</li>
+        <li data-i18n="badge.h24">24 horas</li>
+        <li data-i18n="badge.noreg">Sin registro</li>
+      </ul>
+    </div>
+
+    <!-- Teléfono con conversación animada -->
+    <div class="hero__visual reveal">
+      <svg class="hero__thread" viewBox="0 0 560 300" fill="none" aria-hidden="true">
+        <path class="draw" d="M8 150 C 90 150, 110 60, 190 80 S 300 250, 380 190 S 470 40, 552 110" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+      </svg>
+      <div class="phone" aria-label="Ejemplo de conversación con Tara" data-i18n-attr="aria-label:phone.label">
+        <div class="phone__bar">
+          <span class="logo logo--sm">soy<span>tara</span></span>
+          <span class="phone__status"><span class="live"></span><span data-i18n="phone.status">Te escucha</span></span>
+        </div>
+        <div class="phone__chat" id="heroChat" aria-live="polite"></div>
+        <div class="phone__input"><span data-i18n="phone.input">Escribe aquí…</span><span aria-hidden="true">→</span></div>
+      </div>
+    </div>
+  </div>
+  <a class="scroll-hint" href="#que-es" aria-label="Desliza"><span data-i18n="hero.scroll">Desliza</span><i></i></a>
+</section>
+
+<!-- ============ NUEVO · QUÉ ES TARA (tres anillos) ============ -->
+<section class="section about" id="que-es" aria-labelledby="about-title">
+  <div class="wrap about__grid">
+    <div class="about__copy">
+      <p class="eyebrow reveal" data-i18n="about.label">Qué es TARA</p>
+      <h2 class="about__title" id="about-title">
+        <span class="reveal" data-i18n="about.t1">Comprendernos mejor.</span>
+        <span class="reveal" data-i18n="about.t2">Cuidar las relaciones.</span>
+        <em class="reveal" data-i18n="about.t3">Construir convivencia.</em>
+      </h2>
+      <p class="lead reveal" data-i18n="about.lead">TARA es un ecosistema educativo para la convivencia y la cultura de paz. Integra pedagogía, formación, recursos e inteligencia artificial conversacional para reforzar las capacidades de las personas y de las comunidades educativas.</p>
+      <p class="about__principle reveal" data-i18n="about.principle">La tecnología acompaña y facilita. <em>Las personas valoran, deciden y actúan.</em></p>
+      <div class="hero__actions reveal">
+        <a class="btn btn--primary magnetic" href="#conoce"><span data-i18n="cta.know">Conoce TARA</span> <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#experimenta" data-i18n="cta.try">Experimenta TARA</a>
+      </div>
+    </div>
+    <div class="about__visual reveal" aria-hidden="true">
+      <svg class="rings" viewBox="0 0 520 520" fill="none">
+        <path class="rings__thread draw" d="M10 300 C 90 300, 120 210, 200 230 S 320 330, 380 280 S 470 170, 512 200"/>
+        <g class="ring ring--a"><circle cx="200" cy="200" r="130"/><text x="200" y="150" data-i18n="rings.a">Comprender</text></g>
+        <g class="ring ring--b"><circle cx="320" cy="200" r="130"/><text x="320" y="150" data-i18n="rings.b">Cuidar</text></g>
+        <g class="ring ring--c"><circle cx="260" cy="305" r="130"/><text x="260" y="390" data-i18n="rings.c">Construir</text></g>
+        <g class="rings__core"><circle cx="260" cy="240" r="34"/><text x="260" y="247" class="rings__brand">soy<tspan>tara</tspan></text></g>
+      </svg>
+      <ul class="rings__tags">
+        <li data-i18n="tags.ped">Pedagogía</li>
+        <li data-i18n="tags.form">Formación</li>
+        <li data-i18n="tags.res">Recursos</li>
+        <li data-i18n="tags.ai">IA conversacional</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUEVO · DOS PUERTAS ============ -->
+<section class="section doors" id="puertas" aria-labelledby="doors-title">
+  <div class="wrap">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow reveal" data-i18n="doors.label">Dos puertas de entrada</p>
+        <h2 class="h2 reveal" id="doors-title" data-i18n="doors.title">Entender el proyecto, <em>o probar un instante de su acompañamiento.</em></h2>
+      </div>
+    </div>
+
+    <div class="doors__grid">
+      <article class="door door--know reveal" id="conoce" aria-labelledby="know-title">
+        <div class="door__head">
+          <span class="door__n">01</span>
+          <div>
+            <h3 class="h3" id="know-title" data-i18n="know.title">Conoce TARA</h3>
+            <p class="door__sub" data-i18n="know.sub">Qué es, para quién es y cómo acompaña — explicado por TARA misma.</p>
+          </div>
+        </div>
+        <div class="msg msg--tara msg--static" data-i18n="know.hello">Hola, soy TARA. Puedo explicarte qué es el proyecto, cómo acompaña y qué puede aportar a una comunidad educativa. ¿Por dónde te gustaría empezar?</div>
+        <div class="faq" id="faq">
+          <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false"><span data-i18n="faq.1.q">¿Qué es TARA?</span><i aria-hidden="true"></i></button><div class="faq__a" hidden><p class="msg msg--tara" data-i18n="faq.1.a">Soy un ecosistema educativo para la convivencia y la cultura de paz. Integro pedagogía, formación, recursos e inteligencia artificial conversacional para reforzar las capacidades de las personas y de las comunidades educativas. La tecnología acompaña; las personas valoran, deciden y actúan.</p></div></div>
+          <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false"><span data-i18n="faq.2.q">¿Para quién es?</span><i aria-hidden="true"></i></button><div class="faq__a" hidden><p class="msg msg--tara" data-i18n="faq.2.a">Para toda la comunidad educativa: los profesionales del centro (docencia, tutoría, orientación, convivencia y dirección), las familias y las instituciones que quieran colaborar. El alumnado se incorpora de forma progresiva, siempre con preparación, supervisión y protección.</p></div></div>
+          <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false"><span data-i18n="faq.3.q">¿Cómo acompaña?</span><i aria-hidden="true"></i></button><div class="faq__a" hidden><p class="msg msg--tara" data-i18n="faq.3.a">Con el método ACOGE y la comunicación no violenta: escucha, reflexión, necesidades y agencia de la persona. Cuatro pasos —hechos, sentimiento, necesidad y petición— y ninguno es un consejo.</p></div></div>
+          <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false"><span data-i18n="faq.4.q">¿Qué aporta a mi centro?</span><i aria-hidden="true"></i></button><div class="faq__a" hidden><p class="msg msg--tara" data-i18n="faq.4.a">Tiempo y apoyo para llevar a la práctica lo que ya tenéis: profesionales, conocimiento, protocolos y recursos. Un programa con panel para tutoría, orientación y bienestar, formación del claustro y escuela de familias.</p></div></div>
+          <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false"><span data-i18n="faq.5.q">¿Y a las familias?</span><i aria-hidden="true"></i></button><div class="faq__a" hidden><p class="msg msg--tara" data-i18n="faq.5.a">Un acceso adulto propio, con información y recursos específicos para entender mejor lo que vive tu hijo o tu hija y preparar en casa las conversaciones que cuestan.</p></div></div>
+          <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false"><span data-i18n="faq.6.q">¿En qué fase está el proyecto?</span><i aria-hidden="true"></i></button><div class="faq__a" hidden><p class="msg msg--tara" data-i18n="faq.6.a">En fase de preparación y validación. El primer piloto se centra en los profesionales del centro. No publicamos cifras, centros ni colaboraciones como hechos confirmados sin validarlos antes.</p></div></div>
+          <div class="faq__item"><button type="button" class="faq__q" aria-expanded="false"><span data-i18n="faq.7.q">¿Cómo contacto?</span><i aria-hidden="true"></i></button><div class="faq__a" hidden><p class="msg msg--tara" data-i18n="faq.7.a">Si representas a un centro, una institución o una fundación, puedes escribirnos desde «Ver el programa para centros». Te responderá una persona del equipo.</p></div></div>
+        </div>
+      </article>
+
+      <article class="door door--try reveal" id="experimenta" aria-labelledby="try-title">
+        <div class="mirror-orb" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+        <div class="door__head">
+          <span class="door__n">02</span>
+          <div>
+            <h3 class="h3" id="try-title" data-i18n="try.title">Experimenta TARA</h3>
+            <p class="door__sub" data-i18n="try.sub">El espejo — una muestra breve y voluntaria, para personas adultas.</p>
+          </div>
+        </div>
+        <div class="msg msg--tara msg--static msg--onDark" data-i18n="try.hello">Hola. Si quieres, podemos dedicar unos minutos a explorar una situación que te gustaría comprender mejor. Tú decides qué quieres compartir y cuándo quieres acabar.</div>
+        <p class="try__meta" data-i18n="try.meta">2–4 min · voluntario · puedes salir cuando quieras</p>
+        <div class="try__input" aria-disabled="true">
+          <span data-i18n="try.input">Escribe aquí…</span>
+          <span class="try__lock"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span data-i18n="soon.tag">Próximamente</span></span>
+        </div>
+        <p class="try__status"><span class="live"></span><span data-i18n="try.status">Próximamente — en validación de comportamiento, protección y tratamiento de datos.</span></p>
+        <p class="try__fine" data-i18n="try.fine">Una muestra para personas adultas, de 2 a 4 minutos. No es terapia, ni diagnóstico, ni un servicio de crisis, y no equivale al acceso individual supervisado del alumnado.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUEVO · POR QUÉ EXISTE TARA ============ -->
+<section class="section why" id="por-que" aria-labelledby="why-title">
+  <div class="wrap why__grid">
+    <div>
+      <p class="eyebrow reveal" data-i18n="why.label">Por qué existe TARA</p>
+      <h2 class="h2 reveal" id="why-title" data-i18n="why.title">Los centros ya tienen el conocimiento. <em>Les falta tiempo y apoyo.</em></h2>
+      <p class="lead reveal" data-i18n="why.lead">Los centros ya disponen de profesionales, conocimiento, protocolos y recursos, pero muchas veces no tienen tiempo ni apoyo suficiente para llevarlos a la práctica cotidiana. Esto es lo que nos escriben los y las adolescentes cuando no encuentran ese espacio:</p>
+    </div>
+    <div class="bridge reveal" aria-hidden="true">
+      <span class="bridge__item" data-i18n="why.p1">Profesionales</span>
+      <span class="bridge__item" data-i18n="why.p2">Conocimiento</span>
+      <span class="bridge__item" data-i18n="why.p3">Protocolos</span>
+      <span class="bridge__item" data-i18n="why.p4">Recursos</span>
+      <span class="bridge__gap"><i></i><b data-i18n="why.gap">+ tiempo y apoyo</b></span>
+      <span class="bridge__item bridge__item--end" data-i18n="why.p5">Práctica cotidiana</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE · LO QUE NOS ESCRIBEN ============ -->
+<section class="quotes" aria-labelledby="quotes-label">
+  <p class="eyebrow wrap" id="quotes-label" data-i18n="quotes.label">Lo que nos escriben</p>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span data-i18n="q.1">«No me atrevo a hablar en clase.»</span><i></i>
+      <span data-i18n="q.2">«Paso de intentarlo, seguro que la lío.»</span><i></i>
+      <span data-i18n="q.3">«Si me rechaza, no lo soporto.»</span><i></i>
+      <span data-i18n="q.4">«Ya estoy bien, no pasa nada.»</span><i></i>
+      <span data-i18n="q.5">«Nadie me hace caso.»</span><i></i>
+      <span data-i18n="q.6">«En el patio siempre estoy solo.»</span><i></i>
+    </div>
+  </div>
+  <!-- Segunda franja: frases de los 10 temas, en sentido contrario (la genera main.js) -->
+  <div class="marquee marquee--reverse" aria-hidden="true">
+    <div class="marquee__track" id="marqueeThemes"></div>
+  </div>
+  <div class="wrap quotes__foot">
+    <p class="quotes__count"><span class="quotes__num" id="quotesNum">10</span> <span data-i18n="quotes.count">temas. Ninguno es demasiado pequeño para contarlo.</span></p>
+    <a class="btn btn--link" href="#te-suena" data-i18n="quotes.cta">Encuentra el tuyo ↓</a>
+  </div>
+</section>
+
+<!-- ============ TE SUENA (interactivo) ============ -->
+<section class="section mirror" id="te-suena" aria-labelledby="mirror-title">
+  <div class="wrap mirror__grid">
+    <div class="mirror__head">
+      <p class="eyebrow reveal" data-i18n="mirror.label">Elige la tuya</p>
+      <h2 class="h2 reveal" id="mirror-title" data-i18n="mirror.title">¿Algo de esto <em>te suena?</em></h2>
+      <p class="lead reveal" data-i18n="mirror.lead">Elige un tema y toca la frase que más se parezca a lo que te pasa. Así es como Tara empezaría a escucharte.</p>
+      <div class="rail reveal" id="themeRail" role="tablist" aria-label="Temas">
+        <button type="button" class="rail__tab is-active" role="tab" aria-selected="true" data-theme="freq"><span class="rail__n">✦</span><span data-i18n="mirror.freq">Lo más frecuente</span></button>
+      </div>
+      <div class="chips reveal" role="list" id="themeChips" hidden></div>
+      <div class="chips reveal" role="list" id="mirrorChips">
+        <button type="button" class="chip" data-case="bully" role="listitem" data-i18n="case.bully">Se meten conmigo en clase.</button>
+        <button type="button" class="chip" data-case="speak" role="listitem" data-i18n="case.speak">No me atrevo a hablar en clase.</button>
+        <button type="button" class="chip" data-case="fit" role="listitem" data-i18n="case.fit">Siento que no encajo en ningún grupo.</button>
+        <button type="button" class="chip" data-case="reject" role="listitem" data-i18n="case.reject">Si me rechaza, no lo soporto.</button>
+        <button type="button" class="chip" data-case="fail" role="listitem" data-i18n="case.fail">Paso de intentarlo, seguro que la lío.</button>
+        <button type="button" class="chip" data-case="fine" role="listitem" data-i18n="case.fine">Ya estoy bien, no pasa nada.</button>
+        <button type="button" class="chip" data-case="unheard" role="listitem" data-i18n="case.unheard">Nadie me hace caso.</button>
+      </div>
+    </div>
+    <div class="mirror__panel reveal">
+      <div class="convo" id="mirrorConvo" aria-live="polite">
+        <div class="convo__empty">
+          <svg viewBox="0 0 120 60" fill="none" aria-hidden="true"><rect x="4" y="12" width="40" height="30" rx="7" stroke="currentColor" stroke-width="1.75"/><path d="M44 30 C 64 30, 70 12, 88 20 S 104 46, 116 34" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+          <p data-i18n="mirror.empty">Elige una frase y mira cómo te respondería Tara.</p>
+        </div>
+      </div>
+      <div class="help" id="mirrorHelp" hidden>
+        <p class="help__label" data-i18n="mirror.helpLabel">Cómo te acompaña Tara</p>
+        <p class="help__text" id="mirrorHelpText"></p>
+        <div class="help__lines" id="mirrorHelpLines" hidden>
+          <a class="hotline hotline--sm" href="tel:024"><span class="hotline__n">024</span><span class="hotline__t" data-i18n="crisis.024">24 h · gratuito · confidencial</span></a>
+          <a class="hotline hotline--sm" href="tel:112"><span class="hotline__n">112</span><span class="hotline__t" data-i18n="crisis.112">Si estás en peligro ahora mismo</span></a>
+        </div>
+      </div>
+      <p class="note" data-i18n="mirror.note">Ejemplo ilustrativo. Cada conversación con Tara es distinta y nadie más la lee.</p>
+    </div>
+  </div>
+  <p class="wrap mirror__closing reveal" data-i18n="mirror.closing">Todo esto tiene un nombre. Tara lo escucha <em>sin juzgarlo</em> — y sin decirte qué hacer.</p>
+</section>
+
+<!-- ============ MÉTODO ============ -->
+<section class="section method" id="como-funciona" aria-labelledby="method-title">
+  <div class="wrap">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow reveal" data-i18n="method.label">El método</p>
+        <h2 class="h2 reveal" id="method-title" data-i18n="method.title">Cuatro pasos. <em>Ninguno es un consejo.</em></h2>
+      </div>
+      <p class="lead reveal" data-i18n="method.lead">Tara se basa en la Comunicación No Violenta: te ayuda a ordenar lo que te pasa para que seas tú quien encuentre qué hacer.</p>
+    </div>
+
+    <div class="steps reveal" id="steps">
+      <span class="steps__dot" aria-hidden="true"></span>
+      <svg class="steps__thread" viewBox="0 0 1200 60" preserveAspectRatio="none" fill="none" aria-hidden="true"><path class="draw" d="M0 30 C 150 30, 180 8, 300 20 S 480 52, 600 30 S 780 6, 900 24 S 1080 40, 1200 28" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>
+      <ol class="steps__list" role="tablist" aria-label="Pasos del método">
+        <li role="presentation"><button type="button" class="step is-active" role="tab" aria-selected="true" data-step="0">
+          <span class="step__n">01</span>
+          <span class="step__icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M3 16s5-9 13-9 13 9 13 9-5 9-13 9S3 16 3 16Z"/><circle cx="16" cy="16" r="4"/></svg></span>
+          <span class="step__t" data-i18n="step.1.t">Hechos</span>
+          <span class="step__d" data-i18n="step.1.d">Lo que ha pasado, sin la historia que te cuentas sobre lo que pasó.</span>
+        </button></li>
+        <li role="presentation"><button type="button" class="step" role="tab" aria-selected="false" data-step="1">
+          <span class="step__n">02</span>
+          <span class="step__icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 27S4 20 4 11.5A6.5 6.5 0 0 1 16 8a6.5 6.5 0 0 1 12 3.5C28 20 16 27 16 27Z"/></svg></span>
+          <span class="step__t" data-i18n="step.2.t">Sentimiento</span>
+          <span class="step__d" data-i18n="step.2.d">Lo que sientes de verdad — no la interpretación disfrazada de sentimiento.</span>
+        </button></li>
+        <li role="presentation"><button type="button" class="step" role="tab" aria-selected="false" data-step="2">
+          <span class="step__n">03</span>
+          <span class="step__icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 28V14"/><path d="M16 16c0-5 3-9 9-9 0 6-4 9-9 9Z"/><path d="M16 20c0-4-3-7-8-7 0 5 3 7 8 7Z"/></svg></span>
+          <span class="step__t" data-i18n="step.3.t">Necesidad</span>
+          <span class="step__d" data-i18n="step.3.d">Lo que hay debajo del sentimiento. Casi nunca es lo primero que se nombra.</span>
+        </button></li>
+        <li role="presentation"><button type="button" class="step" role="tab" aria-selected="false" data-step="3">
+          <span class="step__n">04</span>
+          <span class="step__icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 16h20"/><path d="M19 9l7 7-7 7"/></svg></span>
+          <span class="step__t" data-i18n="step.4.t">Petición</span>
+          <span class="step__d" data-i18n="step.4.d">Algo concreto que puedes pedir o hacer. Lo eliges tú, no Tara.</span>
+        </button></li>
+      </ol>
+    </div>
+
+    <div class="example reveal" role="tabpanel" aria-live="polite">
+      <p class="example__label" data-i18n="example.label">Un ejemplo real, paso a paso</p>
+      <p class="example__quote" data-i18n="example.quote">«Hoy la profe me ha pedido leer en voz alta y me he quedado en blanco.»</p>
+      <div class="example__out">
+        <span class="example__step" id="exStep">Hechos</span>
+        <p class="example__text" id="exText">Te han pedido leer delante de toda la clase y no ha salido la voz.</p>
+      </div>
+      <div class="example__dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LO QUE TARA NUNCA HACE ============ -->
+<section class="section never" id="nunca" aria-labelledby="never-title">
+  <div class="wrap">
+    <svg class="weave" viewBox="0 0 1440 600" preserveAspectRatio="none" fill="none" aria-hidden="true">
+      <g class="weave__g"><path d="M-720 80 C -540 30, -360 130, -180 80 S 180 30, 360 80 S 720 130, 900 80 S 1260 30, 1440 80 S 1800 130, 1980 80 S 2340 30, 2520 80"/></g>
+      <g class="weave__g weave__g--2"><path d="M-720 200 C -540 150, -360 250, -180 200 S 180 150, 360 200 S 720 250, 900 200 S 1260 150, 1440 200 S 1800 250, 1980 200 S 2340 150, 2520 200"/></g>
+      <g class="weave__g weave__g--3"><path d="M-720 320 C -540 270, -360 370, -180 320 S 180 270, 360 320 S 720 370, 900 320 S 1260 270, 1440 320 S 1800 370, 1980 320 S 2340 270, 2520 320"/></g>
+      <g class="weave__g weave__g--4"><path d="M-720 440 C -540 390, -360 490, -180 440 S 180 390, 360 440 S 720 490, 900 440 S 1260 390, 1440 440 S 1800 490, 1980 440 S 2340 390, 2520 440"/></g>
+      <g class="weave__g weave__g--5"><path class="weave__accent" d="M-720 540 C -540 490, -360 590, -180 540 S 180 490, 360 540 S 720 590, 900 540 S 1260 490, 1440 540 S 1800 590, 1980 540 S 2340 490, 2520 540"/></g>
+    </svg>
+    <p class="eyebrow eyebrow--light reveal" data-i18n="never.label">Lo que Tara nunca hace</p>
+    <h2 class="h2 reveal" id="never-title" data-i18n="never.title">Un espacio que escucha. <em>No uno que sermonea.</em></h2>
+    <div class="never__grid">
+      <article class="ncard reveal"><span class="ncard__x" aria-hidden="true"></span><h3 data-i18n="never.1.t">No cuenta su propia historia.</h3><p data-i18n="never.1.d">El foco eres tú, siempre. Tara no compite contigo por el protagonismo.</p></article>
+      <article class="ncard reveal"><span class="ncard__x" aria-hidden="true"></span><h3 data-i18n="never.2.t">No dice que seguro se arregla.</h3><p data-i18n="never.2.d">Primero refleja lo que sientes. La esperanza, si acaso, viene después.</p></article>
+      <article class="ncard reveal"><span class="ncard__x" aria-hidden="true"></span><h3 data-i18n="never.3.t">No da soluciones.</h3><p data-i18n="never.3.d">No hasta que tú has nombrado qué necesitas. Nunca antes.</p></article>
+      <article class="ncard reveal"><span class="ncard__x" aria-hidden="true"></span><h3 data-i18n="never.4.t">No interroga.</h3><p data-i18n="never.4.d">Una pregunta, no un interrogatorio. Y siempre puedes no responder.</p></article>
+    </div>
+
+    <div class="safety reveal">
+      <div class="safety__copy">
+        <h3 class="h3" data-i18n="safety.title">Y cuando hace falta una persona de verdad, <em>te lo dice sin rodeos.</em></h3>
+        <p data-i18n="safety.text">Si lo que cuentas es abuso, violencia o una idea de hacerte daño, Tara no finge poder resolverlo sola. Para ahí, y te acompaña hacia un adulto de confianza o una línea de ayuda real.</p>
+      </div>
+      <div class="safety__lines">
+        <a class="hotline" href="tel:024"><span class="hotline__n">024</span><span class="hotline__t" data-i18n="safety.024">Línea de atención a la conducta suicida · 24 h, gratuita</span></a>
+        <a class="hotline" href="tel:717003717"><span class="hotline__n">717 00 37 17</span><span class="hotline__t" data-i18n="safety.esperanza">Teléfono de la Esperanza · 24 h, gratuito</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMUNIDAD ============ -->
+<section class="section community" id="comunidad" aria-labelledby="community-title">
+  <div class="wrap">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow reveal" data-i18n="community.label">Para toda la comunidad</p>
+        <h2 class="h2 reveal" id="community-title" data-i18n="community.title">Un ecosistema de acompañamiento, <em>no una app suelta.</em></h2>
+      </div>
+      <p class="lead reveal" data-i18n="community.lead">Tara no sustituye al tutor, al orientador ni a la familia. Les abre la puerta para que su acompañamiento llegue antes.</p>
+    </div>
+
+    <div class="eco reveal" aria-hidden="true">
+      <svg viewBox="0 0 700 250" fill="none">
+        <path id="ecoA" class="eco__line" d="M92 125 C 160 125, 190 125, 262 125"/>
+        <path id="ecoB" class="eco__line" d="M338 125 C 410 125, 420 45, 508 45"/>
+        <path id="ecoC" class="eco__line" d="M338 125 C 410 125, 440 125, 508 125"/>
+        <path id="ecoD" class="eco__line" d="M338 125 C 410 125, 420 205, 508 205"/>
+        <circle r="4" class="eco__pulse"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#ecoA"/></animateMotion></circle>
+        <circle r="4" class="eco__pulse"><animateMotion dur="3.1s" begin="0.6s" repeatCount="indefinite"><mpath href="#ecoB"/></animateMotion></circle>
+        <circle r="4" class="eco__pulse"><animateMotion dur="2.8s" begin="1.1s" repeatCount="indefinite"><mpath href="#ecoC"/></animateMotion></circle>
+        <circle r="4" class="eco__pulse"><animateMotion dur="3.3s" begin="1.6s" repeatCount="indefinite"><mpath href="#ecoD"/></animateMotion></circle>
+        <g class="eco__node eco__node--you"><circle cx="62" cy="125" r="30"/><text x="62" y="176" data-i18n="eco.student">Alumnado</text></g>
+        <g class="eco__tara"><rect x="262" y="99" width="76" height="52" rx="12"/><text x="300" y="131" class="eco__brand">soy<tspan>tara</tspan></text></g>
+        <g class="eco__node"><circle cx="530" cy="45" r="22"/><text x="562" y="50" text-anchor="start" data-i18n="eco.guidance">Orientación</text></g>
+        <g class="eco__node"><circle cx="530" cy="125" r="22"/><text x="562" y="130" text-anchor="start" data-i18n="eco.teachers">Profesorado</text></g>
+        <g class="eco__node"><circle cx="530" cy="205" r="22"/><text x="562" y="210" text-anchor="start" data-i18n="eco.families">Familias</text></g>
+      </svg>
+    </div>
+    <div class="ccards">
+      <article class="ccard ccard--main reveal tilt">
+        <p class="ccard__tag" data-i18n="community.c1.tag">Centros educativos</p>
+        <h3 class="h3" data-i18n="community.c1.t">Un programa que se integra con lo que ya tenéis</h3>
+        <p data-i18n="community.c1.d">Panel para tutoría, orientación y bienestar. Formación del claustro y escuela de familias.</p>
+        <ul class="ccard__list">
+          <li data-i18n="community.c1.l1">Panel de bienestar por grupo, sin datos personales</li>
+          <li data-i18n="community.c1.l2">Alertas de seguridad revisadas por una persona</li>
+          <li data-i18n="community.c1.l3">Castellano, català e inglés</li>
+        </ul>
+        <a class="btn btn--primary" href="#contacto-centros" data-action="schools"><span data-i18n="community.c1.cta">Ver el programa para centros</span> <span class="arr" aria-hidden="true">→</span></a>
+        <svg class="ccard__thread" viewBox="0 0 300 120" fill="none" aria-hidden="true"><path class="draw" d="M0 90 C 60 90, 80 30, 140 40 S 230 110, 300 20" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+      </article>
+      <article class="ccard reveal tilt">
+        <p class="ccard__tag" data-i18n="community.c2.tag">Profesorado · Tara Docent</p>
+        <h3 class="h3" data-i18n="community.c2.t">Preparar tutorías y conversaciones difíciles</h3>
+        <p data-i18n="community.c2.d">Gestionar conflictos en el aula con más herramientas.</p>
+      </article>
+      <article class="ccard reveal tilt">
+        <p class="ccard__tag" data-i18n="community.c3.tag">Familias · Tara Família</p>
+        <h3 class="h3" data-i18n="community.c3.t">Entender mejor lo que vive tu hijo o tu hija</h3>
+        <p data-i18n="community.c3.d">Preparar en casa las conversaciones que cuestan.</p>
+      </article>
+    </div>
+    <div class="orienta reveal">
+      <div class="orienta__compass" aria-hidden="true">
+        <svg viewBox="0 0 160 160" fill="none">
+          <circle class="orienta__ring" cx="80" cy="80" r="70"/>
+          <circle cx="80" cy="80" r="54" stroke-dasharray="2 8"/>
+          <g class="orienta__ticks"><path d="M80 4v12M80 144v12M4 80h12M144 80h12"/></g>
+          <g class="orienta__needle"><path d="M80 30 L88 80 L80 130 L72 80 Z"/><path class="tip" d="M80 30 L88 80 L72 80 Z"/></g>
+          <circle cx="80" cy="80" r="4" class="orienta__pin"/>
+        </svg>
+      </div>
+      <div class="orienta__body">
+        <span class="pill pill--soft" data-i18n="soon.tag">Próximamente</span>
+        <h3 class="h3">Tara Orienta</h3>
+        <p class="orienta__quote" data-i18n="orienta.quote">«No sé qué quiero hacer con mi vida y siento que voy tarde.»</p>
+        <p class="orienta__text" data-i18n="orienta.text">Para descubrir tu perfil profesional y pensar en tu futuro a tu ritmo, sin comparaciones y sin que una nota diga lo que vales.</p>
+      </div>
+    </div>
+
+    <!-- NUEVO · Instituciones y fundaciones -->
+    <div class="alliance reveal">
+      <svg class="alliance__braid" viewBox="0 0 400 120" fill="none" aria-hidden="true">
+        <path class="braid braid--a" d="M0 60 C 50 10, 100 10, 150 60 S 250 110, 300 60 S 380 10, 400 30"/>
+        <path class="braid braid--b" d="M0 60 C 50 110, 100 110, 150 60 S 250 10, 300 60 S 380 110, 400 90"/>
+        <circle class="braid__knot" cx="150" cy="60" r="5"/><circle class="braid__knot" cx="300" cy="60" r="5"/>
+      </svg>
+      <div class="alliance__copy">
+        <p class="ccard__tag" data-i18n="inst.tag">Instituciones y fundaciones</p>
+        <h3 class="h3" data-i18n="inst.t">Colaborar en la validación del proyecto</h3>
+        <p data-i18n="inst.d">TARA busca alianzas con instituciones y fundaciones comprometidas con la convivencia y la cultura de paz, en fase de preparación y validación.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUEVO · CÓMO SE IMPLEMENTA ============ -->
+<section class="section impl" id="implementacion" aria-labelledby="impl-title">
+  <div class="wrap">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow reveal" data-i18n="impl.label">Cómo se implementa</p>
+        <h2 class="h2 reveal" id="impl-title" data-i18n="impl.title">Cinco niveles, <em>siempre con preparación previa.</em></h2>
+      </div>
+      <p class="lead reveal" data-i18n="impl.lead">Cada centro decide hasta dónde despliega TARA dentro del marco establecido y cuándo cumple las condiciones. El primer piloto se centra en los profesionales del centro; las otras modalidades forman parte del modelo progresivo y no se presentan como funcionalidades ya disponibles para el alumnado.</p>
+    </div>
+
+    <ol class="levels" id="levels">
+      <li class="level"><span class="level__bar" aria-hidden="true"></span><span class="level__n">01</span><div class="level__body"><h3 data-i18n="lv.1.t">Profesionales del centro</h3><p data-i18n="lv.1.d">Docentes, tutoría, orientación, convivencia, dirección y otros perfiles profesionales.</p></div><span class="level__tag" data-i18n="lv.pilot">Primer piloto</span></li>
+      <li class="level"><span class="level__bar" aria-hidden="true"></span><span class="level__n">02</span><div class="level__body"><h3 data-i18n="lv.2.t">Familias</h3><p data-i18n="lv.2.d">Acceso adulto propio, acompañado de información y recursos específicos.</p></div></li>
+      <li class="level"><span class="level__bar" aria-hidden="true"></span><span class="level__n">03</span><div class="level__body"><h3 data-i18n="lv.3.t">Uso pedagógico con el grupo-clase</h3><p data-i18n="lv.3.d">Actividades dirigidas por profesionales responsables.</p></div></li>
+      <li class="level"><span class="level__bar" aria-hidden="true"></span><span class="level__n">04</span><div class="level__body"><h3 data-i18n="lv.4.t">Uso guiado en parejas o pequeños grupos</h3><p data-i18n="lv.4.d">Trabajo supervisado sobre situaciones, casos, diálogos y actividades educativas.</p></div></li>
+      <li class="level"><span class="level__bar" aria-hidden="true"></span><span class="level__n">05</span><div class="level__body"><h3 data-i18n="lv.5.t">Uso individual estructurado del alumnado</h3><p data-i18n="lv.5.d">Interacción directa dentro del contexto educativo, orientada a escucha, reflexión, aprendizaje, comunicación y convivencia, con supervisión y protección.</p></div></li>
+    </ol>
+
+    <div class="rule reveal" id="rule">
+      <div class="rule__copy">
+        <p class="rule__label" data-i18n="rule.label">Regla obligatoria</p>
+        <h3 class="h3" data-i18n="rule.title">Ningún nivel se activa solo porque exista <em>acceso técnico.</em></h3>
+        <p class="rule__note" data-i18n="rule.note">Una demostración pública para adultos (Experimenta TARA) no equivale al nivel 5 de acceso individual supervisado del alumnado.</p>
+      </div>
+      <ul class="rule__list">
+        <li data-i18n="rule.1">Preparación previa</li>
+        <li data-i18n="rule.2">Información o formación</li>
+        <li data-i18n="rule.3">Condiciones de acceso</li>
+        <li data-i18n="rule.4">Responsables humanos</li>
+        <li data-i18n="rule.5">Seguimiento</li>
+        <li data-i18n="rule.6">Evaluación</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRIVACIDAD ============ -->
+<section class="section privacy" id="privacidad" aria-labelledby="privacy-title">
+  <div class="wrap">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow reveal" data-i18n="privacy.label">Privacidad y protección</p>
+        <h2 class="h2 reveal" id="privacy-title" data-i18n="privacy.title">Lo que guardamos <em>y lo que no.</em></h2>
+      </div>
+      <p class="lead reveal"><span data-i18n="privacy.lead">Tara está hecha para adolescentes. Cada frase de esta sección describe exactamente lo que hace el chat.</span> <a class="inline-link" href="#politica-privacidad" data-action="privacy" data-i18n="privacy.link">Política de privacidad completa →</a></p>
+    </div>
+
+    <div class="pgrid">
+      <article class="pcard reveal"><span class="icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="11" r="5"/><path d="M6 27c1.5-5 5.5-8 10-8s8.5 3 10 8"/><path d="M4 4l24 24"/></svg></span><h3 data-i18n="privacy.1.t">No hace falta decir quién eres</h3><p data-i18n="privacy.1.d">No hay registro ni cuenta. Hablas con Tara de forma anónima, sin nombre ni email.</p><p class="redact" aria-hidden="true"><span>tu.nombre@email.com</span></p></article>
+      <article class="pcard pcard--pending reveal"><span class="icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="6" y="5" width="20" height="23" rx="4"/><path d="M11 12h10M11 17h10M11 22h6"/></svg></span><h3 data-i18n="privacy.2.t">Qué se guarda de la conversación</h3><p data-i18n="privacy.2.d">[Por decidir con el equipo: exactamente qué se guarda, durante cuánto tiempo y si se usa para mejorar el modelo.]</p></article>
+      <article class="pcard reveal"><span class="icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="6" y="14" width="20" height="14" rx="4"/><path d="M11 14V10a5 5 0 0 1 10 0v4"/></svg></span><h3 data-i18n="privacy.3.t">La conversación viaja cifrada</h3><p data-i18n="privacy.3.d">Nadie de fuera puede leerla. No se comparte, no se vende y no hay publicidad ni rastreo comercial.</p><p class="cipher" aria-hidden="true" id="cipher">me siento solo en clase</p></article>
+      <article class="pcard reveal"><span class="icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="10" r="5"/><path d="M7 28c1-5 4.5-8 9-8s8 3 9 8"/></svg></span><h3 data-i18n="privacy.4.t">Decide una persona</h3><p data-i18n="privacy.4.d">En una alerta de seguridad, la IA nunca actúa sola: la revisa un humano responsable.</p></article>
+      <article class="pcard reveal"><span class="icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 4l10 4v7c0 7-4.5 11-10 13-5.5-2-10-6-10-13V8l10-4Z"/><path d="M11.5 16l3 3 6-6"/></svg></span><h3 data-i18n="privacy.5.t">RGPD y normativa de menores</h3><p data-i18n="privacy.5.d">Reglamento europeo y normativa española para menores de edad.</p></article>
+      <article class="pcard pcard--pending reveal"><span class="icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M16 10v6l4 3"/></svg></span><h3 data-i18n="privacy.6.t">Edad de uso</h3><p data-i18n="privacy.6.d">[Por fijar: a partir de 12 o 14 años.]</p></article>
+    </div>
+
+    <div class="guarantee reveal">
+      <h3 class="h3" data-i18n="privacy.school.t">En los centros educativos, <em>un nivel más de garantías.</em></h3>
+      <p data-i18n="privacy.school.d">Cuando Tara se usa dentro de un centro, el acceso del personal está protegido con verificación en dos pasos, las peticiones al sistema están limitadas para evitar abusos, y cualquier alerta de seguridad llega en tiempo real y por escrito a las personas responsables — nunca se pierde ni se queda sin revisar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUEVO · PROYECTO Y VALIDACIÓN ============ -->
+<section class="section valid" id="validacion" aria-labelledby="valid-title">
+  <div class="wrap">
+    <div class="section__head">
+      <div>
+        <p class="eyebrow reveal" data-i18n="valid.label">Proyecto y validación</p>
+        <h2 class="h2 reveal" id="valid-title" data-i18n="valid.title">Fase de preparación, <em>no resultados cerrados.</em></h2>
+      </div>
+      <p class="lead reveal" data-i18n="valid.lead">TARA distingue entre lo que ya existe, lo que es una demostración, lo que está previsto para los pilotos y la visión futura. No publicamos cifras, centros ni colaboraciones como hechos confirmados sin validación del equipo.</p>
+    </div>
+
+    <div class="phases reveal" aria-hidden="true">
+      <svg class="phases__line" viewBox="0 0 1000 40" preserveAspectRatio="none" fill="none"><path class="draw" d="M0 20 C 120 20, 160 6, 250 14 S 400 34, 500 20 S 650 6, 750 16 S 900 30, 1000 20" vector-effect="non-scaling-stroke"/></svg>
+      <span class="phases__spark"></span>
+      <ol class="phases__list">
+        <li data-i18n="phase.1">Lo que ya existe</li>
+        <li data-i18n="phase.2">Demostración</li>
+        <li data-i18n="phase.3">Previsto para pilotos</li>
+        <li data-i18n="phase.4">Visión futura</li>
+      </ol>
+    </div>
+
+    <div class="vgrid">
+      <article class="vcard reveal"><span class="gauge" aria-hidden="true"><i></i></span><h3 data-i18n="valid.1.t">Utilidad y adopción profesional</h3><p data-i18n="valid.1.d">Si el profesorado y los equipos de orientación encuentran valor real en el día a día.</p><span class="vcard__state" data-i18n="valid.state">Por medir</span></article>
+      <article class="vcard reveal"><span class="gauge" aria-hidden="true"><i></i></span><h3 data-i18n="valid.2.t">Calidad de la reflexión</h3><p data-i18n="valid.2.d">Si las conversaciones ayudan a preparar actuaciones, no solo a desahogarse.</p><span class="vcard__state" data-i18n="valid.state">Por medir</span></article>
+      <article class="vcard reveal"><span class="gauge" aria-hidden="true"><i></i></span><h3 data-i18n="valid.3.t">Viabilidad y seguridad</h3><p data-i18n="valid.3.d">Que el sistema funcione de forma fiable y protegida antes de ampliar su uso.</p><span class="vcard__state" data-i18n="valid.state">Por medir</span></article>
+      <article class="vcard reveal"><span class="gauge" aria-hidden="true"><i></i></span><h3 data-i18n="valid.4.t">Carga percibida y convivencia</h3><p data-i18n="valid.4.d">Que TARA reduzca fricciones reales, con indicadores de convivencia cuando sean medibles.</p><span class="vcard__state" data-i18n="valid.state">Por medir</span></article>
+    </div>
+    <p class="valid__note reveal" data-i18n="valid.note">Estos son objetivos previstos para la fase de validación, no resultados observados.</p>
+    <p class="quotes__closing valid__closing reveal" data-i18n="why.closing">Todo esto tiene un nombre. TARA quiere reforzar la capacidad de las comunidades educativas para escucharlo — <em>sin prometer resultados que aún no están demostrados.</em></p>
+  </div>
+</section>
+
+<!-- ============ EQUIPO (bloque ondas) ============ -->
+<section class="tara-equipo" id="equipo" aria-labelledby="te-titulo">
+  <div class="te-wrap wrap">
+    <p class="eyebrow reveal" data-i18n="team.label">Quién hay detrás</p>
+    <div class="te-heading">
+      <h2 class="h2 reveal" id="te-titulo" data-i18n="team.title">Equipo</h2>
+      <p class="lead reveal" data-i18n="team.lead">Visión, dirección, tecnología, pedagogía y salud mental</p>
+    </div>
+    <div class="te-grid">
+      <article class="te-card reveal">
+        <div class="te-top"><span class="te-av" aria-hidden="true">MB</span><div><h3 class="te-name">Marc Boix Sanglas</h3><p class="te-role" data-i18n="team.1.r">Arquitectura · Visión</p></div></div>
+        <div class="te-bio">
+          <p data-i18n="team.1.a">Creador de Tara (soytara.com) y Mirall Íntim (mirallintim.com) — validado por profesionales de salud mental.</p>
+          <p data-i18n="team.1.b">Cofundador de EMLIFE y creador del primer probiótico líquido del mercado español.</p>
+          <p data-i18n="team.1.c">Experiencia en educación emocional, CNV aplicada y arquitectura de IA conversacional.</p>
+        </div>
+      </article>
+      <article class="te-card reveal">
+        <div class="te-top"><span class="te-av" aria-hidden="true">MR</span><div><h3 class="te-name">Marc Ribó Tarré</h3><p class="te-role" data-i18n="team.2.r">Estrategia · Crecimiento</p></div></div>
+        <div class="te-bio">
+          <p data-i18n="team.2.a">Fundador de la agencia de marketing Aurora Global Group y cofundador de OPEN, software de gestión de escuelas de yoga.</p>
+          <p data-i18n="team.2.b">MBA y amplia experiencia en liderazgo emprendedor, visión comercial y estrategia de mercado.</p>
+          <p data-i18n="team.2.c">Trayectoria demostrada en construcción de nuevas categorías y desarrollo de negocio.</p>
+        </div>
+      </article>
+      <article class="te-card reveal">
+        <div class="te-top"><span class="te-av" aria-hidden="true">FA</span><div><h3 class="te-name">Flor Alonso Arjona</h3><p class="te-role" data-i18n="team.3.r">Educación emocional · Convivencia</p></div></div>
+        <div class="te-bio">
+          <p data-i18n="team.3.a">Maestra con 12 años de aula. Mediadora familiar y escolar, formadora en CNV y coach familiar.</p>
+          <p data-i18n="team.3.b">Máster Universitario en Educación Emocional y del Carácter. Autora del libro «Aquí convive una familia».</p>
+          <p data-i18n="team.3.c">Fundadora de Educando en la Paz: 4 años formando a alumnado, profesorado y familias en centros educativos.</p>
+        </div>
+      </article>
+      <article class="te-card reveal">
+        <div class="te-top"><span class="te-av" aria-hidden="true">MF</span><div><h3 class="te-name">Mireia Font Rodríguez</h3><p class="te-role" data-i18n="team.4.r">Supervisión clínica · Derivación</p></div></div>
+        <div class="te-bio">
+          <p data-i18n="team.4.a">Graduada en Psicología por la UAB y Máster en Psicología General Sanitaria por la UVic-UCC.</p>
+          <p data-i18n="team.4.b">Experiencia en salud mental infantojuvenil y neuropsicología clínica.</p>
+          <p data-i18n="team.4.c">Vinculada al CSMIJ del Consorci Hospitalari de Vic en el marco de formación sanitaria especializada.</p>
+        </div>
+      </article>
+      <article class="te-card reveal">
+        <div class="te-top"><span class="te-av" aria-hidden="true">MS</span><div><h3 class="te-name">Mustapha Sousan</h3><p class="te-role" data-i18n="team.5.r">Infraestructura · Seguridad</p></div></div>
+        <div class="te-bio">
+          <p data-i18n="team.5.a">Director General de T-Connect y VSL — programación, desarrollo web e infraestructura digital.</p>
+          <p data-i18n="team.5.b">Autor de Bonito Caos (Amazon, 2017), escrito a los 16 años — récord de ventas.</p>
+          <p data-i18n="team.5.c">Responsable de la arquitectura técnica escalable, seguridad GDPR, desarrollo de modelo de IA propio e integración API.</p>
+        </div>
+      </article>
+    </div>
+    <svg class="te-thread" viewBox="0 0 320 40" fill="none" aria-hidden="true"><path class="draw" d="M2 26 C65 26 63 8 117 12 S213 38 318 14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+  </div>
+</section>
+
+<!-- ============ CTA FINAL ============ -->
+<section class="final" id="hablar" aria-labelledby="final-title">
+  <div class="final__ripples" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="wrap final__in">
+    <svg class="final__screen" viewBox="0 0 360 120" fill="none" aria-hidden="true">
+      <rect x="2" y="30" width="70" height="52" rx="11" stroke="currentColor" stroke-width="1.75"/>
+      <path class="draw" d="M72 56 C 120 56, 140 20, 190 30 S 270 100, 358 50" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+    </svg>
+    <h2 class="final__title reveal" id="final-title" data-i18n="final.title">Sea lo que sea, <br><em>empieza por donde estés.</em></h2>
+    <a class="btn btn--primary btn--lg magnetic reveal" href="#hablar" data-action="chat"><span data-i18n="cta.talk2">Habla con Tara</span> <span class="arr" aria-hidden="true">→</span></a>
+    <p class="final__note reveal" data-i18n="final.note">Gratis. Sin registro. Nadie más lo lee.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <div>
+      <a class="logo logo--light" href="#top">soy<span>tara</span></a>
+      <p class="footer__claim" data-i18n="footer.claim">De la pantalla <em>a la vida.</em></p>
+    </div>
+    <div>
+      <p class="footer__h"><span class="brandname">soytara</span></p>
+      <a href="#como-funciona" data-i18n="nav.how">Cómo funciona</a>
+      <a href="#comunidad" data-i18n="footer.schools">Centros educativos</a>
+      <a href="#equipo" data-i18n="nav.team">Equipo</a>
+    </div>
+    <div>
+      <p class="footer__h" data-i18n="footer.legal">Legal</p>
+      <a href="#aviso-legal" data-action="legal" data-i18n="footer.notice">Aviso legal</a>
+      <a href="#politica-privacidad" data-action="privacy" data-i18n="footer.privacy">Política de privacidad</a>
+      <a href="#derechos" data-action="rights" data-i18n="footer.rights">Cómo ejercer tus derechos</a>
+    </div>
+    <div>
+      <p class="footer__h" data-i18n="footer.lang">Idioma</p>
+      <button type="button" class="footer__lang" data-lang="es">Castellano</button>
+      <button type="button" class="footer__lang" data-lang="ca">Català</button>
+      <button type="button" class="footer__lang" data-lang="en">English</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="footer__mark reveal" aria-hidden="true"><span>s</span><span>o</span><span>y</span><span class="t">t</span><span class="t">a</span><span class="t">r</span><span class="t">a</span></p>
+  </div>
+  <div class="wrap footer__bottom">
+    <span>© 2026 <span class="brandname">soytara</span></span>
+    <span data-i18n="footer.help">¿Necesitas ayuda ahora? Llama al 024 · 24 h</span>
+  </div>
+</footer>
+
+<script src="i18n.js?v=20261016d" defer></script>
+<script src="main.js?v=20261016d" defer></script>
+</body>
+</html>

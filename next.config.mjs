@@ -11,8 +11,12 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      // "/" ahora la sirve la landing en React (app/page.tsx).
-      // La app de chat existente (index.html, sin tocar) vive en /chat.
+      // "/" sirve la portada estática nueva (public/tara-home.html).
+      // En soctara.com/iamtara.io, el middleware la intercepta antes de
+      // llegar aquí y sirve la misma plantilla con lang/title/og:* del
+      // idioma correspondiente. La app de chat existente (index.html,
+      // sin tocar) vive en /chat.
+      { source: "/", destination: "/tara-home.html" },
       { source: "/chat", destination: "/index.html" },
       { source: "/escoles", destination: "/escoles/index.html" },
       { source: "/escoles/", destination: "/escoles/index.html" },

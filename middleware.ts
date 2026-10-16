@@ -1,27 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Réplica de netlify/edge-functions/inject-meta.js, solo para /escoles
-// (página estática sin tocar). La nueva landing en "/" ya no pasa por aquí:
-// al ser una página React real, resuelve su lang/title/og:* de forma nativa
-// leyendo el host en app/page.tsx (ver getBrandForHost en lib/i18n.ts).
-const META_BY_HOST: Record<string, { lang: string; title: string; ogTitle: string; ogDesc: string; ogUrl: string }> = {
+// Réplica de netlify/edge-functions/inject-meta.js. Reescribe lang/title/
+// og:* (y, para "/", el idioma inicial del body) según el host, sobre una
+// plantilla HTML estática que es la misma en los tres dominios.
+const META_BY_HOST: Record<
+  string,
+  { lang: string; title: string; ogTitle: string; ogDesc: string; ogUrl: string }
+> = {
   soctara: {
     lang: "ca",
-    title: "Tara — soctara.com",
-    ogTitle: "Soc Tara",
-    ogDesc: "Soc aquí per escoltar-te i acompanyar-te sense jutjar.",
+    title: "Tara — Acompanyament emocional per a adolescents · soctara.com",
+    ogTitle: "Hola. Soc Tara.",
+    ogDesc: "No sóc aquí per donar-te lliçons. Explica'm què ha passat.",
     ogUrl: "https://soctara.com"
   },
   iamtara: {
     lang: "en",
-    title: "Tara — iamtara.io",
-    ogTitle: "I'm Tara",
-    ogDesc: "I'm here to listen and walk alongside you — no judgment.",
+    title: "Tara — Emotional support for teenagers · iamtara.io",
+    ogTitle: "Hi. I'm Tara.",
+    ogDesc: "I'm not here to lecture you. Tell me what happened.",
     ogUrl: "https://iamtara.io"
   }
 };
 
+const LANG_BY_HOST: Record<string, string> = { soctara: "ca", iamtara: "en" };
+
 const HTML_SOURCE_BY_PATH: Record<string, string> = {
+  "/": "/tara-home.html",
   "/escoles": "/escoles/index.html",
   "/escoles/": "/escoles/index.html"
 };
@@ -114,6 +119,10 @@ export async function middleware(request: NextRequest) {
   html = html.replace(/(<meta property="og:title" content=")[^"]*"/, `$1${meta.ogTitle}"`);
   html = html.replace(/(<meta property="og:description" content=")[^"]*"/, `$1${meta.ogDesc}"`);
   html = html.replace(/(<meta property="og:url" content=")[^"]*"/, `$1${meta.ogUrl}"`);
+  html = html.replace(
+    /window\.__TARA_HOST_LANG__\s*=\s*"[^"]*"/,
+    `window.__TARA_HOST_LANG__ = "${LANG_BY_HOST[key]}"`
+  );
 
   return new NextResponse(html, {
     status: 200,
@@ -122,5 +131,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/escoles", "/escoles/", "/chat"]
+  matcher: ["/", "/escoles", "/escoles/", "/chat"]
 };
