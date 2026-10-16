@@ -351,6 +351,10 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
                 </div>
               ))}
             </div>
+            <p className="sphere-help">
+              {c.spheres.sphereA.help.text}{" "}
+              <a href="mailto:tara@soytara.com">{c.spheres.sphereA.help.linkLabel}</a>
+            </p>
           </div>
           <div className="sphere-card sphere-b" id="esfera-b">
             <SphereOrb variant="dormant" />

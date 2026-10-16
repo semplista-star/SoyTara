@@ -28,6 +28,7 @@ export interface LandingContent {
       cta: string;
       topics: { question: string; answer: string }[];
       close: string;
+      help: { text: string; linkLabel: string };
     };
     sphereB: {
       name: string;
@@ -165,7 +166,8 @@ export const CONTENT: Record<Locale, LandingContent> = {
             answer: "Desde el programa para centros educativos, o desde el equipo de TARA — tienes los enlaces al final de esta página."
           }
         ],
-        close: "Cerrar"
+        close: "Cerrar",
+        help: { text: "¿No encuentras tu pregunta?", linkLabel: "Escríbenos →" }
       },
       sphereB: {
         name: "Experimenta TARA",
@@ -411,7 +413,8 @@ export const CONTENT: Record<Locale, LandingContent> = {
             answer: "Des del programa per a centres educatius, o des de l'equip de TARA — tens els enllaços al final d'aquesta pàgina."
           }
         ],
-        close: "Tancar"
+        close: "Tancar",
+        help: { text: "No trobes la teva pregunta?", linkLabel: "Escriu-nos →" }
       },
       sphereB: {
         name: "Experimenta TARA",
@@ -657,7 +660,8 @@ export const CONTENT: Record<Locale, LandingContent> = {
             answer: "Through the schools program, or through the TARA team — you'll find the links at the bottom of this page."
           }
         ],
-        close: "Close"
+        close: "Close",
+        help: { text: "Can't find your question?", linkLabel: "Write to us →" }
       },
       sphereB: {
         name: "Experience TARA",
