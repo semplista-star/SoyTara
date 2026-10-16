@@ -833,3 +833,14 @@ em { font-style: italic; }
   .marquee__track { animation-duration: 120s; }
   .phone { animation: none; }
 }
+
+/* ---------- Página de política de privacidad y seguridad ---------- */
+.policy { padding-top: clamp(140px, 16vw, 190px); }
+.policy__wrap { max-width: 760px; }
+.policy__intro { max-width: none; margin: 18px 0 clamp(50px, 6vw, 80px); color: var(--musgo); }
+.policy__section { margin-bottom: clamp(36px, 4.5vw, 52px); }
+.policy__section h2 { margin-bottom: 14px; }
+.policy__section p { margin: 0 0 12px; color: var(--musgo); }
+.policy__section p:last-child { margin-bottom: 0; }
+.policy__section--pending { padding: 20px 24px; border: 1px solid var(--fibra); border-radius: var(--r-card); background: var(--arena-2); }
+.policy__section--pending h2 { color: var(--terracota-d); }

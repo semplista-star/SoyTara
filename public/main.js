@@ -11,7 +11,7 @@
 window.TARA_LINKS = {
   chat: "/chat",      // «Habla con Tara» (abrir el chat)
   schools: "/escoles", // «Ver el programa para centros»
-  privacy: "",   // Política de privacidad (pendiente: página legal propia)
+  privacy: "/privacidad", // Política de privacidad y protocolo de seguridad
   legal: "",     // Aviso legal (pendiente: página legal propia)
   rights: ""     // Cómo ejercer tus derechos (pendiente: página legal propia)
 };

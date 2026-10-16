@@ -17,6 +17,7 @@ const nextConfig = {
       // idioma correspondiente. La app de chat existente (index.html,
       // sin tocar) vive en /chat.
       { source: "/", destination: "/tara-home.html" },
+      { source: "/privacidad", destination: "/privacidad.html" },
       { source: "/chat", destination: "/index.html" },
       { source: "/escoles", destination: "/escoles/index.html" },
       { source: "/escoles/", destination: "/escoles/index.html" },

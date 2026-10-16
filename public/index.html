@@ -313,7 +313,7 @@
 <div id="gdpr-modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="gdpr-title">
   <div class="gdpr-box">
     <h2 id="gdpr-title">El que escrius aquí és teu</h2>
-    <p id="gdpr-p1">Ningú pot llegir les teves converses amb Tara — ni professors, ni pares, ni ningú. L'únic que es guarda és un resum anònim de com t'has sentit, sense nom ni cap dada que et pugui identificar.</p>
+    <p id="gdpr-p1">Ningú pot llegir les teves converses amb Tara — ni professors, ni pares, ni ningú. El que escrius no es guarda: s'elimina en acabar la sessió. Fas servir un codi, no el teu nom.</p>
     <p id="gdpr-p2">Pots escriure amb llibertat.</p>
     <p id="gdpr-p3" style="font-size:0.8rem;color:rgba(28,38,33,0.3);margin-top:1rem;">Si tens menys de 14 anys, parla amb un adult de confiança abans d'usar Tara.</p>
     <button id="gdpr-btn" onclick="acceptarGDPR()" aria-label="Acceptar condicions i continuar">Entesos, entro</button>
@@ -734,6 +734,7 @@ Activa el protocol immediatament en qualsevol d'aquests casos:
 
 Protocol: "Esto que describes merece apoyo de un adulto ahora. Por favor, habla hoy con un adulto de confianza: un familiar, tutor o profesor. Si hay peligro inmediato, llama al 112. En España también puedes llamar al 024, disponible 24h." / En català: "El que expliques necessita el suport d'un adult ara. Parla avui amb un adult de confiança: un familiar, tutor o professor. Si hi ha perill immediat, truca al 112. A Espanya també pots trucar al 024, disponible 24h."
 Para aquí. No continuis com si fos una conversa ordinària. Queda't present però no avancis amb el procés CNV fins que confirmi que té suport adult.
+Acaba la resposta amb l'etiqueta exacta [SENYAL_ROJA] en una línia a part, sense explicar-la ni esmentar-la mai a la persona. Emet-la només la primera vegada que s'activi el protocol dins la mateixa conversa; si torna a aparèixer un criteri de risc més endavant, no la repeteixis.
 
 ---
 
@@ -1507,9 +1508,9 @@ function setLang(l) {
   set('mode-pill-mediacio', 'textContent', t.modeMediacio);
   // GDPR modal — traducció dinàmica
   const gdpr = {
-    ca: { t:'El que escrius aquí és teu', p1:'Ningú pot llegir les teves converses amb Tara — ni professors, ni pares, ni ningú. L\'únic que es guarda és un resum anònim de com t\'has sentit, sense nom ni cap dada que et pugui identificar.', p2:'Pots escriure amb llibertat.', p3:'Si tens menys de 14 anys, parla amb un adult de confiança abans d\'usar Tara.', btn:'Entesos, entro' },
-    es: { t:'Lo que escribes aquí es tuyo', p1:'Nadie puede leer tus conversaciones con Tara — ni profesores, ni padres, ni nadie. Lo único que se guarda es un resumen anónimo de cómo te has sentido, sin nombre ni ningún dato que te pueda identificar.', p2:'Puedes escribir con libertad.', p3:'Si tienes menos de 14 años, habla con un adulto de confianza antes de usar Tara.', btn:'Entendido, entro' },
-    en: { t:'What you write here is yours', p1:'Nobody can read your conversations with Tara — not teachers, not parents, nobody. The only thing saved is an anonymous summary of how you felt, with no name or any data that could identify you.', p2:'You can write freely.', p3:'If you are under 14, talk to a trusted adult before using Tara.', btn:'Got it, let\'s go' }
+    ca: { t:'El que escrius aquí és teu', p1:'Ningú pot llegir les teves converses amb Tara — ni professors, ni pares, ni ningú. El que escrius no es guarda: s\'elimina en acabar la sessió. Fas servir un codi, no el teu nom.', p2:'Pots escriure amb llibertat.', p3:'Si tens menys de 14 anys, parla amb un adult de confiança abans d\'usar Tara.', btn:'Entesos, entro' },
+    es: { t:'Lo que escribes aquí es tuyo', p1:'Nadie puede leer tus conversaciones con Tara — ni profesores, ni padres, ni nadie. Lo que escribes no se guarda: se elimina al terminar la sesión. Usas un código, no tu nombre.', p2:'Puedes escribir con libertad.', p3:'Si tienes menos de 14 años, habla con un adulto de confianza antes de usar Tara.', btn:'Entendido, entro' },
+    en: { t:'What you write here is yours', p1:'Nobody can read your conversations with Tara — not teachers, not parents, nobody. What you write isn\'t saved: it\'s deleted when the session ends. You use a code, not your name.', p2:'You can write freely.', p3:'If you are under 14, talk to a trusted adult before using Tara.', btn:'Got it, let\'s go' }
   };
   const g = gdpr[l] || gdpr.ca;
   set('gdpr-title', 'textContent', g.t);
@@ -1756,6 +1757,22 @@ async function callAPI(messages) {
   return data.content?.[0]?.text || i18n[lang].error;
 }
 
+// Senyal roja (apartat 10-12 del protocol): notifica una sola vegada per
+// conversa a l'adult de la sessió i al referent de protecció. No conté
+// el contingut de la conversa, només codi, grup i hora.
+let senyalJaEnviada = false;
+async function enviaSenyalRoja() {
+  if (senyalJaEnviada) return;
+  senyalJaEnviada = true;
+  try {
+    await fetch('/api/senal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codi: userCodi || 'anonim', lang })
+    });
+  } catch (e) {}
+}
+
 async function sendMessage(userText) {
   if (!userText.trim()) return;
   send.disabled = true;
@@ -1776,6 +1793,10 @@ async function sendMessage(userText) {
     let reply = await callAPI(history);
     removeTyping();
     reply = fixCatalan(reply);
+    if (reply.includes('[SENYAL_ROJA]')) {
+      reply = reply.replace('[SENYAL_ROJA]', '').trim();
+      enviaSenyalRoja();
+    }
     let sessionComplete = false;
     // Detectar tag de mediació
     if (reply.includes('[MEDIACIO_COMPLETA]')) {
