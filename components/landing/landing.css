@@ -1011,6 +1011,242 @@
   }
 }
 
+/* ---------- SECONDARY CTA (hero) ---------- */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 16px 34px;
+  border-radius: 100px;
+  border: 1px solid var(--border-soft);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.hero-actions {
+  flex-wrap: wrap;
+}
+
+.product-intro {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--text-dim);
+  max-width: 560px;
+  line-height: 1.6;
+  margin: 0 0 var(--sp-5);
+}
+
+.context-lead {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-dim);
+  max-width: 680px;
+  line-height: 1.6;
+  margin: 0 0 var(--sp-4);
+}
+
+/* ---------- SPHERES — the two public entry points ---------- */
+.spheres {
+  padding: var(--sp-7) 0;
+  border-top: 1px solid var(--border-soft);
+}
+.spheres-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+}
+.sphere-card {
+  background: var(--surface);
+  border-top: 3px solid var(--border-soft);
+  padding: var(--sp-5) var(--sp-4);
+  opacity: 0;
+  transform: translateY(24px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sphere-a {
+  border-top-color: var(--accent);
+}
+.sphere-name {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text);
+}
+.sphere-tagline {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin: 0;
+}
+.sphere-welcome {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--text);
+  margin: 0;
+}
+.sphere-welcome.muted {
+  color: var(--text-dim);
+}
+.sphere-topics {
+  margin-top: 8px;
+  border-top: 1px solid var(--border-soft);
+}
+.sphere-topic {
+  border-bottom: 1px solid var(--border-soft);
+}
+.sphere-topic-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  padding: 14px 0;
+  cursor: pointer;
+}
+.sphere-topic-toggle {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+.sphere-topic-a {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin: 0 0 16px;
+  max-width: 480px;
+}
+.sphere-duration {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin: 0;
+}
+.sphere-status {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 100px;
+  padding: 6px 14px;
+}
+.sphere-note {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-faint);
+  line-height: 1.55;
+  margin: 0;
+}
+
+@media (min-width: 800px) {
+  .spheres-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---------- LEVELS — five-level rollout ---------- */
+.levels {
+  padding: var(--sp-7) 0;
+  border-top: 1px solid var(--border-soft);
+}
+.levels-intro {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-dim);
+  max-width: 680px;
+  line-height: 1.6;
+  margin: 0 0 var(--sp-5);
+}
+.levels-list {
+  display: flex;
+  flex-direction: column;
+}
+.level-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-top: 1px solid var(--border-soft);
+  opacity: 0;
+  transform: translateY(24px);
+}
+.level-item:last-child {
+  border-bottom: 1px solid var(--border-soft);
+}
+.level-num {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text-faint);
+  padding-top: 2px;
+}
+.level-title {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+.level-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 560px;
+}
+.levels-note {
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+/* ---------- PROJECT — preparation stage, not results ---------- */
+.project {
+  padding: var(--sp-7) 0;
+  border-top: 1px solid var(--border-soft);
+}
+.project-intro {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-dim);
+  max-width: 680px;
+  line-height: 1.6;
+  margin: 0 0 var(--sp-5);
+}
+.project-grid {
+  margin-bottom: var(--sp-4);
+}
+.project-note {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--text-faint);
+  margin: 0;
+}
+
 /* ---------- MOBILE TIGHTENING ---------- */
 /* Desktop rhythm (140–200px section padding) reads as premium breathing
    room at 1440px but becomes dead, "broken-looking" empty space at phone
@@ -1065,11 +1301,23 @@
     padding: var(--sp-4) var(--sp-3);
   }
 
-  .credibility {
-    padding: 100px 0;
+  .spheres {
+    padding: var(--sp-6) 0;
   }
-  .cred-grid {
-    gap: 44px;
+  .sphere-card {
+    padding: var(--sp-4) var(--sp-3);
+  }
+
+  .levels {
+    padding: var(--sp-6) 0;
+  }
+
+  .project {
+    padding: var(--sp-6) 0;
+  }
+
+  .community {
+    padding: var(--sp-6) 0;
   }
 
   .cta {

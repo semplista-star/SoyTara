@@ -24,6 +24,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
   const railFillRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openTopic, setOpenTopic] = useState<number | null>(null);
   const stepCount = c.product.steps.length;
 
   useLayoutEffect(() => {
@@ -40,7 +41,16 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
 
       if (reduceMotion) {
         gsap.set(
-          ["[data-reveal]", ".step", ".never-item", ".team-card", ".community-card", ".hero-title .line span"],
+          [
+            "[data-reveal]",
+            ".step",
+            ".never-item",
+            ".team-card",
+            ".community-card",
+            ".sphere-card",
+            ".level-item",
+            ".hero-title .line span"
+          ],
           { opacity: 1, y: 0, x: 0 }
         );
         return;
@@ -56,7 +66,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         .from(".hero-scroll", { opacity: 0, duration: 0.6 }, "-=0.3");
 
       // --- Generic reveal-on-scroll for grouped elements ---
-      const revealGroups = [".step", ".never-item", ".team-card", ".community-card"];
+      const revealGroups = [".step", ".never-item", ".team-card", ".community-card", ".sphere-card", ".level-item"];
       revealGroups.forEach((sel) => {
         const items = gsap.utils.toArray<HTMLElement>(sel);
         items.forEach((el, i) => {
@@ -198,6 +208,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         </a>
         <div className="nav-menu">
           <a href="#como-funciona">{c.nav.menu.how}</a>
+          <a href="#niveles">{c.nav.menu.levels}</a>
           <a href="#privacy">{c.nav.menu.privacy}</a>
           <a href="#community">{c.nav.menu.community}</a>
           <a href="#team">{c.nav.menu.team}</a>
@@ -241,6 +252,9 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         <a href="#como-funciona" onClick={() => setMenuOpen(false)}>
           {c.nav.menu.how}
         </a>
+        <a href="#niveles" onClick={() => setMenuOpen(false)}>
+          {c.nav.menu.levels}
+        </a>
         <a href="#privacy" onClick={() => setMenuOpen(false)}>
           {c.nav.menu.privacy}
         </a>
@@ -281,18 +295,24 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
             </span>
             <span className="line">
               <span className="gold">
-                {c.hero.line2}
+                {c.hero.sub}
                 <i className="hero-cursor" aria-hidden="true" />
               </span>
             </span>
+            <span className="line">
+              <span>{c.hero.line2}</span>
+            </span>
           </h1>
-          <p className="hero-sub">{c.hero.sub}</p>
+          <p className="hero-sub">{c.hero.text}</p>
           <div className="hero-actions">
-            <a href="/chat" className="btn-gold">
-              {c.hero.cta}
+            <a href="#esfera-a" className="btn-gold">
+              {c.hero.ctaKnow}
               <span className="arrow" aria-hidden="true">
                 →
               </span>
+            </a>
+            <a href="#esfera-b" className="btn-outline">
+              {c.hero.ctaTry}
             </a>
           </div>
         </div>
@@ -303,8 +323,52 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         </div>
       </section>
 
+      <section className="spheres wrap" id="esferas">
+        <span className="section-kicker" data-reveal>
+          {c.spheres.kicker}
+        </span>
+        <h2 className="section-title" data-reveal>
+          {c.spheres.title}
+        </h2>
+        <div className="spheres-grid">
+          <div className="sphere-card sphere-a" id="esfera-a">
+            <span className="sphere-name">{c.spheres.sphereA.name}</span>
+            <p className="sphere-tagline">{c.spheres.sphereA.tagline}</p>
+            <p className="sphere-welcome">{c.spheres.sphereA.welcome}</p>
+            <div className="sphere-topics">
+              {c.spheres.sphereA.topics.map((topic, i) => (
+                <div className="sphere-topic" key={topic.question}>
+                  <button
+                    className="sphere-topic-q"
+                    aria-expanded={openTopic === i}
+                    onClick={() => setOpenTopic(openTopic === i ? null : i)}
+                  >
+                    {topic.question}
+                    <span className="sphere-topic-toggle" aria-hidden="true">
+                      {openTopic === i ? "−" : "+"}
+                    </span>
+                  </button>
+                  {openTopic === i && <p className="sphere-topic-a">{topic.answer}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="sphere-card sphere-b" id="esfera-b">
+            <span className="sphere-name">{c.spheres.sphereB.name}</span>
+            <p className="sphere-tagline">{c.spheres.sphereB.tagline}</p>
+            <p className="sphere-welcome muted">{c.spheres.sphereB.welcome}</p>
+            <p className="sphere-duration">{c.spheres.sphereB.duration}</p>
+            <span className="sphere-status">{c.spheres.sphereB.status}</span>
+            <p className="sphere-note">{c.spheres.sphereB.note}</p>
+          </div>
+        </div>
+      </section>
+
       <section className="context wrap">
         <span className="context-kicker">{c.context.kicker}</span>
+        <p className="context-lead" data-reveal>
+          {c.context.lead}
+        </p>
         <div className="confessions">
           {c.context.phrases.map((phrase, i) => (
             <p
@@ -330,6 +394,9 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         <h2 className="section-title" data-reveal>
           {c.product.title}
         </h2>
+        <p className="product-intro" data-reveal>
+          {c.product.intro}
+        </p>
         <div className="steps">
           <div className="steps-rail" aria-hidden="true" />
           <div className="steps-rail-fill" ref={railFillRef} aria-hidden="true" />
@@ -397,6 +464,33 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         <p className="community-extra">{c.community.extra}</p>
       </section>
 
+      <section className="levels wrap" id="niveles">
+        <span className="section-kicker" data-reveal>
+          {c.levels.kicker}
+        </span>
+        <h2 className="section-title" data-reveal>
+          {c.levels.title}
+        </h2>
+        <p className="levels-intro" data-reveal>
+          {c.levels.intro}
+        </p>
+        <div className="levels-list">
+          {c.levels.items.map((item) => (
+            <div className="level-item" key={item.n}>
+              <span className="level-num">{item.n}</span>
+              <div className="level-body">
+                <h3 className="level-title">{item.title}</h3>
+                <p className="level-desc">{item.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="bridge" data-reveal>
+          <p className="bridge-body">{c.levels.rule}</p>
+          <p className="bridge-body levels-note">{c.levels.note}</p>
+        </div>
+      </section>
+
       <section className="privacy wrap" id="privacy">
         <span className="section-kicker" data-reveal>
           {c.privacy.kicker}
@@ -429,6 +523,29 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
           <h3 className="bridge-title">{c.privacy.note.title}</h3>
           <p className="bridge-body">{c.privacy.note.body}</p>
         </div>
+      </section>
+
+      <section className="project wrap" id="project">
+        <span className="section-kicker" data-reveal>
+          {c.project.kicker}
+        </span>
+        <h2 className="section-title" data-reveal>
+          {c.project.title}
+        </h2>
+        <p className="project-intro" data-reveal>
+          {c.project.intro}
+        </p>
+        <div className="never-grid project-grid">
+          {c.project.indicators.map((item) => (
+            <div className="never-item" key={item.title}>
+              <h3 className="never-title">{item.title}</h3>
+              <p className="never-body">{item.body}</p>
+            </div>
+          ))}
+        </div>
+        <p className="project-note" data-reveal>
+          {c.project.note}
+        </p>
       </section>
 
       <section className="team wrap" id="team">
