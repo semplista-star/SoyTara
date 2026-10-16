@@ -2,11 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Réplica de netlify/edge-functions/inject-meta.js. Reescribe lang/title/
 // og:* (y, para "/", el idioma inicial del body) según el host, sobre una
-// plantilla HTML estática que es la misma en los tres dominios.
-const META_BY_HOST: Record<
-  string,
-  { lang: string; title: string; ogTitle: string; ogDesc: string; ogUrl: string }
-> = {
+// plantilla HTML estática que es la misma en los tres dominios. "/" y
+// "/escoles" usan juegos de meta distintos — son páginas distintas con
+// sus propios título/descripción, no deben compartirse entre sí.
+type HostMeta = { lang: string; title: string; ogTitle: string; ogDesc: string; ogUrl: string };
+
+const HOME_META_BY_HOST: Record<string, HostMeta> = {
+  soytara: {
+    lang: "es",
+    title: "Tara — Acompañamiento emocional para adolescentes · soytara.com",
+    ogTitle: "Hola. Soy Tara.",
+    ogDesc: "No estoy aquí para darte lecciones. Cuéntame qué ha pasado.",
+    ogUrl: "https://soytara.com"
+  },
   soctara: {
     lang: "ca",
     title: "Tara — Acompanyament emocional per a adolescents · soctara.com",
@@ -23,7 +31,27 @@ const META_BY_HOST: Record<
   }
 };
 
-const LANG_BY_HOST: Record<string, string> = { soctara: "ca", iamtara: "en" };
+// /escoles está escrita en català y no cambia de idioma por dominio;
+// esto solo reescribe el título/og para que no diga "soytara.com" en
+// los otros dos dominios (comportamiento ya existente, sin tocar).
+const ESCOLES_META_BY_HOST: Record<string, HostMeta> = {
+  soctara: {
+    lang: "ca",
+    title: "Tara — soctara.com",
+    ogTitle: "Soc Tara",
+    ogDesc: "Soc aquí per escoltar-te i acompanyar-te sense jutjar.",
+    ogUrl: "https://soctara.com"
+  },
+  iamtara: {
+    lang: "en",
+    title: "Tara — iamtara.io",
+    ogTitle: "I'm Tara",
+    ogDesc: "I'm here to listen and walk alongside you — no judgment.",
+    ogUrl: "https://iamtara.io"
+  }
+};
+
+const LANG_BY_HOST: Record<string, string> = { soytara: "es", soctara: "ca", iamtara: "en" };
 
 const HTML_SOURCE_BY_PATH: Record<string, string> = {
   "/": "/tara-home.html",
@@ -101,17 +129,26 @@ export async function middleware(request: NextRequest) {
   }
 
   const hostname = (request.headers.get("host") ?? request.nextUrl.hostname).toLowerCase();
-  const key = Object.keys(META_BY_HOST).find((k) => hostname.includes(k));
+  const key = Object.keys(LANG_BY_HOST).find((k) => hostname.includes(k));
   if (!key) return NextResponse.next();
 
-  const sourcePath = HTML_SOURCE_BY_PATH[request.nextUrl.pathname];
+  const pathname = request.nextUrl.pathname;
+  // "/": los tres dominios pasan siempre por aquí (misma plantilla,
+  // meta propio de cada uno) — evita que el edge cache de Vercel sirva
+  // la versión de un host equivocado bajo la clave "/" compartida.
+  // "/escoles": solo lo reescriben soctara/iamtara; soytara.com ya
+  // tiene el título correcto en el propio archivo y sigue de largo.
+  const metaMap = pathname === "/" ? HOME_META_BY_HOST : ESCOLES_META_BY_HOST;
+  const meta = metaMap[key];
+  if (!meta) return NextResponse.next();
+
+  const sourcePath = HTML_SOURCE_BY_PATH[pathname];
   if (!sourcePath) return NextResponse.next();
 
   const sourceUrl = new URL(sourcePath, request.url);
   const sourceRes = await fetch(sourceUrl, { headers: { accept: "text/html" } });
   if (!sourceRes.ok) return NextResponse.next();
 
-  const meta = META_BY_HOST[key];
   let html = await sourceRes.text();
 
   html = html.replace(/<html lang="[^"]*"/, `<html lang="${meta.lang}"`);
@@ -126,7 +163,10 @@ export async function middleware(request: NextRequest) {
 
   return new NextResponse(html, {
     status: 200,
-    headers: { "content-type": "text/html; charset=utf-8" }
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store, must-revalidate"
+    }
   });
 }
 
