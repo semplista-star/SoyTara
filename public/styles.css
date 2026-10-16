@@ -334,8 +334,10 @@ em { font-style: italic; }
 .te-card:nth-child(4) { grid-column: 2 / span 2; }
 .te-card:nth-child(5) { grid-column: 4 / span 2; }
 .te-top { display: flex; gap: 16px; align-items: center; margin-bottom: 22px; padding-bottom: 20px; border-bottom: 1px solid var(--fibra); }
-.te-av { flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: var(--duna); border: 1px solid var(--fibra); font: italic 500 20px/1 var(--serif); color: var(--terracota); transition: background .4s, color .4s; }
+.te-av { flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: var(--duna); border: 1px solid var(--fibra); font: italic 500 20px/1 var(--serif); color: var(--terracota); transition: background .4s, color .4s; overflow: hidden; }
 .te-card:hover .te-av { background: var(--terracota); color: var(--arena); border-color: var(--terracota); }
+.te-av--photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
+.te-card:hover .te-av--photo { border-color: var(--terracota); }
 .te-name { margin: 0 0 6px; font: 500 22px/1.2 var(--serif); letter-spacing: -.025em; }
 .te-role { margin: 0; font: 400 11px/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--tinta); }
 .te-bio { display: grid; gap: 14px; }
