@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Locale } from "@/lib/i18n";
 import type { LandingContent } from "@/lib/content";
 import BridgeMotif from "./BridgeMotif";
+import SphereOrb from "./SphereOrb";
 import "./landing.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -294,10 +295,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
               <span>{c.hero.line1}</span>
             </span>
             <span className="line">
-              <span className="gold">
-                {c.hero.sub}
-                <i className="hero-cursor" aria-hidden="true" />
-              </span>
+              <span className="gold">{c.hero.sub}</span>
             </span>
             <span className="line">
               <span>{c.hero.line2}</span>
@@ -332,6 +330,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
         </h2>
         <div className="spheres-grid">
           <div className="sphere-card sphere-a" id="esfera-a">
+            <SphereOrb variant="active" />
             <span className="sphere-name">{c.spheres.sphereA.name}</span>
             <p className="sphere-tagline">{c.spheres.sphereA.tagline}</p>
             <p className="sphere-welcome">{c.spheres.sphereA.welcome}</p>
@@ -354,6 +353,7 @@ export default function LandingClient({ locale, content: c }: { locale: Locale; 
             </div>
           </div>
           <div className="sphere-card sphere-b" id="esfera-b">
+            <SphereOrb variant="dormant" />
             <span className="sphere-name">{c.spheres.sphereB.name}</span>
             <p className="sphere-tagline">{c.spheres.sphereB.tagline}</p>
             <p className="sphere-welcome muted">{c.spheres.sphereB.welcome}</p>
