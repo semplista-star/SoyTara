@@ -1,52 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Réplica de netlify/edge-functions/inject-meta.js. Reescribe lang/title/
-// og:* (y, para "/", el idioma inicial del body) según el host, sobre una
-// plantilla HTML estática que es la misma en los tres dominios. "/" y
-// "/escoles" usan juegos de meta distintos — son páginas distintas con
-// sus propios título/descripción, no deben compartirse entre sí.
+// og:* y el idioma inicial del body según el host, sobre una plantilla
+// HTML estática que es la misma en los tres dominios.
 type HostMeta = { lang: string; title: string; ogTitle: string; ogDesc: string; ogUrl: string };
 
 const HOME_META_BY_HOST: Record<string, HostMeta> = {
   soytara: {
     lang: "es",
-    title: "Tara — Acompañamiento emocional para adolescentes · soytara.com",
-    ogTitle: "Hola. Soy Tara.",
-    ogDesc: "No estoy aquí para darte lecciones. Cuéntame qué ha pasado.",
+    title: "TARA · Ecosistema educativo para la convivencia y la cultura de paz · soytara.com",
+    ogTitle: "TARA · Ecosistema educativo para la convivencia y la cultura de paz",
+    ogDesc: "Puedo ayudarte a comprender mejor lo que pasa, preparar conversaciones y cuidar las relaciones.",
     ogUrl: "https://soytara.com"
   },
   soctara: {
     lang: "ca",
-    title: "Tara — Acompanyament emocional per a adolescents · soctara.com",
-    ogTitle: "Hola. Soc Tara.",
-    ogDesc: "No sóc aquí per donar-te lliçons. Explica'm què ha passat.",
+    title: "TARA · Ecosistema educatiu per a la convivència i la cultura de pau · soctara.com",
+    ogTitle: "TARA · Ecosistema educatiu per a la convivència i la cultura de pau",
+    ogDesc: "Puc ajudar-te a comprendre millor el que passa, preparar converses i cuidar les relacions.",
     ogUrl: "https://soctara.com"
   },
   iamtara: {
     lang: "en",
-    title: "Tara — Emotional support for teenagers · iamtara.io",
-    ogTitle: "Hi. I'm Tara.",
-    ogDesc: "I'm not here to lecture you. Tell me what happened.",
-    ogUrl: "https://iamtara.io"
-  }
-};
-
-// /escoles está escrita en català y no cambia de idioma por dominio;
-// esto solo reescribe el título/og para que no diga "soytara.com" en
-// los otros dos dominios (comportamiento ya existente, sin tocar).
-const ESCOLES_META_BY_HOST: Record<string, HostMeta> = {
-  soctara: {
-    lang: "ca",
-    title: "Tara — soctara.com",
-    ogTitle: "Soc Tara",
-    ogDesc: "Soc aquí per escoltar-te i acompanyar-te sense jutjar.",
-    ogUrl: "https://soctara.com"
-  },
-  iamtara: {
-    lang: "en",
-    title: "Tara — iamtara.io",
-    ogTitle: "I'm Tara",
-    ogDesc: "I'm here to listen and walk alongside you — no judgment.",
+    title: "TARA · An educational ecosystem for coexistence and a culture of peace · iamtara.io",
+    ogTitle: "TARA · An educational ecosystem for coexistence and a culture of peace",
+    ogDesc: "I can help you better understand what is happening, prepare conversations and care for relationships.",
     ogUrl: "https://iamtara.io"
   }
 };
@@ -54,9 +32,7 @@ const ESCOLES_META_BY_HOST: Record<string, HostMeta> = {
 const LANG_BY_HOST: Record<string, string> = { soytara: "es", soctara: "ca", iamtara: "en" };
 
 const HTML_SOURCE_BY_PATH: Record<string, string> = {
-  "/": "/tara-home.html",
-  "/escoles": "/escoles/index.html",
-  "/escoles/": "/escoles/index.html"
+  "/": "/tara-home.html"
 };
 
 // Bloqueo temporal del chat: nadie puede hablar con Tara sin contraseña.
@@ -133,13 +109,10 @@ export async function middleware(request: NextRequest) {
   if (!key) return NextResponse.next();
 
   const pathname = request.nextUrl.pathname;
-  // "/": los tres dominios pasan siempre por aquí (misma plantilla,
-  // meta propio de cada uno) — evita que el edge cache de Vercel sirva
-  // la versión de un host equivocado bajo la clave "/" compartida.
-  // "/escoles": solo lo reescriben soctara/iamtara; soytara.com ya
-  // tiene el título correcto en el propio archivo y sigue de largo.
-  const metaMap = pathname === "/" ? HOME_META_BY_HOST : ESCOLES_META_BY_HOST;
-  const meta = metaMap[key];
+  // Los tres dominios pasan siempre por aquí (misma plantilla, meta propio
+  // de cada uno) — evita que el edge cache de Vercel sirva la versión de
+  // un host equivocado bajo la clave "/" compartida.
+  const meta = HOME_META_BY_HOST[key];
   if (!meta) return NextResponse.next();
 
   const sourcePath = HTML_SOURCE_BY_PATH[pathname];
@@ -171,5 +144,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/escoles", "/escoles/", "/chat"]
+  matcher: ["/", "/chat"]
 };

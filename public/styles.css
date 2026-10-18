@@ -334,10 +334,8 @@ em { font-style: italic; }
 .te-card:nth-child(4) { grid-column: 2 / span 2; }
 .te-card:nth-child(5) { grid-column: 4 / span 2; }
 .te-top { display: flex; gap: 16px; align-items: center; margin-bottom: 22px; padding-bottom: 20px; border-bottom: 1px solid var(--fibra); }
-.te-av { flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: var(--duna); border: 1px solid var(--fibra); font: italic 500 20px/1 var(--serif); color: var(--terracota); transition: background .4s, color .4s; overflow: hidden; }
+.te-av { flex: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: var(--duna); border: 1px solid var(--fibra); font: italic 500 20px/1 var(--serif); color: var(--terracota); transition: background .4s, color .4s; }
 .te-card:hover .te-av { background: var(--terracota); color: var(--arena); border-color: var(--terracota); }
-.te-av--photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
-.te-card:hover .te-av--photo { border-color: var(--terracota); }
 .te-name { margin: 0 0 6px; font: 500 22px/1.2 var(--serif); letter-spacing: -.025em; }
 .te-role { margin: 0; font: 400 11px/1.6 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--tinta); }
 .te-bio { display: grid; gap: 14px; }
@@ -453,7 +451,7 @@ em { font-style: italic; }
    TEMAS · franjas, raíl de temas, ayuda
    ========================================================= */
 .marquee + .marquee { margin-top: 22px; }
-.marquee--reverse .marquee__track { animation-direction: reverse; animation-duration: 140s; }
+.marquee--reverse .marquee__track { animation-direction: normal; animation-duration: 380s; }  /* mismo sentido, tempo más lento que la primera franja para poder leer las frases */
 .marquee--reverse .marquee__track span { font: 400 clamp(17px, 1.6vw, 22px)/1.3 var(--sans); letter-spacing: 0; color: var(--musgo); padding: 12px 22px; border: 1px solid var(--fibra); border-radius: var(--r-pill); background: var(--arena); }
 .marquee--reverse .marquee__track i { display: none; }
 .marquee--reverse .marquee__track { gap: 12px; }
@@ -833,6 +831,32 @@ em { font-style: italic; }
   .marquee__track { animation-duration: 120s; }
   .phone { animation: none; }
 }
+
+/* ---------- Móvil: espaciado más compacto entre y dentro de los apartados ---------- */
+@media (max-width: 640px) {
+  .hero { min-height: 0; padding: 104px 0 56px; }
+  .scroll-hint { display: none; }
+  .footer { padding-top: 56px; }
+  .convo { min-height: 230px; }
+  .footer__grid { gap: 26px; }
+  .footer__mark { margin-top: 28px; }
+  .footer__bottom { margin-top: 32px; }
+  /* en columna, la base de 440px del texto se convertía en altura y dejaba un hueco antes del diseño */
+  .section__head .lead, .te-heading .lead { flex-basis: auto; }
+  .section__head, .te-heading { gap: 16px; }
+}
+
+/* ---------- Bloques más juntos (todas las pantallas) ---------- */
+.section, .te-wrap { padding-block: clamp(36px, 5.5vw, 80px); }
+.quotes { padding-block: clamp(36px, 4.5vw, 60px); }
+.final { padding-block: clamp(56px, 8vw, 110px); }
+.section__head, .never .h2 { margin-bottom: clamp(28px, 3vw, 44px); }
+.mirror__closing { margin-top: clamp(40px, 5vw, 72px); }
+
+/* ---------- Fotos del equipo (en vez de iniciales) ---------- */
+.te-av--photo { overflow: hidden; }
+.te-av--photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; }
+.te-card:hover .te-av--photo { border-color: var(--terracota); }
 
 /* ---------- Página de política de privacidad y seguridad ---------- */
 .policy { padding-top: clamp(140px, 16vw, 190px); }

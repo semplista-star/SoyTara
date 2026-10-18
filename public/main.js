@@ -9,11 +9,11 @@
    está vacío, el botón muestra un aviso de «Muy pronto».
    --------------------------------------------------------- */
 window.TARA_LINKS = {
-  chat: "/chat",      // «Habla con Tara» (abrir el chat)
-  schools: "/escoles", // «Ver el programa para centros»
+  chat: "",      // «Experimenta TARA» — intencionadamente bloqueado (Próximamente)
+  schools: "mailto:tara@soytara.com", // «TARA para centros e instituciones»
   privacy: "/privacidad", // Política de privacidad y protocolo de seguridad
-  legal: "",     // Aviso legal (pendiente: página legal propia)
-  rights: ""     // Cómo ejercer tus derechos (pendiente: página legal propia)
+  legal: "",     // Aviso legal
+  rights: ""     // Cómo ejercer tus derechos
 };
 
 (function () {
@@ -272,7 +272,7 @@ window.TARA_LINKS = {
         if (!(th && th.crisis)) {
           var cta = document.createElement("a");
           cta.className = "btn btn--primary btn--sm convo__cta";
-          cta.href = "#hablar"; cta.setAttribute("data-action", "chat");
+          cta.href = "#que-es";
           cta.textContent = d.followCta;
           convo.appendChild(cta);
         }
