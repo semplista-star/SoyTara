@@ -3,7 +3,16 @@ import { NextRequest, NextResponse } from "next/server";
 // Réplica de netlify/edge-functions/inject-meta.js. Reescribe lang/title/
 // og:* y el idioma inicial del body según el host, sobre una plantilla
 // HTML estática que es la misma en los tres dominios.
-type HostMeta = { lang: string; title: string; ogTitle: string; ogDesc: string; ogUrl: string };
+type HostMeta = {
+  lang: string;
+  title: string;
+  ogTitle: string;
+  ogDesc: string;
+  ogUrl: string;
+  domain: string;
+  brandPrefix: string;
+  homeAria: string;
+};
 
 const HOME_META_BY_HOST: Record<string, HostMeta> = {
   soytara: {
@@ -11,21 +20,30 @@ const HOME_META_BY_HOST: Record<string, HostMeta> = {
     title: "TARA · Ecosistema educativo para la convivencia y la cultura de paz · soytara.com",
     ogTitle: "TARA · Ecosistema educativo para la convivencia y la cultura de paz",
     ogDesc: "Puedo ayudarte a comprender mejor lo que pasa, preparar conversaciones y cuidar las relaciones.",
-    ogUrl: "https://soytara.com"
+    ogUrl: "https://soytara.com",
+    domain: "soytara.com",
+    brandPrefix: "soy",
+    homeAria: "soytara — inicio"
   },
   soctara: {
     lang: "ca",
     title: "TARA · Ecosistema educatiu per a la convivència i la cultura de pau · soctara.com",
     ogTitle: "TARA · Ecosistema educatiu per a la convivència i la cultura de pau",
     ogDesc: "Puc ajudar-te a comprendre millor el que passa, preparar converses i cuidar les relacions.",
-    ogUrl: "https://soctara.com"
+    ogUrl: "https://soctara.com",
+    domain: "soctara.com",
+    brandPrefix: "soc",
+    homeAria: "soctara — inici"
   },
   iamtara: {
     lang: "en",
     title: "TARA · An educational ecosystem for coexistence and a culture of peace · iamtara.io",
     ogTitle: "TARA · An educational ecosystem for coexistence and a culture of peace",
     ogDesc: "I can help you better understand what is happening, prepare conversations and care for relationships.",
-    ogUrl: "https://iamtara.io"
+    ogUrl: "https://iamtara.io",
+    domain: "iamtara.io",
+    brandPrefix: "iam",
+    homeAria: "iamtara — home"
   }
 };
 
@@ -133,6 +151,16 @@ export async function middleware(request: NextRequest) {
     /window\.__TARA_HOST_LANG__\s*=\s*"[^"]*"/,
     `window.__TARA_HOST_LANG__ = "${LANG_BY_HOST[key]}"`
   );
+
+  // Marca: la plantilla trae el logotipo escrito para soytara.com ("soy"
+  // + "tara"); aquí se adapta al dominio real (soc/iam + tara).
+  html = html.replaceAll("soy<span>tara</span>", `${meta.brandPrefix}<span>tara</span>`);
+  html = html.replace('aria-label="soytara — inicio"', `aria-label="${meta.homeAria}"`);
+  html = html.replaceAll(
+    '<span class="brandname">soytara</span>',
+    `<span class="brandname">${key}</span>`
+  );
+  html = html.replace("(soytara.com)", `(${meta.domain})`);
 
   return new NextResponse(html, {
     status: 200,
