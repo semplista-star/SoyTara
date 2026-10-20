@@ -215,6 +215,56 @@
     .voice-main-btn.is-active { background: transparent; color: #b3453f; border: 1px solid rgba(179,69,63,0.4); }
     .voice-mute-btn { width: 48px; height: 48px; border-radius: 50%; border: 1px solid #ddd3bc; background: var(--surface); color: #52584f; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
     .voice-mute-btn.is-muted { border-color: rgba(193,101,46,0.4); color: var(--gold); background: rgba(193,101,46,0.08); }
+    /* ─── XAT ESTIL CHATGPT (TARA) ─── */
+    body { background: #faf7f1; }
+    #app { background: #faf7f1; }
+    header { padding: 10px 14px; border-bottom: none; background: #faf7f1; gap: 8px; min-height: 56px; }
+    .header-back { color: rgba(28,38,33,0.45); font-size: 20px; padding: 6px 8px; border-radius: 10px; }
+    .header-back:hover { background: rgba(28,38,33,0.06); color: var(--text); }
+    .header-left { flex: 1; min-width: 0; gap: 10px; }
+    .avatar { width: 28px; height: 28px; border: none; box-shadow: none; flex-shrink: 0;
+      background: radial-gradient(circle at 30% 75%, #ffe3c8 0%, #f6b98a 30%, #e98a4e 62%, #c1652e 100%); }
+    .header-info h1 { font-size: 17px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+    .header-info p { font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(28,38,33,0.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .status-dot { width: 6px; height: 6px; background: #3aa66b; animation: none; }
+    .chat-lang { align-items: center; gap: 4px; }
+    .chat-lang-btn { border: none; padding: 6px 8px; border-radius: 10px; font-size: 11px; color: rgba(28,38,33,0.45); }
+    .chat-lang-btn:hover { background: rgba(28,38,33,0.06); color: var(--text); }
+    .chat-lang-btn.active { color: var(--text); background: rgba(28,38,33,0.07); }
+    #new-session-btn { border: none !important; color: var(--text) !important; width: 34px; height: 34px; padding: 0; font-size: 17px; display: inline-flex; align-items: center; justify-content: center; }
+    #voice-toggle-btn { display: none; }
+    #chat { padding: 12px 0 28px; gap: 26px; }
+    #chat > .msg { width: 100%; max-width: 760px; margin: 0 auto; padding: 0 20px; align-self: center; }
+    .msg .label { display: none; }
+    .bubble { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 16px; line-height: 1.7; }
+    .msg.tara .bubble { background: none; border: none; padding: 0; border-radius: 0; color: var(--text); }
+    .msg.user { align-items: flex-end; }
+    .msg.user .bubble { background: #ece5d6; border: none; border-radius: 22px; padding: 10px 18px; max-width: 80%; }
+    .typing { background: none; border: none; padding: 6px 0; }
+    .typing .dot { display: none; }
+    .typing .dot:first-child { display: block; width: 14px; height: 14px; opacity: 1; animation: taraBreath 1.3s ease-in-out infinite;
+      background: radial-gradient(circle at 30% 75%, #ffe3c8, #e98a4e 60%, #c1652e); }
+    @keyframes taraBreath { 0%,100% { transform: scale(0.75); opacity: .7 } 50% { transform: scale(1.05); opacity: 1 } }
+    .session-end { width: calc(100% - 40px); max-width: 720px; margin: 8px auto; }
+    footer { border-top: none; flex-direction: column; align-items: stretch; gap: 6px; padding: 6px 12px calc(8px + env(safe-area-inset-bottom)); background: #faf7f1; }
+    .composer { width: 100%; max-width: 760px; margin: 0 auto; display: flex; align-items: flex-end; gap: 6px; background: #fff; border: 1px solid rgba(28,38,33,0.1); border-radius: 28px; padding: 7px 7px 7px 20px; box-shadow: 0 6px 24px rgba(28,38,33,0.07); transition: border-color .2s, box-shadow .2s; }
+    .composer:focus-within { border-color: rgba(193,101,46,0.35); box-shadow: 0 6px 24px rgba(193,101,46,0.12); }
+    #input { background: transparent; border: none; border-radius: 0; padding: 9px 0; min-height: 42px; max-height: 160px; font-size: 16px; }
+    #input:focus { border: none; box-shadow: none; }
+    #input::placeholder { color: rgba(28,38,33,0.4); }
+    #send, .composer-voice { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; box-shadow: none; }
+    #send { background: var(--gold); display: none; }
+    #send svg { width: 20px; height: 20px; }
+    .composer.has-text #send { display: flex; }
+    .composer.has-text .composer-voice { display: none; }
+    .composer-voice { display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; color: #fff; background: radial-gradient(circle at 30% 80%, #f6b98a 0%, #e98a4e 45%, #c1652e 100%); transition: transform .1s, opacity .15s; }
+    .composer-voice:hover { opacity: .92; } .composer-voice:active { transform: scale(.94); }
+    .composer-note { max-width: 760px; margin: 0 auto; text-align: center; font-size: 11.5px; color: rgba(28,38,33,0.42); line-height: 1.4; }
+    @media (max-width: 480px) {
+      .header-info p { display: none; }
+      #chat > .msg { padding: 0 16px; }
+      .composer-note { font-size: 11px; }
+    }
   </style>
 </head>
 <body>
@@ -263,7 +313,7 @@
   <header>
     <button class="header-back" id="header-back" title="Enrere" aria-label="Tornar enrere">←</button>
     <div class="header-left">
-      <div class="avatar">🌿</div>
+      <div class="avatar" aria-hidden="true"></div>
       <div class="header-info">
         <h1>Tara</h1>
         <p><span class="status-dot"></span><span id="header-status">en línia · sistema de suport emocional</span></p>
@@ -292,13 +342,21 @@
     <a href="/" class="session-home-link" id="session-home-link">← soytara.com</a>
   </div>
   <footer>
-    <textarea id="input" placeholder="Escriu aquí..." rows="1" aria-label="Escriu el teu missatge" autocomplete="off" spellcheck="false"></textarea>
-    <button id="send" aria-label="Enviar missatge a Tara">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#f6f3ec" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="22" y1="2" x2="11" y2="13"></line>
-        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-      </svg>
-    </button>
+    <div class="composer" id="composer">
+      <textarea id="input" placeholder="Escriu a Tara…" rows="1" aria-label="Escriu el teu missatge" autocomplete="off" spellcheck="false"></textarea>
+      <button id="composer-voice" class="composer-voice" type="button" title="Parlar amb Tara per veu" aria-label="Parlar amb Tara per veu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+          <line x1="5" y1="10" x2="5" y2="14"></line><line x1="9.5" y1="7" x2="9.5" y2="17"></line><line x1="14.5" y1="4" x2="14.5" y2="20"></line><line x1="19" y1="9" x2="19" y2="15"></line>
+        </svg>
+      </button>
+      <button id="send" aria-label="Enviar missatge a Tara">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </button>
+    </div>
+    <p class="composer-note" id="composer-note">Tara acompanya, no substitueix ningú. Si estàs en perill, truca al 112.</p>
   </footer>
 </div>
 
@@ -1090,7 +1148,7 @@ const i18n = {
     sub: "Soc aquí per escoltar-te i acompanyar-te sense jutjar.",
     btn: 'Parla amb Tara →',
     status: "en línia · suport emocional per a joves",
-    placeholder: 'Escriu aquí...',
+    placeholder: 'Escriu a Tara…',
     labelTara: 'Tara', labelUser: 'Tu',
     error: "Alguna cosa ha fallat. Torna-ho a provar.",
     modeLabel: 'mode',
@@ -1106,7 +1164,7 @@ const i18n = {
     sub: "Estoy aquí para escucharte y acompañarte sin juzgar.",
     btn: 'Habla con Tara →',
     status: "en línea · apoyo emocional para jóvenes",
-    placeholder: 'Escribe aquí...',
+    placeholder: 'Escribe a Tara…',
     labelTara: 'Tara', labelUser: 'Tú',
     error: "Algo ha fallado. Prueba otra vez.",
     modeLabel: 'modo',
@@ -1122,7 +1180,7 @@ const i18n = {
     sub: "I'm here to listen and walk alongside you — no judgment.",
     btn: 'Talk to Tara →',
     status: "online · emotional support for young people",
-    placeholder: 'Write here...',
+    placeholder: 'Message Tara…',
     labelTara: 'Tara', labelUser: 'You',
     error: "Something went wrong. Please try again.",
     modeLabel: 'mode',
@@ -1521,6 +1579,7 @@ function setLang(l) {
   set('enter-btn', 'textContent', t.btn);
   set('header-status', 'textContent', t.status);
   set('input', 'placeholder', t.placeholder);
+  set('composer-note', 'textContent', l === 'en' ? 'Tara walks with you, it does not replace anyone. If you are in danger, call 112.' : l === 'es' ? 'Tara acompaña, no sustituye a nadie. Si estás en peligro, llama al 112.' : 'Tara acompanya, no substitueix ningú. Si estàs en perill, truca al 112.');
   // Traduir pills de mode i etiqueta
   const msel = document.querySelector('.mode-selector-label');
   if (msel) msel.textContent = t.modeLabel;
@@ -1799,6 +1858,7 @@ async function sendMessage(userText) {
   send.disabled = true;
   input.value = '';
   input.style.height = 'auto';
+  if (typeof syncComposer === 'function') syncComposer();
   addMsg('user', userText);
   history.push({ role: 'user', content: userText });
 
@@ -2542,10 +2602,14 @@ if (window.visualViewport) {
 input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input.value); }
 });
+const composerEl = document.getElementById('composer');
+function syncComposer() { if (composerEl) composerEl.classList.toggle('has-text', input.value.trim().length > 0); }
 input.addEventListener('input', () => {
   input.style.height = 'auto';
-  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+  input.style.height = Math.min(input.scrollHeight, 160) + 'px';
+  syncComposer();
 });
+document.getElementById('composer-voice')?.addEventListener('click', () => document.getElementById('voice-toggle-btn')?.click());
 
 // Auto-detecció d'idioma per domini
 const hostname = window.location.hostname;
