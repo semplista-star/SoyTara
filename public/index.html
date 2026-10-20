@@ -183,6 +183,10 @@
     .voice-close:hover { color: var(--gold); }
     .voice-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; text-align: center; max-width: 340px; margin: 0 auto; }
     .voice-orb { position: relative; width: 132px; height: 132px; display: flex; align-items: center; justify-content: center; }
+    .voice-orb.has-gl { width: 240px; height: 240px; }
+    .voice-orb.has-gl::before, .voice-orb.has-gl::after, .voice-orb.has-gl .voice-orb-core { display: none; }
+    #voice-orb-canvas { position: absolute; inset: -30px; width: 300px; height: 300px; display: none; pointer-events: none; }
+    .voice-orb.has-gl #voice-orb-canvas { display: block; }
     .voice-orb::before, .voice-orb::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgba(193,101,46,0.25); opacity: 0; }
     .voice-orb-core { width: 92px; height: 92px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #d97b46, var(--gold) 70%); box-shadow: 0 0 0 rgba(193,101,46,0.35); transition: transform 0.4s ease, box-shadow 0.4s ease; }
     .voice-orb.state-connecting .voice-orb-core { animation: voice-breathe 1.4s ease-in-out infinite; }
@@ -302,7 +306,7 @@
 <div id="voice-screen" role="dialog" aria-modal="true" aria-label="Parlar amb Tara per veu" style="display:none;">
   <button class="voice-close" id="voice-close-btn" aria-label="Tancar veu">←</button>
   <div class="voice-stage">
-    <div class="voice-orb" id="voice-orb"><div class="voice-orb-core"></div></div>
+    <div class="voice-orb" id="voice-orb"><div class="voice-orb-core"></div><canvas id="voice-orb-canvas" aria-hidden="true"></canvas></div>
     <p class="voice-status" id="voice-status">Toca per parlar</p>
     <p class="voice-note" id="voice-note">Tara te habla en español.</p>
     <div class="voice-protocol" id="voice-protocol" role="alert">
@@ -2118,7 +2122,7 @@ function setVoiceState(state) {
   const mainBtn = document.getElementById('voice-main-btn');
   const muteBtn = document.getElementById('voice-mute-btn');
   if (!orb || !status || !mainBtn) return;
-  orb.className = 'voice-orb' + (state === 'idle' ? '' : ' state-' + state);
+  orb.className = 'voice-orb' + (orb3d.ok ? ' has-gl' : '') + (state === 'idle' ? '' : ' state-' + state);
   if (state === 'idle') {
     status.textContent = voiceText('tap');
     mainBtn.textContent = voiceText('start');
@@ -2234,26 +2238,118 @@ function voiceOnModeChange(m) {
   setVoiceState(speaking ? 'speaking' : 'listening');
 }
 
-// L'esfera respira amb el volum real: el de TARA quan parla, el de la persona quan escolta.
-function voiceAmpLoop() {
-  const core = document.querySelector('#voice-orb .voice-orb-core');
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let level = 0;
-  const tick = () => {
-    if (!voiceConversation || !core) { if (core) core.style.transform = ''; return; }
-    let v = 0;
-    try {
-      v = voiceState === 'speaking' ? voiceConversation.getOutputVolume()
-        : voiceState === 'listening' ? voiceConversation.getInputVolume() * 0.6 : 0;
-    } catch (e) {}
-    level += (Math.min(v * 1.6, 1) - level) * 0.25;
-    if (!reduce && voiceState !== 'thinking') core.style.transform = 'scale(' + (1 + level * 0.22).toFixed(3) + ')';
-    else core.style.transform = '';
-    voiceAmpRaf = requestAnimationFrame(tick);
-  };
-  cancelAnimationFrame(voiceAmpRaf);
-  voiceAmpRaf = requestAnimationFrame(tick);
+// ---------- Esfera 3D (WebGL, sense llibreries) ----------
+// Una esfera orgànica feta amb raymarching: gira sempre i respira sola (vida pròpia), i el volum real
+// (la persona quan escolta, TARA quan parla) la deforma i n'accelera el gir. Si no hi ha WebGL, es queda l'esfera CSS.
+const ORB_VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+const ORB_FS = `precision highp float;
+uniform vec2 uRes;uniform float uTime,uAmp,uRot,uMode,uCalm;
+vec3 m289(vec3 x){return x-floor(x*(1./289.))*289.;}vec4 m289(vec4 x){return x-floor(x*(1./289.))*289.;}
+vec4 perm(vec4 x){return m289(((x*34.)+1.)*x);}vec4 tis(vec4 r){return 1.79284291400159-.85373472095314*r;}
+float snoise(vec3 v){const vec2 C=vec2(1./6.,1./3.);const vec4 D=vec4(0.,.5,1.,2.);
+vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.-g;
+vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;
+i=m289(i);vec4 p=perm(perm(perm(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+float n_=.142857142857;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.*x_);
+vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.-abs(x)-abs(y);vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
+vec4 s0=floor(b0)*2.+1.;vec4 s1=floor(b1)*2.+1.;vec4 sh=-step(h,vec4(0.));vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
+vec4 nr=tis(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));p0*=nr.x;p1*=nr.y;p2*=nr.z;p3*=nr.w;
+vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);m=m*m;
+return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}
+mat3 rY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s,0.,1.,0.,s,0.,c);}
+mat3 rX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0.,0.,c,s,0.,-s,c);}
+vec3 rot(vec3 p){return rX(.38*sin(uTime*.21)+.25)*rY(uRot)*p;}
+float amountD(){return (.045+.02*sin(uTime*.83)+.012*sin(uTime*1.7)+uAmp*.15+(uMode==2.?.03:0.))*uCalm;}
+float disp(vec3 q){float t=uTime*(uMode==2.?1.8:1.);
+return snoise(q*1.35+vec3(0.,t*.22,t*.13))*.65+snoise(q*2.6-vec3(t*.35,0.,t*.27))*.18;}
+float map(vec3 p){return length(p)-.74-.012*sin(uTime*1.3)+disp(rot(p))*amountD();}
+vec3 nrm(vec3 p){vec2 e=vec2(.0025,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}
+void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;
+vec3 ro=vec3(0.,0.,2.75);vec3 rd=normalize(vec3(uv,-1.12));
+float t=0.,md=9.;bool hit=false;
+for(int i=0;i<72;i++){vec3 p=ro+rd*t;float d=map(p);md=min(md,d);if(d<.0012){hit=true;break;}t+=d*.62;if(t>5.)break;}
+vec3 glowC=vec3(.76,.40,.18);
+if(!hit){float g=exp(-md*(9.-uAmp*4.))*(.28+uAmp*.45)*smoothstep(.5,.3,length(uv));gl_FragColor=vec4(glowC*g,g);return;}
+vec3 p=ro+rd*t;vec3 n=nrm(p);vec3 q=rot(p);
+float band=snoise(q*1.6+vec3(uTime*.06))+.35*snoise(q*3.4);
+vec3 c1=vec3(.98,.72,.52),c2=vec3(.85,.47,.24),c3=vec3(.62,.28,.11);
+vec3 col=mix(c2,c1,smoothstep(-.9,1.3,band)*.75);
+col=mix(col,c3,smoothstep(.25,1.,.5-.5*n.y-band*.2)*.35);
+vec3 l=normalize(vec3(-.55,.75,.6));float dif=max(dot(n,l),0.);
+float rim=pow(1.-max(dot(n,-rd),0.),2.6);float spec=pow(max(dot(reflect(-l,n),-rd),0.),28.);
+vec3 lit=col*(.55+.6*dif)+rim*vec3(1.,.86,.7)*(.3+uAmp*.45)+spec*.28;
+gl_FragColor=vec4(lit,1.);}`;
+
+const orb3d = { ok: false, tried: false, gl: null, u: {}, raf: 0, start: 0, last: 0, amp: 0, rot: 0 };
+
+function orbInit() {
+  orb3d.tried = true;
+  const cv = document.getElementById('voice-orb-canvas');
+  const gl = cv && (cv.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: true }) ||
+                    cv.getContext('experimental-webgl'));
+  if (!gl) return false;
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.warn('Orb shader', gl.getShaderInfoLog(s)); return null; } return s; };
+  const vs = sh(gl.VERTEX_SHADER, ORB_VS), fs = sh(gl.FRAGMENT_SHADER, ORB_FS);
+  if (!vs || !fs) return false;
+  const pr = gl.createProgram(); gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return false;
+  gl.useProgram(pr);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  ['uRes', 'uTime', 'uAmp', 'uRot', 'uMode', 'uCalm'].forEach(k => { orb3d.u[k] = gl.getUniformLocation(pr, k); });
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  cv.width = Math.round(300 * dpr); cv.height = Math.round(300 * dpr);
+  gl.viewport(0, 0, cv.width, cv.height);
+  gl.clearColor(0, 0, 0, 0);
+  orb3d.gl = gl;
+  return true;
 }
+
+function orbFrame(now) {
+  const gl = orb3d.gl;
+  if (!orb3d.start) { orb3d.start = now; orb3d.last = now; }
+  const dt = Math.min((now - orb3d.last) / 1000, 0.05);
+  orb3d.last = now;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let v = 0;
+  try {
+    if (voiceConversation) v = voiceState === 'speaking' ? voiceConversation.getOutputVolume()
+      : voiceState === 'listening' ? voiceConversation.getInputVolume() * 0.7 : 0;
+  } catch (e) {}
+  const target = Math.min(v * 1.8, 1) * (reduce ? 0.3 : 1);
+  orb3d.amp += (target - orb3d.amp) * (target > orb3d.amp ? 0.35 : 0.07);
+  const mode = { idle: 0, connecting: 0, listening: 1, thinking: 2, speaking: 3 }[voiceState] || 0;
+  const speed = (mode === 2 ? 1.15 : mode === 3 ? 0.45 + orb3d.amp * 2.4 : mode === 1 ? 0.32 + orb3d.amp * 1.6 : 0.22)
+    * (reduce ? 0.3 : 1);
+  orb3d.rot += speed * dt;
+  const u = orb3d.u;
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.uniform2f(u.uRes, gl.drawingBufferWidth, gl.drawingBufferHeight);
+  gl.uniform1f(u.uTime, (now - orb3d.start) / 1000);
+  gl.uniform1f(u.uAmp, orb3d.amp);
+  gl.uniform1f(u.uRot, orb3d.rot);
+  gl.uniform1f(u.uMode, mode);
+  gl.uniform1f(u.uCalm, reduce ? 0.5 : 1);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  orb3d.raf = requestAnimationFrame(orbFrame);
+}
+
+function orbStart() {
+  if (!orb3d.tried) orb3d.ok = orbInit();
+  if (!orb3d.ok) return;
+  document.getElementById('voice-orb').classList.add('has-gl');
+  if (!orb3d.raf) orb3d.raf = requestAnimationFrame(orbFrame);
+}
+
+function orbStop() {
+  cancelAnimationFrame(orb3d.raf);
+  orb3d.raf = 0;
+}
+
+function voiceAmpLoop() { orbStart(); }
 
 function voiceErrorDetail(e) {
   if (!e) return '';
@@ -2321,12 +2417,14 @@ function openVoiceScreen() {
   }
   const note = document.getElementById('voice-note');
   if (note) note.textContent = voiceText('note');
-  setVoiceState('idle');
   document.getElementById('voice-screen').style.display = 'flex';
+  orbStart();
+  setVoiceState('idle');
 }
 
 function closeVoiceScreen() {
   endVoiceSession();
+  orbStop();
   document.getElementById('voice-screen').style.display = 'none';
 }
 
