@@ -1,0 +1,25 @@
+# TARA
+
+> TARA és un ecosistema educatiu per a la convivència i la cultura de pau
+> que integra formació, estructures de centre i un component
+> conversacional basat en intel·ligència artificial.
+
+En la fase actual, TARA treballa amb els professionals dels centres
+educatius: professorat, tutoria, orientació, convivència i direcció.
+Prepara un pilotatge en centres per al 2027 (Xarxa de Centres Col·laboradors).
+
+TARA no diagnostica, no avalua les persones, no decideix sancions i no
+substitueix l'orientació, els serveis especialitzats ni els circuits de
+protecció del centre.
+
+## Pàgines
+
+- [Portada](https://soctara.com/): què és TARA, com funciona en un centre i pilotatge 2027.
+- [Política de privacitat](https://soctara.com/privacitat)
+- [Avís legal](https://soctara.com/avis-legal)
+- [Com exercir els teus drets](https://soctara.com/drets)
+
+## Altres idiomes
+
+- Castellano: https://soytara.com/
+- English: https://iamtara.io/

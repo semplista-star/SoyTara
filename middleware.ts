@@ -1,57 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Réplica de netlify/edge-functions/inject-meta.js. Reescribe lang/title/
-// og:* y el idioma inicial del body según el host, sobre una plantilla
-// HTML estática que es la misma en los tres dominios.
-type HostMeta = {
-  lang: string;
-  title: string;
-  ogTitle: string;
-  ogDesc: string;
-  ogUrl: string;
-  domain: string;
-  brandPrefix: string;
-  homeAria: string;
+// Un dominio, un idioma (Documento único web, 29-oct-2026, apartado 4.2):
+// soytara.com → castellano · soctara.com → catalán · iamtara.io → inglés.
+// Las páginas se generan ya traducidas con `npm run build:site` en
+// public/_site/{es,ca,en}/ y aquí solo se elige cuál servir según el host.
+type Lang = "es" | "ca" | "en";
+
+const LANG_BY_HOST: Record<string, Lang> = { soytara: "es", soctara: "ca", iamtara: "en" };
+
+// Nombre interno de cada página → ruta pública en cada idioma
+const PAGES: Record<string, Record<Lang, string>> = {
+  home: { es: "/", ca: "/", en: "/" },
+  privacy: { es: "/privacidad", ca: "/privacitat", en: "/privacy" },
+  legal: { es: "/aviso-legal", ca: "/avis-legal", en: "/legal-notice" },
+  rights: { es: "/derechos", ca: "/drets", en: "/rights" }
 };
 
-const HOME_META_BY_HOST: Record<string, HostMeta> = {
-  soytara: {
-    lang: "es",
-    title: "TARA · Ecosistema educativo para la convivencia y la cultura de paz · soytara.com",
-    ogTitle: "TARA · Ecosistema educativo para la convivencia y la cultura de paz",
-    ogDesc: "Puedo ayudarte a comprender mejor lo que pasa, preparar conversaciones y cuidar las relaciones.",
-    ogUrl: "https://soytara.com",
-    domain: "soytara.com",
-    brandPrefix: "soy",
-    homeAria: "soytara — inicio"
-  },
-  soctara: {
-    lang: "ca",
-    title: "TARA · Ecosistema educatiu per a la convivència i la cultura de pau · soctara.com",
-    ogTitle: "TARA · Ecosistema educatiu per a la convivència i la cultura de pau",
-    ogDesc: "Puc ajudar-te a comprendre millor el que passa, preparar converses i cuidar les relacions.",
-    ogUrl: "https://soctara.com",
-    domain: "soctara.com",
-    brandPrefix: "soc",
-    homeAria: "soctara — inici"
-  },
-  iamtara: {
-    lang: "en",
-    title: "TARA · An educational ecosystem for coexistence and a culture of peace · iamtara.io",
-    ogTitle: "TARA · An educational ecosystem for coexistence and a culture of peace",
-    ogDesc: "I can help you better understand what is happening, prepare conversations and care for relationships.",
-    ogUrl: "https://iamtara.io",
-    domain: "iamtara.io",
-    brandPrefix: "iam",
-    homeAria: "iamtara — home"
-  }
-};
-
-const LANG_BY_HOST: Record<string, string> = { soytara: "es", soctara: "ca", iamtara: "en" };
-
-const HTML_SOURCE_BY_PATH: Record<string, string> = {
-  "/": "/tara-home.html"
-};
+function langForHost(host: string): Lang {
+  const key = Object.keys(LANG_BY_HOST).find((k) => host.includes(k));
+  return key ? LANG_BY_HOST[key] : "es";
+}
 
 // Bloqueo temporal del chat: nadie puede hablar con Tara sin contraseña.
 // Quitar este bloque (y el matcher "/chat") cuando se reabra el acceso.
@@ -64,7 +32,7 @@ function renderChatGate(error: boolean) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tara</title>
+<title>TARA · Acceso restringido</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
   body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
@@ -86,7 +54,7 @@ function renderChatGate(error: boolean) {
     <p>El chat está temporalmente desactivado.</p>
     <form method="POST" action="/chat">
       ${error ? '<div class="err">Contraseña incorrecta.</div>' : ""}
-      <input type="password" name="pw" placeholder="••••" autofocus inputmode="numeric">
+      <input type="password" name="pw" placeholder="••••" autofocus inputmode="numeric" aria-label="Contraseña">
       <button type="submit">Entrar</button>
     </form>
   </div>
@@ -117,60 +85,55 @@ async function chatGate(request: NextRequest): Promise<NextResponse | null> {
 }
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === "/chat") {
+  const pathname = request.nextUrl.pathname;
+
+  if (pathname === "/chat") {
     const gate = await chatGate(request);
     return gate ?? NextResponse.next();
   }
 
-  const hostname = (request.headers.get("host") ?? request.nextUrl.hostname).toLowerCase();
-  const key = Object.keys(LANG_BY_HOST).find((k) => hostname.includes(k));
-  if (!key) return NextResponse.next();
+  // Los ficheros generados solo se sirven a través de su ruta pública
+  if (pathname.startsWith("/_site/") && !pathname.endsWith(".js")) {
+    return new NextResponse("Not found", { status: 404 });
+  }
 
-  const pathname = request.nextUrl.pathname;
-  // Los tres dominios pasan siempre por aquí (misma plantilla, meta propio
-  // de cada uno) — evita que el edge cache de Vercel sirva la versión de
-  // un host equivocado bajo la clave "/" compartida.
-  const meta = HOME_META_BY_HOST[key];
-  if (!meta) return NextResponse.next();
+  const host = (request.headers.get("host") ?? request.nextUrl.hostname).toLowerCase();
+  const lang = langForHost(host);
 
-  const sourcePath = HTML_SOURCE_BY_PATH[pathname];
-  if (!sourcePath) return NextResponse.next();
+  if (pathname === "/llms.txt") {
+    return NextResponse.rewrite(new URL(`/_site/${lang}/llms.txt`, request.url));
+  }
 
-  const sourceUrl = new URL(sourcePath, request.url);
-  const sourceRes = await fetch(sourceUrl, { headers: { accept: "text/html" } });
-  if (!sourceRes.ok) return NextResponse.next();
-
-  let html = await sourceRes.text();
-
-  html = html.replace(/<html lang="[^"]*"/, `<html lang="${meta.lang}"`);
-  html = html.replace(/<title>[^<]*<\/title>/, `<title>${meta.title}</title>`);
-  html = html.replace(/(<meta property="og:title" content=")[^"]*"/, `$1${meta.ogTitle}"`);
-  html = html.replace(/(<meta property="og:description" content=")[^"]*"/, `$1${meta.ogDesc}"`);
-  html = html.replace(/(<meta property="og:url" content=")[^"]*"/, `$1${meta.ogUrl}"`);
-  html = html.replace(
-    /window\.__TARA_HOST_LANG__\s*=\s*"[^"]*"/,
-    `window.__TARA_HOST_LANG__ = "${LANG_BY_HOST[key]}"`
-  );
-
-  // Marca: la plantilla trae el logotipo escrito para soytara.com ("soy"
-  // + "tara"); aquí se adapta al dominio real (soc/iam + tara).
-  html = html.replaceAll("soy<span>tara</span>", `${meta.brandPrefix}<span>tara</span>`);
-  html = html.replace('aria-label="soytara — inicio"', `aria-label="${meta.homeAria}"`);
-  html = html.replaceAll(
-    '<span class="brandname">soytara</span>',
-    `<span class="brandname">${key}</span>`
-  );
-  html = html.replace("(soytara.com)", `(${meta.domain})`);
-
-  return new NextResponse(html, {
-    status: 200,
-    headers: {
-      "content-type": "text/html; charset=utf-8",
-      "cache-control": "no-store, must-revalidate"
+  for (const [page, paths] of Object.entries(PAGES)) {
+    if (paths[lang] === pathname) {
+      const res = NextResponse.rewrite(new URL(`/_site/${lang}/${page}.html`, request.url));
+      res.headers.set("content-language", lang);
+      return res;
     }
-  });
+    // Ruta de otro idioma en este dominio (p. ej. /privacidad en soctara.com) → la suya
+    if (Object.values(paths).includes(pathname)) {
+      const to = request.nextUrl.clone();
+      to.pathname = paths[lang];
+      return NextResponse.redirect(to, 301);
+    }
+  }
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/chat"]
+  matcher: [
+    "/",
+    "/chat",
+    "/privacidad",
+    "/privacitat",
+    "/privacy",
+    "/aviso-legal",
+    "/avis-legal",
+    "/legal-notice",
+    "/derechos",
+    "/drets",
+    "/rights",
+    "/llms.txt",
+    "/_site/:path*"
+  ]
 };

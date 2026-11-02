@@ -1,0 +1,25 @@
+# TARA
+
+> TARA is an educational ecosystem for coexistence and a culture of peace
+> that brings together training, school structures and a conversational
+> component based on artificial intelligence.
+
+At this stage, TARA works with school professionals: teachers, tutors,
+guidance, coexistence and leadership teams. It is preparing a pilot in
+schools for 2027 (Partner Schools Network).
+
+TARA does not diagnose, does not assess people, does not decide sanctions
+and does not replace guidance staff, specialist services or the school's
+protection procedures.
+
+## Pages
+
+- [Home](https://iamtara.io/): what TARA is, how it works in a school and the 2027 pilot.
+- [Privacy policy](https://iamtara.io/privacy)
+- [Legal notice](https://iamtara.io/legal-notice)
+- [How to exercise your rights](https://iamtara.io/rights)
+
+## Other languages
+
+- Castellano: https://soytara.com/
+- Català: https://soctara.com/

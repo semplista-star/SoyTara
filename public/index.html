@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Tara — soytara.com</title>
+  <title>TARA · Chat (acceso restringido)</title>
+  <meta name="robots" content="noindex, nofollow">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta property="og:title" content="Soy Tara">
@@ -288,7 +289,7 @@
     </div>
   </div>
 
-  <button class="landing-orienta-btn" id="orienta-landing-btn" onclick="enterOrienta()" aria-label="Tara Orienta: descobreix el teu perfil professional">Tara Orienta — descobreix el teu perfil professional →</button>
+  <button class="landing-orienta-btn" id="orienta-landing-btn" hidden style="display:none" onclick="enterOrienta()" aria-label="Tara Orienta: descobreix el teu perfil professional">Tara Orienta — descobreix el teu perfil professional →</button>
   <a href="mailto:tara@soytara.com" class="landing-schools-link" id="landing-schools-link">Per a centres educatius → tara@soytara.com</a>
   <div class="landing-url">soytara.com</div>
 </div>
@@ -498,6 +499,11 @@
 </div>
 
 <script>
+// Qüestionaris (EEET, GHQ-12, RIASEC) retirats de producció amb el panell
+// docent (Document únic web, 29-oct-2026, apartat 1.3). Tornaran només amb el
+// seu encaix al Protocol de Seguretat. Posar a true per reactivar-los.
+const QUESTIONARIS_ACTIUS = false;
+
 const PROXY_URL = 'https://markisboix--d4e9d964465b11f199bc42b51c65c3df.web.val.run';
 
 const SYSTEM_PROMPT = `Eres Tara. Acompañas a personas que están pasando por momentos difíciles. Usas CNV de Marshall Rosenberg en lenguaje natural, cercano y respetuoso. Tu misión: que descubran qué sienten, qué necesitan y qué pueden hacer.
@@ -1544,7 +1550,7 @@ function showSessionEnd() {
     // Botó retest voluntari
     const testLliureBtn = document.getElementById('test-lliure-btn');
     if (testLliureBtn) {
-      if (userCodi && potFerTestLliure(userCodi)) {
+      if (QUESTIONARIS_ACTIUS && userCodi && potFerTestLliure(userCodi)) {
         testLliureBtn.style.display = 'block';
         testLliureBtn.textContent = lang === 'ca' ? 'Veure com he evolucionat →' : lang === 'en' ? 'See how I\'ve grown →' : 'Ver cómo he evolucionado →';
       } else {
@@ -1553,7 +1559,7 @@ function showSessionEnd() {
     }
     const orientaBtn = document.getElementById('orienta-btn');
     if (orientaBtn) {
-      if (userCodi) {
+      if (QUESTIONARIS_ACTIUS && userCodi) {
         orientaBtn.style.display = 'block';
         orientaBtn.textContent = lang === 'ca' ? 'Descobreix el teu perfil professional →' : lang === 'en' ? 'Discover your professional profile →' : 'Descubre tu perfil profesional →';
       } else {
@@ -2703,7 +2709,7 @@ checkGDPR();
 // ══════════════════════════════════════════════════════════════
 
 function detectarMomentTest(codi) {
-  if (!codi) return null;
+  if (!QUESTIONARIS_ACTIUS || !codi) return null;
   const mes = new Date().getMonth() + 1;
   const fets = JSON.parse(localStorage.getItem('tests_' + codi) || '[]');
   if (fets.length === 0) return 'PRE';
