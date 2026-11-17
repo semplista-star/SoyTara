@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "build:site": "node site/build.mjs"
+    "start": "next start"
   },
   "dependencies": {
     "gsap": "^3.15.0",

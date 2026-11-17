@@ -1,0 +1,59 @@
+/* Páginas de detalle de Primaria, Instituto, Fundaciones y Otras instituciones.
+   Se carga solo en esas páginas, después de comunidades.css. Las clases propias empiezan por "det". */
+
+.det{padding-block:clamp(110px,12vw,150px) clamp(28px,4vw,48px)}
+.det__back{display:inline-flex;gap:8px;margin-bottom:22px;color:var(--musgo);font:400 12px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
+.det__back:hover{color:var(--tinta)}
+
+/* Cabecera: reutiliza el color y la ilustración del apartado */
+.comu.det__hero{flex-direction:row;align-items:flex-end;justify-content:space-between;min-height:clamp(360px,34vw,460px)}
+.det__hero .comu__text{flex:1 1 56%}
+.det__hero .comu__name{font-size:clamp(44px,6vw,84px)}
+.det__hero .comu__desc{max-width:44ch;font-size:clamp(17px,1.4vw,20px)}
+.det__hero .comu__art{flex:0 1 44%;align-self:flex-end;order:0;margin:0;padding:clamp(20px,3vw,38px) clamp(20px,3vw,38px) 0}
+.det__hero.comu--instituto .comu__art,.det__hero.comu--otras .comu__art{align-self:center;padding-block:clamp(20px,3vw,38px)}
+
+.det__note{margin:18px 0 0}
+
+/* Bloques de contenido */
+.det-block{padding-block:clamp(44px,6vw,80px)}
+.det-block .h2{margin-bottom:clamp(24px,3vw,38px)}
+.det-block .split .w{padding-right:.1em;margin-right:-.1em}
+.det-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+
+.det-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:0;padding:0;list-style:none}
+.det-step{padding-top:18px;border-top:1px solid var(--fibra)}
+.det-step__n{display:block;margin-bottom:14px;color:var(--terracota-d);font:400 12px/1.6 var(--mono);letter-spacing:.14em}
+.det-step p{margin:10px 0 0;color:var(--musgo)}
+
+.det-cta{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:clamp(28px,4vw,48px);border:1px solid var(--fibra);border-radius:var(--r-card);background:var(--arena-2)}
+.det-cta .h2{margin:0}
+.det-cta .btn{flex:none}
+
+.det-others{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.det-other{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:clamp(20px,2.4vw,28px);border:1px solid var(--fibra);border-radius:var(--r-card);color:var(--tinta);font:500 clamp(20px,1.9vw,24px)/1.2 var(--serif);letter-spacing:-.02em;text-decoration:none}
+.det-other--primaria{background:var(--duna)}
+.det-other--instituto{border-color:var(--tinta);background:var(--tinta);color:var(--arena)}
+.det-other--fundaciones{border-color:var(--terracota-d);background:var(--terracota-d);color:var(--arena)}
+.det-other--otras{background:var(--arena-2)}
+.det-other .arr{transition:transform .5s var(--ease)}
+.det-other:hover .arr{transform:translateX(5px)}
+
+@media (max-width:960px){
+  .det-grid{grid-template-columns:1fr}
+  .det-steps{grid-template-columns:1fr 1fr}
+  .det-others{grid-template-columns:1fr}
+}
+
+@media (max-width:640px){
+  .comu.det__hero{flex-direction:column;align-items:stretch;min-height:0}
+  .det__hero .comu__text,.det__hero .comu__art{flex:none}
+  .det__hero .comu__art{width:80%;align-self:center}
+  .det-steps{grid-template-columns:1fr}
+  .det-cta{flex-direction:column;align-items:flex-start}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .det-other .arr{transition:none}
+  .det-other:hover .arr{transform:none}
+}

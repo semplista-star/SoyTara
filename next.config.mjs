@@ -12,8 +12,8 @@ const nextConfig = {
     // antigua de centros, el panel docente sin login real y documentos
     // antiguos dejan de publicarse y redirigen de forma permanente.
     const retired = [
-      ["/escoles", "/#pilotaje"],
-      ["/escoles/:path*", "/#pilotaje"],
+      ["/escoles", "/red-2027"],
+      ["/escoles/:path*", "/red-2027"],
       ["/soytara_mestres", "/"],
       ["/soytara_mestres.html", "/"],
       ["/tara-dashboard-tutora", "/"],
@@ -26,7 +26,7 @@ const nextConfig = {
   },
   async rewrites() {
     // La portada y las páginas legales las sirve el middleware según el
-    // dominio (public/_site/{es,ca,en}). El chat vive en /chat.
+    // dominio (public/_web/{es,ca,en}). El chat vive en /chat.
     return [{ source: "/chat", destination: "/index.html" }];
   },
   async headers() {

@@ -2,19 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Un dominio, un idioma (Documento único web, 29-oct-2026, apartado 4.2):
 // soytara.com → castellano · soctara.com → catalán · iamtara.io → inglés.
-// Las páginas se generan ya traducidas con `npm run build:site` en
-// public/_site/{es,ca,en}/ y aquí solo se elige cuál servir según el host.
+// Las páginas llegan ya traducidas, una carpeta por idioma, en
+// public/_web/{es,ca,en}/ y aquí solo se elige cuál servir según el host.
 type Lang = "es" | "ca" | "en";
 
 const LANG_BY_HOST: Record<string, Lang> = { soytara: "es", soctara: "ca", iamtara: "en" };
 
-// Nombre interno de cada página → ruta pública en cada idioma
+// Web de TARA (borrador del 14-nov-2026): una carpeta por idioma en
+// public/_web/{es,ca,en}/, con el nombre de fichero de cada página.
+// Clave interna de cada página → ruta pública en cada idioma.
 const PAGES: Record<string, Record<Lang, string>> = {
-  home: { es: "/", ca: "/", en: "/" },
+  index: { es: "/", ca: "/", en: "/" },
+  what: { es: "/que-es", ca: "/que-es", en: "/what-is-tara" },
+  how: { es: "/como-funciona", ca: "/com-funciona", en: "/how-it-works" },
+  network: { es: "/red-2027", ca: "/xarxa-2027", en: "/network-2027" },
+  institutions: { es: "/instituciones", ca: "/institucions", en: "/institutions" },
+  team: { es: "/equipo", ca: "/equip", en: "/team" },
   privacy: { es: "/privacidad", ca: "/privacitat", en: "/privacy" },
   legal: { es: "/aviso-legal", ca: "/avis-legal", en: "/legal-notice" },
   rights: { es: "/derechos", ca: "/drets", en: "/rights" }
 };
+
+function fileFor(page: string, lang: Lang) {
+  return page === "index" ? "index" : PAGES[page][lang].slice(1);
+}
 
 function langForHost(host: string): Lang {
   const key = Object.keys(LANG_BY_HOST).find((k) => host.includes(k));
@@ -92,21 +103,21 @@ export async function middleware(request: NextRequest) {
     return gate ?? NextResponse.next();
   }
 
-  // Los ficheros generados solo se sirven a través de su ruta pública
-  if (pathname.startsWith("/_site/") && !pathname.endsWith(".js")) {
+  // Las páginas solo se sirven a través de su ruta pública
+  if (pathname.startsWith("/_web/")) {
     return new NextResponse("Not found", { status: 404 });
   }
 
   const host = (request.headers.get("host") ?? request.nextUrl.hostname).toLowerCase();
   const lang = langForHost(host);
 
-  if (pathname === "/llms.txt") {
-    return NextResponse.rewrite(new URL(`/_site/${lang}/llms.txt`, request.url));
+  if (pathname === "/llms.txt" || pathname === "/sitemap.xml") {
+    return NextResponse.rewrite(new URL(`/_web/${lang}${pathname}`, request.url));
   }
 
   for (const [page, paths] of Object.entries(PAGES)) {
     if (paths[lang] === pathname) {
-      const res = NextResponse.rewrite(new URL(`/_site/${lang}/${page}.html`, request.url));
+      const res = NextResponse.rewrite(new URL(`/_web/${lang}/${fileFor(page, lang)}.html`, request.url));
       res.headers.set("content-language", lang);
       return res;
     }
@@ -117,23 +128,14 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(to, 301);
     }
   }
+  // Cualquier otra ruta sin extensión: la página 404 del idioma
+  if (!pathname.includes(".")) {
+    return NextResponse.rewrite(new URL(`/_web/${lang}/404.html`, request.url), { status: 404 });
+  }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/",
-    "/chat",
-    "/privacidad",
-    "/privacitat",
-    "/privacy",
-    "/aviso-legal",
-    "/avis-legal",
-    "/legal-notice",
-    "/derechos",
-    "/drets",
-    "/rights",
-    "/llms.txt",
-    "/_site/:path*"
-  ]
+  // Todo menos los recursos estáticos, la API y los internos de Next
+  matcher: ["/((?!api/|_next/|assets/|fonts/|robots.txt).*)"]
 };

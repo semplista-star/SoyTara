@@ -1,0 +1,81 @@
+/* Capa de interactividad común (14-nov). No cambia textos, colores ni estructura: solo responde al puntero, al toque y al scroll.
+   La activa assets/js/interactivo.js (clases ix-*). Sin JavaScript todo se ve igual que antes. Respeta prefers-reduced-motion. */
+
+@property --ix-a{syntax:'<number>';inherits:false;initial-value:0}
+
+/* Luz que sigue al puntero en tarjetas */
+.ix-spot{background-image:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),rgba(193,101,46,calc(var(--ix-a) * .10)),transparent 65%);transition:--ix-a .45s var(--ease),border-color .4s,transform .45s var(--ease),opacity .9s var(--ease)}
+.ix-spot:hover{--ix-a:1}
+.hm-data.ix-spot,.pag-sec--dark .ix-spot{background-image:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),rgba(224,162,122,calc(var(--ix-a) * .16)),transparent 65%)}
+.tilt.ix-spot{transition:transform .25s var(--ease),--ix-a .45s var(--ease),border-color .4s,opacity .9s var(--ease)}
+
+/* Secuencias que se recorren solas al verse y responden al pasar el ratón o tocar */
+.ix-seq>*{cursor:default}
+
+/* Comprender · Preparar · Acompañar */
+.hm-verbs.ix-seq .hm-verb{padding:16px 18px 16px 78px;margin-inline:-18px;border:1px solid transparent;border-radius:var(--r-card);transition:background .5s var(--ease),border-color .5s,transform .5s var(--ease)}
+.hm-verbs.ix-seq .hm-verb::before{left:18px;top:calc(16px + .35em)}
+.hm-verbs.ix-seq .hm-verb::after{left:48px;top:calc(16px + .95em);transform-origin:left;transition:transform .5s var(--ease)}
+.hm-verbs.ix-seq .hm-verb h3{transition:color .4s}
+.hm-verbs.ix-seq .hm-verb.is-active{background:var(--arena-2);border-color:var(--fibra);transform:translateX(6px)}
+.hm-verbs.ix-seq .hm-verb.is-active::after{transform:scaleX(1.3)}
+.hm-verbs.ix-seq .hm-verb.is-active h3{color:var(--terracota-d)}
+
+/* Equipo → Familias → Alumnado, y Comprender → Preparar → Acompañar en Cómo funciona */
+.hm-steps.ix-seq,.pag-flow.ix-seq{position:relative;padding-bottom:18px}
+.hm-steps.ix-seq::before,.hm-steps.ix-seq::after,.pag-flow.ix-seq::before,.pag-flow.ix-seq::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;background:var(--fibra)}
+.hm-steps.ix-seq::after,.pag-flow.ix-seq::after{background:var(--terracota);transform-origin:left;transform:scaleX(var(--ix-p,0));transition:transform .7s var(--ease)}
+.hm-steps.ix-seq .hm-step,.pag-flow.ix-seq .pag-flow__step{transition:transform .5s var(--ease),border-color .5s,box-shadow .5s,background .5s}
+.hm-steps.ix-seq .hm-step.is-active,.pag-flow.ix-seq .pag-flow__step.is-active{transform:translateY(-6px);border-color:var(--terracota);box-shadow:0 14px 30px -18px rgba(28,38,33,.45)}
+.hm-steps.ix-seq .hm-step.is-past{border-color:var(--musgo)}
+.hm-steps.ix-seq .hm-step__n,.pag-flow.ix-seq .pag-flow__n{display:inline-block;transition:color .4s,background .4s,padding .4s;border-radius:var(--r-pill)}
+.hm-steps.ix-seq .hm-step.is-active .hm-step__n,.pag-flow.ix-seq .pag-flow__step.is-active .pag-flow__n{padding:2px 10px;background:var(--terracota-d);color:var(--arena)}
+.pag-flow.ix-seq .pag-flow__step.is-active::after{transform:scaleX(1)}
+
+/* Calendario de la Red 2027 */
+.pag-timeline.ix-seq .pag-hito::after{content:"";position:absolute;left:0;right:0;top:-2px;height:2px;background:var(--terracota);transform:scaleX(0);transform-origin:left;transition:transform .8s var(--ease)}
+.pag-timeline.ix-seq .pag-hito.is-past::after,.pag-timeline.ix-seq .pag-hito.is-active::after{transform:scaleX(1)}
+.pag-timeline.ix-seq .pag-hito::before{transition:transform .5s var(--ease),box-shadow .5s}
+.pag-timeline.ix-seq .pag-hito.is-active::before{transform:scale(1.3);box-shadow:0 0 0 6px rgba(193,101,46,.18)}
+.pag-timeline.ix-seq .pag-hito strong{transition:color .4s,transform .5s var(--ease)}
+.pag-timeline.ix-seq .pag-hito.is-active strong{color:var(--terracota-d);transform:translateX(4px)}
+
+/* Tabla de etapas y niveles: fila y columna bajo el puntero, marcas que aparecen al verse */
+.pag-table tbody tr{transition:background .3s}
+.pag-table tbody tr:hover{background:var(--arena-2)}
+.pag-table .ix-col{background:rgba(193,101,46,.07)}
+.pag-yes{transition:transform .5s var(--ease)}
+.ix-table:not(.ix-shown) .pag-yes{transform:scale(0)}
+.ix-table.ix-shown .pag-yes{transition-delay:var(--d,0ms)}
+.pag-table tr:hover .pag-yes{transform:scale(1.12);transition-delay:0ms}
+
+/* Personas (home) */
+.hm-person img{transition:transform .5s var(--ease),border-color .4s,box-shadow .5s var(--ease)}
+.hm-person:hover img{transform:translateY(-6px) scale(1.04);border-color:var(--terracota);box-shadow:0 0 0 5px var(--arena),0 0 0 6.5px rgba(193,101,46,.55)}
+.hm-person strong{transition:color .3s}
+.hm-person:hover strong{color:var(--terracota-d)}
+
+/* Listas, enlaces y preguntas */
+.pag-list li::before{transition:width .4s var(--ease)}
+.pag-list li:hover::before{width:22px}
+.faq--plain .faq__item{transition:border-color .3s}
+.faq--plain .faq__item:hover{border-color:var(--musgo)}
+.faq--plain .faq__item[open] .faq__a{animation:ixDown .45s var(--ease) both}
+@keyframes ixDown{from{opacity:0;transform:translateY(-8px)}}
+
+/* Números que cuentan al verse */
+.ix-num{display:inline-block;font-variant-numeric:tabular-nums}
+
+/* Formularios: contador del mensaje y etapas */
+.ix-counter{align-self:flex-end;margin-top:-2px;color:#66675D;font:400 12px/1.4 var(--mono);letter-spacing:.06em}
+.ix-counter.is-near{color:#8A3F12}
+.pag-stages__opts label{transition:border-color .3s,background .3s,transform .3s var(--ease)}
+.pag-stages__opts label:hover{border-color:var(--musgo)}
+.pag-stages__opts label:active{transform:scale(.97)}
+
+@media (prefers-reduced-motion:reduce){
+  .ix-spot,.hm-verbs.ix-seq .hm-verb,.hm-steps.ix-seq .hm-step,.pag-flow.ix-seq .pag-flow__step,.pag-timeline.ix-seq .pag-hito::after,.pag-yes,.hm-person img{transition:none !important}
+  .hm-verbs.ix-seq .hm-verb.is-active,.hm-steps.ix-seq .hm-step.is-active,.pag-flow.ix-seq .pag-flow__step.is-active,.hm-person:hover img{transform:none}
+  .ix-table:not(.ix-shown) .pag-yes{transform:none}
+  .faq--plain .faq__item[open] .faq__a{animation:none}
+}
