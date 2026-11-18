@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
 // Formulario único de la portada (Documento único web, 29-oct-2026, 3.2).
-// Envía cada consulta a tara@soytara.com con Resend. Necesita RESEND_API_KEY
+// Envía cada consulta a soporte@soytara.com con Resend. Necesita RESEND_API_KEY
 // y un remitente de un dominio verificado en Resend (CONTACT_FROM_EMAIL).
-const DESTINO = process.env.CONTACT_TO_EMAIL || "tara@soytara.com";
+const DESTINO = process.env.CONTACT_TO_EMAIL || "soporte@soytara.com";
 
 const TIPOS: Record<string, string> = {
   centro: "Centro educativo",

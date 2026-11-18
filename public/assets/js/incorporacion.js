@@ -31,7 +31,7 @@
     }
   };
   var MSG = ALL[(document.documentElement.lang || 'es').slice(0, 2)] || ALL.es;
-  var EMAIL = 'tara@soytara.com';
+  var EMAIL = 'soporte@soytara.com';
   var MIN_MS = 2000, TIMEOUT_MS = 15000, POW_TIMEOUT_MS = 90000;
 
   function status(form, text, kind, withMail) {

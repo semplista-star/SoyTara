@@ -11,7 +11,7 @@
   var m = MSG[lang] || MSG.es;
   var MIN_MS = 2000;      // envíos más rápidos que esto se consideran automáticos
   var TIMEOUT_MS = 15000; // tiempo máximo de espera de la respuesta del servidor
-  var EMAIL = 'tara@soytara.com';
+  var EMAIL = 'soporte@soytara.com';
 
   function status(form, text, kind, withMail) {
     var el = form.querySelector('.form__status');
