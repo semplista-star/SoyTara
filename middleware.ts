@@ -103,6 +103,11 @@ export async function middleware(request: NextRequest) {
     return gate ?? NextResponse.next();
   }
 
+  // El chat solo se abre por /chat, detrás de la contraseña
+  if (pathname === "/index.html") {
+    return NextResponse.redirect(new URL("/chat", request.url), 307);
+  }
+
   // Las páginas solo se sirven a través de su ruta pública
   if (pathname.startsWith("/_web/")) {
     return new NextResponse("Not found", { status: 404 });
